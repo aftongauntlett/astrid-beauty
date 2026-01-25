@@ -1,43 +1,46 @@
-# Astro Starter Kit: Minimal
+# Astrid Beauty (Salon Website)
 
-```sh
-npm create astro@latest -- --template minimal
-```
+![Astro](https://img.shields.io/badge/Astro-FF5D01?style=flat&logo=astro&logoColor=white)
+![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-38BDF8?style=flat&logo=tailwindcss&logoColor=white)
+![GitHub commit activity](https://img.shields.io/github/commit-activity/m/aftongauntlett/astrid-beauty)
 
-> 🧑‍🚀 **Seasoned astronaut?** Delete this file. Have fun!
+View live: https://no-wb.org/
 
-## 🚀 Project Structure
+Static salon website scaffold built with Astro and TypeScript. This repo focuses on a clean foundation: strict typing, linting, and tests — without committing to any visual design yet.
 
-Inside of your Astro project, you'll see the following folders and files:
+## Tooling
 
-```text
-/
-├── public/
-├── src/
-│   └── pages/
-│       └── index.astro
-└── package.json
-```
+- **Astro** for static site routing, layouts, and components
+- **TypeScript** with strict compiler settings
+- **ESLint** configured for **Astro + TypeScript** and accessibility-focused linting
+- **Vitest** for unit tests
+- **Astro Check** (`astro check`) for type-checking across `.astro` and TS
 
-Astro looks for `.astro` or `.md` files in the `src/pages/` directory. Each page is exposed as a route based on its file name.
+## Commands
 
-There's nothing special about `src/components/`, but that's where we like to put any Astro/React/Vue/Svelte/Preact components.
+- Dev server: `npm run dev`
+- Production build: `npm run build`
+- Preview build: `npm run preview`
+- Lint: `npm run lint`
+- Type-check: `npm run typecheck`
+- Run tests: `npm run test`
+- Watch tests: `npm run test:watch`
 
-Any static assets, like images, can be placed in the `public/` directory.
+## Notes
 
-## 🧞 Commands
+- Boilerplate is built with **semantic HTML** and basic accessibility primitives (skip link, landmarks, focus outlines).
+- Responsive defaults are provided via the viewport meta tag; visual styling intentionally remains minimal at this stage.
 
-All commands are run from the root of the project, from a terminal:
+## License
 
-| Command                   | Action                                           |
-| :------------------------ | :----------------------------------------------- |
-| `npm install`             | Installs dependencies                            |
-| `npm run dev`             | Starts local dev server at `localhost:4321`      |
-| `npm run build`           | Build your production site to `./dist/`          |
-| `npm run preview`         | Preview your build locally, before deploying     |
-| `npm run astro ...`       | Run CLI commands like `astro add`, `astro check` |
-| `npm run astro -- --help` | Get help using the Astro CLI                     |
+MIT License
 
-## 👀 Want to learn more?
+Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
 
-Feel free to check [our documentation](https://docs.astro.build) or jump into our [Discord server](https://astro.build/chat).
+The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+
+---
+
+Built by [Afton Gauntlett](https://www.aftongauntlett.com/)
