@@ -1,6 +1,7 @@
 ---
 import Header from '../components/site/Header.astro';
 import Footer from '../components/site/Footer.astro';
+import SkipLink from '../components/site/SkipLink.astro';
 import '../styles/global.css';
 
 export interface Props {
@@ -9,11 +10,10 @@ export interface Props {
 }
 
 const { title, description } = Astro.props;
-const currentPath = Astro.url.pathname;
 ---
 
 <!doctype html>
-<html lang="en">
+<html lang="en" data-theme="light">
 	<head>
 		<meta charset="utf-8" />
 		<script is:inline>
@@ -39,9 +39,9 @@ const currentPath = Astro.url.pathname;
 		<title>{title}</title>
 	</head>
 	<body>
-		<a class="skip-link" href="#main-content">Skip to main content</a>
+		<SkipLink />
 
-		<Header currentPath={currentPath} />
+		<Header />
 
 		<main id="main-content" tabindex="-1">
 			<slot />

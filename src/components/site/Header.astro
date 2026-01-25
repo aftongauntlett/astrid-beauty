@@ -1,25 +1,26 @@
 ---
+import Nav from './Nav.astro';
 import ThemeToggle from './ThemeToggle.astro';
-
-export interface Props {
-	currentPath?: string;
-}
-
-const { currentPath } = Astro.props;
-const isHome = currentPath === '/';
 ---
 
-<header role="banner">
-	<div class="container header-inner">
-		<nav aria-label="Primary">
-			<a href="/" aria-current={isHome ? 'page' : undefined}>Home</a>
-		</nav>
+<header class="site-header" role="banner">
+	<div class="container site-header__inner">
+		<a class="site-header__brand" href="/">Site</a>
+		<Nav />
 		<ThemeToggle />
 	</div>
 </header>
 
 <style>
-	.header-inner {
+	.site-header {
+		position: sticky;
+		top: 0;
+		z-index: 50;
+		background: var(--color-surface);
+		border-bottom: 1px solid var(--color-border);
+	}
+
+	.site-header__inner {
 		display: flex;
 		align-items: center;
 		justify-content: space-between;
@@ -27,9 +28,15 @@ const isHome = currentPath === '/';
 		padding-block: var(--space-md);
 	}
 
-	nav a {
-		display: inline-block;
+	.site-header__brand {
+		color: var(--color-text);
+		text-decoration: none;
 		padding: var(--space-xs) var(--space-sm);
 		border-radius: var(--radius-md);
+		font-weight: 700;
+	}
+
+	.site-header__brand:hover {
+		color: var(--color-primary);
 	}
 </style>

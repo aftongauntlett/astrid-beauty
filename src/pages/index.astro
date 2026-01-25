@@ -1,10 +1,55 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
+import Button from '../components/ui/Button.astro';
+import Card from '../components/ui/Card.astro';
+import Accordion from '../components/ui/Accordion.astro';
 ---
 
-<BaseLayout title="Astrid Beauty">
+<BaseLayout title="Site" description="Placeholder homepage layout">
 	<section aria-labelledby="page-title">
-		<h1 id="page-title">Astrid Beauty</h1>
-		<p>Salon website boilerplate (Astro + TypeScript).</p>
+		<h1 id="page-title">Home</h1>
+		<p>Placeholder content for the homepage.</p>
+		<p>
+			<Button href="/#contact" variant="primary">Book now</Button>
+		</p>
+	</section>
+
+	<section id="services" aria-labelledby="services-title">
+		<h2 id="services-title">Services</h2>
+		<p>Placeholder section for services.</p>
+
+		<Card>
+			<h3 slot="header">Featured service</h3>
+			<p>Placeholder card body content.</p>
+			<div slot="footer">
+				<Button href="/#contact" variant="secondary" size="sm">Contact</Button>
+			</div>
+		</Card>
+	</section>
+
+	<section id="about" aria-labelledby="about-title">
+		<h2 id="about-title">About</h2>
+		<p>Placeholder section for about information.</p>
+
+		<Accordion
+			items={[
+				{ id: 'about-1', title: 'What we do', content: 'Placeholder accordion content.' },
+				{ id: 'about-2', title: 'How to book', content: 'Placeholder accordion content.' },
+				{ id: 'about-3', title: 'Accessibility', content: 'Placeholder accordion content.' },
+			]}
+		/>
+	</section>
+
+	<section id="gallery" aria-labelledby="gallery-title">
+		<h2 id="gallery-title">Gallery</h2>
+		<p>Placeholder section for gallery content.</p>
+	</section>
+
+	<section id="contact" aria-labelledby="contact-title">
+		<h2 id="contact-title">Contact</h2>
+		<p>Placeholder section for contact information.</p>
+		<p>
+			<Button href="/" variant="ghost">Back to top</Button>
+		</p>
 	</section>
 </BaseLayout>

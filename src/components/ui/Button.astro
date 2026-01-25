@@ -1,0 +1,112 @@
+---
+export type ButtonVariant = "primary" | "secondary" | "ghost";
+export type ButtonSize = "sm" | "md" | "lg";
+
+export interface Props {
+	variant?: ButtonVariant;
+	size?: ButtonSize;
+	href?: string;
+	type?: "button" | "submit" | "reset";
+	disabled?: boolean;
+}
+
+const {
+	variant = "primary",
+	size = "md",
+	href,
+	type = "button",
+	disabled = false,
+} = Astro.props;
+
+const classes = ["btn", `btn--${variant}`, `btn--${size}`];
+---
+
+{href ? (
+	<a
+		class={classes.join(" ")}
+		href={href}
+		aria-disabled={disabled ? "true" : undefined}
+		tabindex={disabled ? -1 : undefined}
+		data-disabled={disabled ? "true" : undefined}
+	>
+		<slot />
+	</a>
+) : (
+	<button class={classes.join(" ")} type={type} disabled={disabled}>
+		<slot />
+	</button>
+)}
+
+<style>
+	.btn {
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		gap: var(--space-xs);
+		border-radius: var(--radius-md);
+		border: 1px solid transparent;
+		text-decoration: none;
+		font-weight: 600;
+		cursor: pointer;
+		user-select: none;
+		white-space: nowrap;
+		min-height: 2.5rem;
+	}
+
+	.btn--sm {
+		padding: var(--space-xs) var(--space-sm);
+		min-height: 2.25rem;
+	}
+
+	.btn--md {
+		padding: var(--space-sm) var(--space-md);
+	}
+
+	.btn--lg {
+		padding: var(--space-md) var(--space-lg);
+		min-height: 3rem;
+	}
+
+	.btn--primary {
+		background: var(--color-primary);
+		color: var(--color-primary-contrast);
+		border-color: var(--color-primary);
+	}
+
+	.btn--primary:hover {
+		background: var(--color-primary-hover);
+		border-color: var(--color-primary-hover);
+	}
+
+	.btn--secondary {
+		background: var(--color-surface);
+		color: var(--color-text);
+		border-color: var(--color-border);
+	}
+
+	.btn--secondary:hover {
+		background: var(--color-surface-muted);
+	}
+
+	.btn--ghost {
+		background: transparent;
+		color: var(--color-text);
+		border-color: transparent;
+	}
+
+	.btn--ghost:hover {
+		background: var(--color-surface-muted);
+	}
+
+	.btn:focus-visible {
+		outline: 2px solid var(--color-focus);
+		outline-offset: 2px;
+	}
+
+	.btn[aria-disabled="true"],
+	button.btn:disabled {
+		opacity: 0.6;
+		cursor: not-allowed;
+		pointer-events: none;
+	}
+</style>
