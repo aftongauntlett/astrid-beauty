@@ -43,10 +43,12 @@ export default function FeatureIconCard({
     { className: `${styles["particle"]} ${styles["particle3"]}`, delay: 0.9 },
   ] as const;
 
+  const cardStyle = { "--fic-icon-color": iconColor } as unknown as MotionStyle;
+
   return (
     <motion.article
       className={styles["card"]}
-      style={{ ["--fic-icon-color" as any]: iconColor } as MotionStyle}
+      style={cardStyle}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >

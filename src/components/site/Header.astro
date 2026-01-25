@@ -5,7 +5,16 @@ import ThemeToggle from './ThemeToggle.astro';
 
 <header class="site-header" role="banner">
 	<div class="container site-header__inner">
-		<a class="site-header__brand" href="/">Site</a>
+		<a class="site-header__brand" href="/" aria-label="By Astrid Beauty home">
+			<img
+				class="site-header__brandLogo"
+				src="/by-astrid-beauty-logo-nav.png"
+				alt="By Astrid Beauty"
+				width="845"
+				height="328"
+				decoding="async"
+			/>
+		</a>
 		<div class="site-header__right">
 			<Nav />
 			<ThemeToggle />
@@ -26,16 +35,16 @@ import ThemeToggle from './ThemeToggle.astro';
 		display: flex;
 		align-items: center;
 		justify-content: space-between;
-		gap: var(--space-md);
+		gap: var(--space-lg);
 		min-height: var(--header-height);
-		padding-block: var(--space-sm);
+		padding-block: var(--space-xs);
 	}
 
 	.site-header__right {
 		display: flex;
 		align-items: center;
 		justify-content: flex-end;
-		gap: var(--space-sm);
+		gap: var(--space-md);
 		min-width: 0;
 	}
 
@@ -45,6 +54,16 @@ import ThemeToggle from './ThemeToggle.astro';
 		padding: var(--space-xs) var(--space-sm);
 		border-radius: var(--radius-md);
 		font-weight: 700;
+		display: inline-flex;
+		align-items: center;
+		flex: 0 0 auto;
+	}
+
+	.site-header__brandLogo {
+		display: block;
+		height: clamp(2.25rem, 2.7vw, 3rem);
+		max-height: calc(var(--header-height) - var(--space-sm));
+		width: auto;
 	}
 
 	.site-header__brand:hover {

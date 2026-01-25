@@ -166,6 +166,14 @@ hr {
   outline-offset: 2px;
 }
 
+@media (prefers-reduced-motion: no-preference) {
+  html.theme-changing *,
+  html.theme-changing *::before,
+  html.theme-changing *::after {
+    transition: none !important;
+  }
+}
+
 button,
 input,
 select,
@@ -247,40 +255,95 @@ button:disabled {
 
 .hero {
   padding-block: calc(var(--section-pad-y) * 1.1);
+
+  background:
+    radial-gradient(
+      1200px 600px at 20% 10%,
+      color-mix(in oklab, var(--color-surface) 70%, transparent),
+      transparent 60%
+    ),
+    linear-gradient(
+      180deg,
+      color-mix(in oklab, var(--color-surface) 55%, var(--color-bg)),
+      var(--color-bg)
+    );
 }
 
-.hero__inner {
+.hero__grid {
   display: grid;
   gap: var(--space-xl);
   align-items: start;
 }
 
-.hero__kicker {
-  font-size: var(--text-sm);
-  color: var(--color-text-muted);
-}
-
-.hero__lede {
-  font-size: var(--text-lg);
-  color: var(--color-text-muted);
-}
-
-.hero__cta {
+.hero__content {
+  min-width: 0;
+  max-width: min(46rem, var(--measure));
   display: flex;
-  flex-wrap: wrap;
-  gap: var(--space-sm);
   align-items: center;
-  justify-content: flex-start;
+}
+
+.hero__brandmark {
+  display: flex;
+  align-items: center;
+  margin: 0;
+}
+
+.hero__brandmarkLogo {
+  display: block;
+  width: min(100%, clamp(16rem, 28vw, 26rem));
+  height: auto;
+  filter: drop-shadow(
+    0 10px 18px color-mix(in oklab, var(--color-text) 12%, transparent)
+  );
+}
+
+.hero__actions {
+  width: 100%;
+  max-width: 34rem;
+  display: grid;
+  gap: var(--space-md);
+}
+
+.hero__actions .btn {
+  width: 100%;
+}
+
+.hero__actionsCopy {
+  display: grid;
+  gap: var(--space-xs);
+}
+
+.hero__actionsTitle {
+  margin: 0;
+  font-size: var(--heading-3);
+  letter-spacing: -0.01em;
+}
+
+.hero__actionsLede {
+  margin: 0;
+  color: var(--color-text-muted);
+}
+
+.hero__actionsRow {
+  display: grid;
+  gap: var(--space-sm);
+}
+
+@media (min-width: 34rem) {
+  .hero__actionsRow {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    align-items: stretch;
+  }
 }
 
 @media (min-width: 60rem) {
-  .hero__inner {
-    grid-template-columns: minmax(0, 1.2fr) minmax(0, 0.8fr);
+  .hero__grid {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 2fr);
     align-items: center;
   }
 
-  .hero__cta {
-    justify-content: flex-end;
+  .hero__actions {
+    justify-self: end;
   }
 }
 

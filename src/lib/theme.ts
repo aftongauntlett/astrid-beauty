@@ -42,6 +42,10 @@ export function toggleTheme(): Theme {
     getPreferredTheme();
   const next: Theme = current === "dark" ? "light" : "dark";
 
+  if (typeof document !== "undefined") {
+    document.documentElement.classList.add("theme-changing");
+  }
+
   if (typeof window !== "undefined") {
     try {
       window.localStorage.setItem(STORAGE_KEY, next);
@@ -51,5 +55,13 @@ export function toggleTheme(): Theme {
   }
 
   applyTheme(next);
+
+  if (typeof document !== "undefined") {
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => {
+        document.documentElement.classList.remove("theme-changing");
+      });
+    });
+  }
   return next;
 }

@@ -1,5 +1,17 @@
-<button type="button" aria-label="Toggle theme" aria-pressed="false" data-theme-toggle>
-	Theme
+---
+import { Moon, Sun } from "@lucide/astro";
+---
+
+<button
+	type="button"
+	class="theme-toggle"
+	aria-label="Toggle theme"
+	aria-pressed="false"
+	data-theme-toggle
+>
+	<span class="sr-only">Toggle theme</span>
+	<Sun class="theme-toggle__icon" size={18} aria-hidden="true" focusable="false" data-icon="sun" />
+	<Moon class="theme-toggle__icon" size={18} aria-hidden="true" focusable="false" data-icon="moon" />
 </button>
 
 <script>
@@ -20,3 +32,28 @@
 		});
 	}
 </script>
+
+<style is:global>
+	.theme-toggle {
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		gap: var(--space-xs);
+		width: var(--control-height);
+		padding: 0;
+		border-radius: var(--radius-md);
+		box-shadow: none;
+	}
+
+	.theme-toggle__icon {
+		display: block;
+	}
+
+	html[data-theme="dark"] .theme-toggle [data-icon="sun"] {
+		display: none;
+	}
+
+	html[data-theme="light"] .theme-toggle [data-icon="moon"] {
+		display: none;
+	}
+</style>

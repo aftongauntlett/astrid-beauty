@@ -8,6 +8,8 @@ export interface Props {
 	href?: string;
 	type?: "button" | "submit" | "reset";
 	disabled?: boolean;
+	class?: string;
+	[key: string]: unknown;
 }
 
 const {
@@ -16,9 +18,11 @@ const {
 	href,
 	type = "button",
 	disabled = false,
+	class: className,
+	...rest
 } = Astro.props;
 
-const classes = ["btn", `btn--${variant}`, `btn--${size}`];
+const classes = ["btn", `btn--${variant}`, `btn--${size}`, className].filter(Boolean);
 ---
 
 {href ? (
@@ -28,11 +32,12 @@ const classes = ["btn", `btn--${variant}`, `btn--${size}`];
 		aria-disabled={disabled ? "true" : undefined}
 		tabindex={disabled ? -1 : undefined}
 		data-disabled={disabled ? "true" : undefined}
+		{...rest}
 	>
 		<slot />
 	</a>
 ) : (
-	<button class={classes.join(" ")} type={type} disabled={disabled}>
+	<button class={classes.join(" ")} type={type} disabled={disabled} {...rest}>
 		<slot />
 	</button>
 )}
