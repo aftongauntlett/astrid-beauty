@@ -1,4 +1,6 @@
 ---
+import ThemeToggle from './ThemeToggle.astro';
+
 export interface Props {
 	currentPath?: string;
 }
@@ -8,7 +10,26 @@ const isHome = currentPath === '/';
 ---
 
 <header role="banner">
-	<nav aria-label="Primary">
-		<a href="/" aria-current={isHome ? 'page' : undefined}>Home</a>
-	</nav>
+	<div class="container header-inner">
+		<nav aria-label="Primary">
+			<a href="/" aria-current={isHome ? 'page' : undefined}>Home</a>
+		</nav>
+		<ThemeToggle />
+	</div>
 </header>
+
+<style>
+	.header-inner {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		gap: var(--space-md);
+		padding-block: var(--space-md);
+	}
+
+	nav a {
+		display: inline-block;
+		padding: var(--space-xs) var(--space-sm);
+		border-radius: var(--radius-md);
+	}
+</style>

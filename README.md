@@ -4,7 +4,7 @@
 ![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-38BDF8?style=flat&logo=tailwindcss&logoColor=white)
 ![GitHub commit activity](https://img.shields.io/github/commit-activity/m/aftongauntlett/astrid-beauty)
 
-View live: https://no-wb.org/
+View live: https://byastridbeautysalon.com/
 
 Static salon website scaffold built with Astro and TypeScript. This repo focuses on a clean foundation: strict typing, linting, and tests — without committing to any visual design yet.
 

@@ -1,0 +1,22 @@
+<button type="button" aria-label="Toggle theme" aria-pressed="false" data-theme-toggle>
+	Theme
+</button>
+
+<script>
+	import { toggleTheme } from "../../lib/theme";
+
+	const button = document.querySelector("[data-theme-toggle]");
+	if (button instanceof HTMLButtonElement) {
+		const syncPressed = () => {
+			const theme = document.documentElement.dataset["theme"];
+			button.setAttribute("aria-pressed", theme === "dark" ? "true" : "false");
+		};
+
+		syncPressed();
+
+		button.addEventListener("click", () => {
+			toggleTheme();
+			syncPressed();
+		});
+	}
+</script>

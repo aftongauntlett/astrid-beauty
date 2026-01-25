@@ -1,6 +1,7 @@
 ---
 import Header from '../components/site/Header.astro';
 import Footer from '../components/site/Footer.astro';
+import '../styles/global.css';
 
 export interface Props {
 	title: string;
@@ -15,6 +16,21 @@ const currentPath = Astro.url.pathname;
 <html lang="en">
 	<head>
 		<meta charset="utf-8" />
+		<script is:inline>
+			(() => {
+				try {
+					const stored = localStorage.getItem('theme');
+					if (stored === 'light' || stored === 'dark') {
+						document.documentElement.dataset['theme'] = stored;
+						return;
+					}
+					const prefersDark = window.matchMedia?.('(prefers-color-scheme: dark)').matches;
+					document.documentElement.dataset['theme'] = prefersDark ? 'dark' : 'light';
+				} catch {
+					// ignore
+				}
+			})();
+		</script>
 		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 		<link rel="icon" href="/favicon.ico" />
 		<meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -32,24 +48,5 @@ const currentPath = Astro.url.pathname;
 		</main>
 
 		<Footer />
-
-		<style is:global>
-			:focus-visible {
-				outline: 2px solid currentColor;
-				outline-offset: 2px;
-			}
-
-			.skip-link {
-				position: absolute;
-				top: 0;
-				left: 0;
-				transform: translateY(-200%);
-				padding: 0.5rem;
-			}
-
-			.skip-link:focus {
-				transform: translateY(0);
-			}
-		</style>
 	</body>
 </html>
