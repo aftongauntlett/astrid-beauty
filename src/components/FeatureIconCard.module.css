@@ -1,0 +1,146 @@
+.card {
+  --fic-icon-color: var(--color-primary);
+  --fic-icon-size: 3.5rem;
+  --fic-header-gap: var(--space-md);
+
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
+  padding: var(--space-lg);
+  display: grid;
+  gap: var(--space-sm);
+  position: relative;
+  overflow: hidden;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .card {
+    transition:
+      box-shadow 160ms ease,
+      border-color 160ms ease,
+      background-color 160ms ease;
+  }
+
+  .title {
+    transition: color 160ms ease;
+  }
+
+  .card:hover {
+    box-shadow: var(--shadow-md);
+  }
+
+  .card:hover .title {
+    color: var(--color-primary);
+  }
+
+  .card:hover .description,
+  .card:hover .list {
+    color: var(--color-text);
+  }
+
+  .card:hover .list li::marker {
+    color: var(--color-primary);
+  }
+}
+
+.header {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--fic-header-gap);
+}
+
+.iconWrap {
+  position: relative;
+  flex: 0 0 auto;
+  width: var(--fic-icon-size);
+  height: var(--fic-icon-size);
+  display: grid;
+  place-items: center;
+  border-radius: calc(var(--radius-lg) - 0.125rem);
+  background: var(--color-surface-muted);
+  color: var(--fic-icon-color);
+  overflow: visible;
+}
+
+.glowRadial,
+.glowBlur {
+  position: absolute;
+  inset: -40%;
+  border-radius: 999px;
+  pointer-events: none;
+  opacity: 0;
+}
+
+.glowRadial {
+  background: radial-gradient(
+    circle,
+    color-mix(in oklab, var(--fic-icon-color) 45%, transparent) 0%,
+    transparent 65%
+  );
+}
+
+.glowBlur {
+  background: radial-gradient(
+    circle,
+    color-mix(in oklab, var(--fic-icon-color) 60%, transparent) 0%,
+    transparent 70%
+  );
+  filter: blur(18px);
+}
+
+.icon {
+  position: relative;
+  z-index: 2;
+}
+
+.title {
+  margin: 0;
+  font-size: var(--heading-3);
+  color: var(--color-text);
+}
+
+.description {
+  margin: 0;
+  color: var(--color-text-muted);
+}
+
+.list {
+  margin: 0;
+  padding-left: 1.15em;
+  color: var(--color-text-muted);
+  margin-left: calc(var(--fic-icon-size) + var(--fic-header-gap));
+}
+
+.list li {
+  color: inherit;
+}
+
+.list li::marker {
+  color: var(--color-text-muted);
+}
+
+.particle {
+  position: absolute;
+  z-index: 3;
+  width: 0.35rem;
+  height: 0.35rem;
+  border-radius: 999px;
+  background: color-mix(in oklab, var(--fic-icon-color) 70%, transparent);
+  pointer-events: none;
+}
+
+.particle1 {
+  left: 62%;
+  top: 18%;
+}
+
+.particle2 {
+  left: 22%;
+  top: 58%;
+}
+
+.particle3 {
+  left: 78%;
+  top: 64%;
+}

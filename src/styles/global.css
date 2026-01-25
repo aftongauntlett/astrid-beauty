@@ -226,6 +226,10 @@ button:disabled {
   --stack-gap: var(--space-lg);
 }
 
+.capitalize {
+  text-transform: capitalize;
+}
+
 .narrow {
   width: 100%;
   max-width: min(44rem, var(--measure));

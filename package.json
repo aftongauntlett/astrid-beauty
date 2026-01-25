@@ -13,7 +13,13 @@
     "astro": "astro"
   },
   "dependencies": {
-    "astro": "^5.16.15"
+    "@astrojs/react": "^4.4.2",
+    "@lucide/astro": "^0.563.0",
+    "astro": "^5.16.15",
+    "framer-motion": "^12.29.0",
+    "lucide-react": "^0.563.0",
+    "react": "^19.2.3",
+    "react-dom": "^19.2.3"
   },
   "devDependencies": {
     "@astrojs/check": "^0.9.6",

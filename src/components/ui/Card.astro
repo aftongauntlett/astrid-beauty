@@ -40,6 +40,43 @@ const hasFooter = Astro.slots.has("footer");
 		border-bottom: 1px solid var(--color-border);
 	}
 
+	.card__headerRow {
+		display: flex;
+		align-items: baseline;
+		gap: var(--space-sm);
+	}
+
+	.card__headerContent {
+		min-width: 0;
+		flex: 1 1 auto;
+	}
+
+	.card__icon {
+		--card-icon-color: var(--color-text);
+
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		color: var(--card-icon-color);
+		flex: 0 0 auto;
+	}
+
+	.card__icon--default {
+		--card-icon-color: var(--color-text);
+	}
+
+	.card__icon--muted {
+		--card-icon-color: var(--color-text-muted);
+	}
+
+	.card__icon--primary {
+		--card-icon-color: var(--color-primary);
+	}
+
+	:global(.card__headerContent > :first-child) {
+		margin: 0;
+	}
+
 	.card__footer {
 		border-top: 1px solid var(--color-border);
 	}

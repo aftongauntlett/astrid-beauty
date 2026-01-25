@@ -1,9 +1,9 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Button from '../components/ui/Button.astro';
-import Card from '../components/ui/Card.astro';
 import Accordion from '../components/ui/Accordion.astro';
 import SectionIntro from '../components/ui/SectionIntro.astro';
+import FeatureIconCard from '../components/FeatureIconCard.astro';
 ---
 
 <BaseLayout title="Site" description="Placeholder homepage layout">
@@ -33,14 +33,22 @@ import SectionIntro from '../components/ui/SectionIntro.astro';
 				lede="Placeholder section for services, using consistent gutters and spacing."
 			/>
 
-			<div class="narrow">
-				<Card>
-					<h3 slot="header">Featured service</h3>
-					<p>Placeholder card body content.</p>
-					<div slot="footer" class="card-actions">
-						<Button href="/#contact" variant="secondary" size="sm">Contact</Button>
-					</div>
-				</Card>
+			<div class="narrow stack stack--lg">
+				<FeatureIconCard
+					title="Fancy icon card"
+					description="Opt-in React island with motion, only loaded when visible."
+					items={["Hover sparkle", "Respects reduced motion", "Token-based color"]}
+					iconName="sparkles"
+					iconColor="var(--color-primary)"
+				/>
+
+				<FeatureIconCard
+					title="Fancy icon card (variant)"
+					description="Same hover effects, calmer tone via tokens."
+					items={["Client:visible", "No motion when reduced", "Accessible SVG"]}
+					iconName="shield"
+					iconColor="var(--color-text-muted)"
+				/>
 			</div>
 		</div>
 	</section>
@@ -52,9 +60,9 @@ import SectionIntro from '../components/ui/SectionIntro.astro';
 			<div class="narrow">
 				<Accordion
 					items={[
-						{ id: 'about-1', title: 'What we do', content: 'Placeholder accordion content.' },
-						{ id: 'about-2', title: 'How to book', content: 'Placeholder accordion content.' },
-						{ id: 'about-3', title: 'Accessibility', content: 'Placeholder accordion content.' },
+						{ id: 'about-1', title: 'What we do', content: 'Placeholder accordion content.', iconName: 'sparkles' },
+						{ id: 'about-2', title: 'How to book', content: 'Placeholder accordion content.', iconName: 'shield' },
+						{ id: 'about-3', title: 'Accessibility', content: 'Placeholder accordion content.', iconName: 'sparkles' },
 					]}
 				/>
 			</div>
