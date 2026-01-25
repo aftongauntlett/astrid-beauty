@@ -6,8 +6,10 @@ import ThemeToggle from './ThemeToggle.astro';
 <header class="site-header" role="banner">
 	<div class="container site-header__inner">
 		<a class="site-header__brand" href="/">Site</a>
-		<Nav />
-		<ThemeToggle />
+		<div class="site-header__right">
+			<Nav />
+			<ThemeToggle />
+		</div>
 	</div>
 </header>
 
@@ -25,7 +27,16 @@ import ThemeToggle from './ThemeToggle.astro';
 		align-items: center;
 		justify-content: space-between;
 		gap: var(--space-md);
-		padding-block: var(--space-md);
+		min-height: var(--header-height);
+		padding-block: var(--space-sm);
+	}
+
+	.site-header__right {
+		display: flex;
+		align-items: center;
+		justify-content: flex-end;
+		gap: var(--space-sm);
+		min-width: 0;
 	}
 
 	.site-header__brand {

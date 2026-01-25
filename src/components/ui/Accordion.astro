@@ -36,12 +36,53 @@ const { items } = Astro.props;
 		border-radius: var(--radius-md);
 		background: var(--color-surface);
 		overflow: hidden;
+		box-shadow: var(--shadow-sm);
 	}
 
 	.accordion__summary {
+		list-style: none;
 		cursor: pointer;
-		padding: var(--space-sm) var(--space-md);
+		padding: 0 var(--space-lg);
+		min-height: var(--control-height);
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		gap: var(--space-md);
 		font-weight: 600;
+		color: var(--color-text);
+		background: transparent;
+	}
+
+	.accordion__summary::-webkit-details-marker {
+		display: none;
+	}
+
+	.accordion__summary:hover {
+		background: var(--color-surface-muted);
+	}
+
+	.accordion__summary::after {
+		content: "";
+		flex: 0 0 auto;
+		width: 0.75rem;
+		height: 0.75rem;
+		border-right: 2px solid var(--color-text-muted);
+		border-bottom: 2px solid var(--color-text-muted);
+		transform: rotate(45deg);
+	}
+
+	@media (prefers-reduced-motion: no-preference) {
+		.accordion__summary::after {
+			transition: transform 160ms ease;
+		}
+	}
+
+	.accordion__item[open] > .accordion__summary {
+		background: var(--color-surface-muted);
+	}
+
+	.accordion__item[open] > .accordion__summary::after {
+		transform: rotate(-135deg);
 	}
 
 	.accordion__summary:focus-visible {
@@ -50,7 +91,7 @@ const { items } = Astro.props;
 	}
 
 	.accordion__content {
-		padding: 0 var(--space-md) var(--space-md);
+		padding: var(--space-sm) var(--space-lg) var(--space-lg);
 		color: var(--color-text-muted);
 	}
 

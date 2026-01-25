@@ -27,12 +27,13 @@ const hasFooter = Astro.slots.has("footer");
 		border: 1px solid var(--color-border);
 		border-radius: var(--radius-lg);
 		overflow: hidden;
+		box-shadow: var(--shadow-sm);
 	}
 
 	.card__header,
 	.card__body,
 	.card__footer {
-		padding: var(--space-md);
+		padding: var(--space-lg);
 	}
 
 	.card__header {

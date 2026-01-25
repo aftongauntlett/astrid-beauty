@@ -1,0 +1,74 @@
+---
+export type HeadingLevel = 1 | 2 | 3 | 4;
+export type SectionIntroAs = "header" | "div";
+
+type HeadingTag = "h1" | "h2" | "h3" | "h4";
+
+export interface Props {
+	title: string;
+	lede?: string;
+	eyebrow?: string;
+	id?: string;
+	level?: HeadingLevel;
+	class?: string;
+	as?: SectionIntroAs;
+}
+
+const { title, lede, eyebrow, id, level = 2, class: className, as = "header" } = Astro.props;
+
+const RootTag = as;
+const TitleTag = (`h${level}` as HeadingTag);
+
+const rootClass = className ? `section-intro ${className}` : "section-intro";
+const hasEyebrowSlot = Astro.slots.has("eyebrow");
+const hasLedeSlot = Astro.slots.has("lede");
+
+const showEyebrow = Boolean(eyebrow) || hasEyebrowSlot;
+const showLede = Boolean(lede) || hasLedeSlot;
+---
+
+<RootTag class={rootClass}>
+  {showEyebrow && (
+    <p class="section-intro__eyebrow">
+      {hasEyebrowSlot ? <slot name="eyebrow" /> : eyebrow}
+    </p>
+  )}
+
+  <TitleTag class="section-intro__title" id={id}>
+    {title}
+  </TitleTag>
+
+  {showLede && (
+    <p class="section-intro__lede">
+      {hasLedeSlot ? <slot name="lede" /> : lede}
+    </p>
+  )}
+</RootTag>
+
+<style>
+	.section-intro {
+		display: grid;
+		gap: var(--space-sm);
+		max-width: var(--measure);
+	}
+
+	.section-intro__eyebrow {
+		font-size: var(--text-sm);
+		color: var(--color-text-muted);
+		font-weight: 600;
+		letter-spacing: 0.01em;
+		margin: 0;
+	}
+
+	.section-intro__title {
+		margin: 0;
+	}
+
+	.section-intro__lede {
+		margin: 0;
+		font-size: var(--text-lg);
+		line-height: 1.55;
+		color: var(--color-text-muted);
+		max-width: var(--measure);
+	}
+</style>

@@ -3,53 +3,81 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import Button from '../components/ui/Button.astro';
 import Card from '../components/ui/Card.astro';
 import Accordion from '../components/ui/Accordion.astro';
+import SectionIntro from '../components/ui/SectionIntro.astro';
 ---
 
 <BaseLayout title="Site" description="Placeholder homepage layout">
-	<section aria-labelledby="page-title">
-		<h1 id="page-title">Home</h1>
-		<p>Placeholder content for the homepage.</p>
-		<p>
-			<Button href="/#contact" variant="primary">Book now</Button>
-		</p>
-	</section>
+	<section class="section hero" aria-labelledby="page-title">
+		<div class="container hero__inner">
+			<SectionIntro
+				class="hero__intro"
+				level={1}
+				id="page-title"
+				eyebrow="Neutral marketing scaffold"
+				title="A clear headline for the homepage"
+				lede="Short supporting copy that explains the value without committing to a brand vibe."
+			/>
 
-	<section id="services" aria-labelledby="services-title">
-		<h2 id="services-title">Services</h2>
-		<p>Placeholder section for services.</p>
-
-		<Card>
-			<h3 slot="header">Featured service</h3>
-			<p>Placeholder card body content.</p>
-			<div slot="footer">
-				<Button href="/#contact" variant="secondary" size="sm">Contact</Button>
+			<div class="hero__cta" aria-label="Primary actions">
+				<Button href="/#contact" variant="primary">Primary CTA</Button>
+				<Button href="/#services" variant="secondary">Explore services</Button>
 			</div>
-		</Card>
+		</div>
 	</section>
 
-	<section id="about" aria-labelledby="about-title">
-		<h2 id="about-title">About</h2>
-		<p>Placeholder section for about information.</p>
+	<section class="section" id="services" aria-labelledby="services-title">
+		<div class="container stack stack--lg">
+			<SectionIntro
+				id="services-title"
+				title="Services"
+				lede="Placeholder section for services, using consistent gutters and spacing."
+			/>
 
-		<Accordion
-			items={[
-				{ id: 'about-1', title: 'What we do', content: 'Placeholder accordion content.' },
-				{ id: 'about-2', title: 'How to book', content: 'Placeholder accordion content.' },
-				{ id: 'about-3', title: 'Accessibility', content: 'Placeholder accordion content.' },
-			]}
-		/>
+			<div class="narrow">
+				<Card>
+					<h3 slot="header">Featured service</h3>
+					<p>Placeholder card body content.</p>
+					<div slot="footer" class="card-actions">
+						<Button href="/#contact" variant="secondary" size="sm">Contact</Button>
+					</div>
+				</Card>
+			</div>
+		</div>
 	</section>
 
-	<section id="gallery" aria-labelledby="gallery-title">
-		<h2 id="gallery-title">Gallery</h2>
-		<p>Placeholder section for gallery content.</p>
+	<section class="section" id="about" aria-labelledby="about-title">
+		<div class="container stack stack--lg">
+			<SectionIntro id="about-title" title="About" lede="Placeholder section for about information." />
+
+			<div class="narrow">
+				<Accordion
+					items={[
+						{ id: 'about-1', title: 'What we do', content: 'Placeholder accordion content.' },
+						{ id: 'about-2', title: 'How to book', content: 'Placeholder accordion content.' },
+						{ id: 'about-3', title: 'Accessibility', content: 'Placeholder accordion content.' },
+					]}
+				/>
+			</div>
+		</div>
 	</section>
 
-	<section id="contact" aria-labelledby="contact-title">
-		<h2 id="contact-title">Contact</h2>
-		<p>Placeholder section for contact information.</p>
-		<p>
-			<Button href="/" variant="ghost">Back to top</Button>
-		</p>
+	<section class="section" id="gallery" aria-labelledby="gallery-title">
+		<div class="container stack">
+			<SectionIntro id="gallery-title" title="Gallery" lede="Placeholder section for gallery content." />
+		</div>
+	</section>
+
+	<section class="section" id="contact" aria-labelledby="contact-title">
+		<div class="container stack stack--lg">
+			<SectionIntro
+				id="contact-title"
+				title="Contact"
+				lede="Placeholder section for contact information."
+			/>
+
+			<div class="back-to-top">
+				<Button href="#top" variant="ghost">Back to top</Button>
+			</div>
+		</div>
 	</section>
 </BaseLayout>
