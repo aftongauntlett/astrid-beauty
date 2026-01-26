@@ -1,5 +1,5 @@
 ---
-import FeatureIconCardReact from "./FeatureIconCard";
+import FeatureIconCardReact from "./FeatureIconCard.tsx";
 
 export interface Props {
 	title: string;
@@ -21,6 +21,6 @@ const reactProps = {
 ---
 
 <FeatureIconCardReact
-	client:visible
+	client:load
 	{...reactProps}
 />

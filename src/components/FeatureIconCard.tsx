@@ -66,8 +66,10 @@ export default function FeatureIconCard({
     <motion.article
       className={styles["card"]}
       style={cardStyle}
-      onMouseEnter={() => setIsHovered(true)}
-      onMouseLeave={() => setIsHovered(false)}
+      onPointerEnter={() => setIsHovered(true)}
+      onPointerLeave={() => setIsHovered(false)}
+      onFocus={() => setIsHovered(true)}
+      onBlur={() => setIsHovered(false)}
     >
       <div className={styles["header"]}>
         <motion.div

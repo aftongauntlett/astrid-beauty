@@ -1,4 +1,5 @@
 ---
+import Button from "../ui/Button.astro";
 import SettingsMenu from "./SettingsMenu.astro";
 import { getMessages, type Lang } from "../../i18n";
 
@@ -12,31 +13,28 @@ const { lang } = Astro.props;
 const messages = getMessages(lang);
 
 const sectionHref = (id: string) => (lang === "es" ? `/es#${id}` : `/#${id}`);
-
-const bookingUrl = "https://www.vagaro.com/byastridbeautysalon";
 ---
 
 <nav class="nav" aria-label="Primary">
-	<button
+	<Button
 		type="button"
+		variant="ghost"
+		size="sm"
 		class="nav__toggle"
 		aria-expanded="false"
 		aria-controls={menuId}
 		data-nav-toggle
 	>
 		{messages.nav.menu}
-	</button>
+	</Button>
 
 	<div class="nav__menu" id={menuId} hidden data-nav-menu>
 		<a class="nav__link" href={sectionHref("services")} data-section-link="services">{messages.nav.services}</a>
+		<a class="nav__link" href={sectionHref("booking")} data-section-link="booking">{messages.nav.booking}</a>
 		<a class="nav__link" href={sectionHref("gallery")} data-section-link="gallery">{messages.nav.gallery}</a>
-		<a class="nav__link" href={sectionHref("find-us")} data-section-link="find-us">{messages.nav.findUs}</a>
 		<a
 			class="nav__link nav__link--book"
-			href={bookingUrl}
-			target="_blank"
-			rel="noopener noreferrer"
-			aria-label={`${messages.misc.bookNow} (opens in a new tab)`}
+			href={sectionHref("booking")}
 		>
 			{messages.misc.bookNow}
 		</a>
@@ -221,6 +219,13 @@ const bookingUrl = "https://www.vagaro.com/byastridbeautysalon";
 		gap: var(--space-xs);
 		min-height: var(--control-height);
 		padding: 0 var(--space-md);
+	}
+
+	.nav__toggle.btn {
+		box-shadow: none;
+		border: 1px solid transparent;
+		padding: 0 var(--space-md);
+		min-height: var(--control-height);
 	}
 
 	.nav__menu {

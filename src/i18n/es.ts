@@ -5,6 +5,7 @@ export const es: Messages = {
     services: "Servicios",
     gallery: "Galería",
     findUs: "Encuéntranos",
+    booking: "Reservas",
     menu: "Menú",
   },
   common: {
@@ -20,18 +21,24 @@ export const es: Messages = {
     bookNow: "Agendar cita",
     viewServices: "Ver servicios",
     backToTop: "Volver arriba",
-    placeholderText: "Marcador de posición",
+    scheduleNow: "Programar ahora",
   },
   home: {
     heroLede:
-      "Texto de ejemplo para reservas y servicios. Breve, seguro y apropiado.",
+      "Color, cortes y tratamientos de brillo en Herndon—reserva en línea cuando quieras.",
     brandSrOnly: "By Astrid Beauty",
   },
   findUs: {
-    lede: "Detalles de ubicación próximamente. Por ahora, esta es una sección de ejemplo para dirección y horario.",
+    lede: "Visítanos en Herndon. El horario puede cambiar—llámanos para confirmar.",
+  },
+  booking: {
+    title: "Información de reservas",
+    lede: "Para ver las opciones de servicio, precios y disponibilidad más actualizados, reserva directamente a través de Vagaro. Así te aseguras de elegir el servicio exacto que mejor se adapte a tu cabello y a tus objetivos.",
+    scheduleHelper: "Reserva en línea al instante con Vagaro.",
+    reviewsTitle: "Reseñas de clientes",
   },
   services: {
-    lede: "Sección de ejemplo para servicios, con márgenes y espaciado consistentes.",
+    lede: "Un menú enfocado de color, corte y cuidado—adaptado a tu cabello y a tu agenda.",
     cards: [
       {
         title: "Color característico",
@@ -72,13 +79,19 @@ export const es: Messages = {
   },
   footer: {
     address: "Dirección",
+    contact: "Contacto",
     phone: "Teléfono",
     hours: "Horario",
     social: "Redes",
-    placeholderAddress: "Dirección de ejemplo",
-    placeholderPhone: "Teléfono de ejemplo",
-    placeholderHours: "Horario de ejemplo",
-    placeholderSocial: "Marcador de posición",
-    copyright: "Site",
+    findUsCta: "Abrir mapas",
+    email: "Correo",
+    facebook: "Facebook",
+    instagram: "Instagram",
+    placeholderAddress: "384 Elden Street, Suite 210\nHerndon, VA 20170",
+    placeholderPhone: "(703) 786-3707",
+    placeholderHours:
+      "El horario puede cambiar—por favor llámanos para confirmar.\nDomingo: Cerrado\nLunes: 9:00 AM – 5:00 PM\nMartes: Cerrado\nMiércoles: 9:00 AM – 6:30 PM\nJueves: Cerrado\nViernes: 9:00 AM – 6:30 PM\nSábado: 9:30 AM – 4:30 PM",
+    copyright: "By Astrid Beauty",
+    builtByLabel: "Creado por",
   },
 };

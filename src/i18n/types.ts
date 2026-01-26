@@ -3,6 +3,7 @@ export type Messages = {
     services: string;
     gallery: string;
     findUs: string;
+    booking: string;
     menu: string;
   };
   common: {
@@ -18,7 +19,7 @@ export type Messages = {
     bookNow: string;
     viewServices: string;
     backToTop: string;
-    placeholderText: string;
+    scheduleNow: string;
   };
   home: {
     heroLede: string;
@@ -26,6 +27,12 @@ export type Messages = {
   };
   findUs: {
     lede: string;
+  };
+  booking: {
+    title: string;
+    lede: string;
+    scheduleHelper: string;
+    reviewsTitle: string;
   };
   services: {
     lede: string;
@@ -47,13 +54,18 @@ export type Messages = {
   };
   footer: {
     address: string;
+    contact: string;
     phone: string;
     hours: string;
     social: string;
+    findUsCta: string;
+    email: string;
+    facebook: string;
+    instagram: string;
     placeholderAddress: string;
     placeholderPhone: string;
     placeholderHours: string;
-    placeholderSocial: string;
     copyright: string;
+    builtByLabel: string;
   };
 };

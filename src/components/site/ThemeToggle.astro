@@ -1,4 +1,5 @@
 ---
+import Button from "../ui/Button.astro";
 import { Moon, Sun } from "@lucide/astro";
 
 export interface Props {
@@ -8,8 +9,10 @@ export interface Props {
 const { label = "Toggle theme" } = Astro.props;
 ---
 
-<button
+<Button
 	type="button"
+	variant="ghost"
+	size="sm"
 	class="theme-toggle"
 	aria-label={label}
 	aria-pressed="false"
@@ -18,7 +21,7 @@ const { label = "Toggle theme" } = Astro.props;
 	<span class="sr-only">{label}</span>
 	<Sun class="theme-toggle__icon" size={18} aria-hidden="true" focusable="false" data-icon="sun" />
 	<Moon class="theme-toggle__icon" size={18} aria-hidden="true" focusable="false" data-icon="moon" />
-</button>
+</Button>
 
 <script>
 	import { toggleTheme } from "../../lib/theme";
@@ -48,6 +51,13 @@ const { label = "Toggle theme" } = Astro.props;
 		width: var(--control-height);
 		padding: 0;
 		border-radius: var(--radius-md);
+		box-shadow: none;
+	}
+
+	.theme-toggle.btn {
+		min-height: var(--control-height);
+		border: 1px solid transparent;
+		background: transparent;
 		box-shadow: none;
 	}
 

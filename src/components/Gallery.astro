@@ -90,13 +90,16 @@ const dataId = 'gallery-data';
 				{messages.gallery.showMore}
 			</Button>
 			<p class="sr-only" id={statusId} aria-live="polite"></p>
-			<script type="application/json" id="gallery-i18n" is:inline>
-				{JSON.stringify({
+			<script
+				type="application/json"
+				id="gallery-i18n"
+				is:inline
+				set:html={JSON.stringify({
 					showMore: messages.gallery.showMore,
 					showLess: messages.gallery.showLess,
 					statusTemplate: messages.gallery.statusTemplate,
 				})}
-			</script>
+			></script>
 			<script
 				type="application/json"
 				id={dataId}
@@ -117,9 +120,17 @@ const dataId = 'gallery-data';
 				// Gallery markup not present.
 			} else {
 				const initialCount = 6;
+				const safeParse = (node, fallback) => {
+					if (!node) return fallback;
+					try {
+						return JSON.parse(node.textContent || '');
+					} catch {
+						return fallback;
+					}
+				};
 				/** @type {{src: string, alt: string}[]} */
-				const remaining = JSON.parse(data.textContent || '[]');
-				const labels = i18n ? JSON.parse(i18n.textContent || '{}') : {};
+				const remaining = safeParse(data, []);
+				const labels = safeParse(i18n, {});
 				const showMoreLabel = labels.showMore || 'Show more';
 				const showLessLabel = labels.showLess || 'Show less';
 				const statusTemplate = labels.statusTemplate || 'Showing {count} images.';

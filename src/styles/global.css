@@ -87,8 +87,8 @@ html[data-theme="dark"] {
   --color-text-muted: #d0c2bb;
   --color-border: #3a2f2c80;
 
-  --color-primary: #cba5d8; /* mauve that pops on dark */
-  --color-primary-hover: #ab72bc;
+  --color-primary: #d395b3; /* mauve that pops on dark */
+  --color-primary-hover: #b36796;
   --color-primary-contrast: #17110f;
 
   --color-secondary: #d8b66a; /* soft glowing gold */
@@ -258,7 +258,7 @@ button:hover {
   color: var(--color-primary);
   border-color: color-mix(
     in oklab,
-    var(--color-primary) 55%,
+    var(--color-secondary) 55%,
     var(--color-border)
   );
 }
@@ -266,10 +266,10 @@ button:hover {
 .btn.btn--secondary:hover {
   background: color-mix(
     in oklab,
-    var(--color-primary) 10%,
+    var(--color-secondary) 14%,
     var(--color-surface)
   );
-  border-color: var(--color-primary);
+  border-color: var(--color-secondary);
 }
 
 button:disabled {

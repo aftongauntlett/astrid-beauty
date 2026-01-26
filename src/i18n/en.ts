@@ -5,6 +5,7 @@ export const en: Messages = {
     services: "Services",
     gallery: "Gallery",
     findUs: "Find Us",
+    booking: "Booking",
     menu: "Menu",
   },
   common: {
@@ -20,18 +21,24 @@ export const en: Messages = {
     bookNow: "Book Now",
     viewServices: "View Services",
     backToTop: "Back to top",
-    placeholderText: "Placeholder",
+    scheduleNow: "Schedule Now",
   },
   home: {
     heroLede:
-      "Placeholder copy for booking and services. Short, confident, and salon-appropriate.",
+      "Dimensional color, cuts, and gloss treatments in Herndon—book online anytime.",
     brandSrOnly: "By Astrid Beauty",
   },
   findUs: {
-    lede: "Location details coming soon. For now, here’s a placeholder section for address and hours.",
+    lede: "Visit us in Herndon. Business hours can change—call to confirm.",
+  },
+  booking: {
+    title: "Booking Information",
+    lede: "For the most up-to-date service options, pricing, and availability, please book directly through Vagaro. This ensures you are selecting the exact service that best fits your hair and your goals.",
+    scheduleHelper: "Instant online booking via Vagaro.",
+    reviewsTitle: "Client Reviews",
   },
   services: {
-    lede: "Placeholder section for services, using consistent gutters and spacing.",
+    lede: "A focused menu of color, cut, and care—tailored to your hair and your schedule.",
     cards: [
       {
         title: "Signature Color",
@@ -68,13 +75,19 @@ export const en: Messages = {
   },
   footer: {
     address: "Address",
+    contact: "Contact",
     phone: "Phone",
     hours: "Hours",
     social: "Social",
-    placeholderAddress: "Placeholder address",
-    placeholderPhone: "Placeholder phone",
-    placeholderHours: "Placeholder hours",
-    placeholderSocial: "Placeholder",
-    copyright: "Site",
+    findUsCta: "Open Maps",
+    email: "Email",
+    facebook: "Facebook",
+    instagram: "Instagram",
+    placeholderAddress: "384 Elden Street, Suite 210\nHerndon, VA 20170",
+    placeholderPhone: "(703) 786-3707",
+    placeholderHours:
+      "Business hours can change—please call to confirm.\nSunday: Closed\nMonday: 9:00 AM – 5:00 PM\nTuesday: Closed\nWednesday: 9:00 AM – 6:30 PM\nThursday: Closed\nFriday: 9:00 AM – 6:30 PM\nSaturday: 9:30 AM – 4:30 PM",
+    copyright: "By Astrid Beauty",
+    builtByLabel: "Built by",
   },
 };

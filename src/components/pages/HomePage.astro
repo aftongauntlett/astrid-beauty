@@ -4,6 +4,8 @@ import SectionIntro from "../ui/SectionIntro.astro";
 import FeatureIconCard from "../FeatureIconCard.astro";
 import Gallery from "../Gallery.astro";
 
+import { Star } from "@lucide/astro";
+
 import { getMessages, type Lang } from "../../i18n";
 
 type Props = {
@@ -14,7 +16,34 @@ const { lang } = Astro.props;
 const messages = getMessages(lang);
 const sectionHref = (id: string) => (lang === "es" ? `/es#${id}` : `/#${id}`);
 
-const bookingUrl = "https://www.vagaro.com/byastridbeautysalon";
+const vagaroServicesUrl = "https://www.vagaro.com/byastridbeautysalon/services";
+
+const reviews = [
+	{
+		quote:
+			"Always takes great care of me to where I had to bring my sister in. She got my sister and I right lol if you aren’t already going here you should ",
+		author: "Elizabeth C",
+		date: "Aug 14, 2025",
+	},
+	{
+		quote:
+			"if you are thinking of going to this salon, do it! she’s amazing, she does a very good job & she’s really nice & sweet, thank you Astrid you are incredible🤍",
+		author: "Anyi F",
+		date: "Jul 21, 2023",
+	},
+	{
+		quote:
+			"Astrid did such a beautiful job with my haircut! Got the exact results I was looking for. I definitely will be back.",
+		author: "Jules D",
+		date: "Dec 02, 2022",
+	},
+	{
+		quote:
+			"She did an amazing job. I am more than happy with the results. She is very friendly and makes you comfortable. She didn't rush through the process instead took her time , and explained what she did and why she did throughout. Will come again!",
+		author: "Ramsha S",
+		date: "May 06, 2021",
+	},
+] as const;
 
 const serviceCardMeta = [
 	{ iconName: "palette", iconColor: "var(--color-primary)" },
@@ -47,17 +76,12 @@ const serviceCardMeta = [
 			</div>
 			<div class="hero__actionsRow">
 				<Button
-					href={bookingUrl}
+					href={sectionHref("booking")}
 					variant="primary"
 					size="lg"
-					target="_blank"
-					rel="noopener noreferrer"
 					class="hero__bookNow"
 				>
 					{messages.misc.bookNow}
-				</Button>
-				<Button href={sectionHref("services")} variant="secondary" size="lg">
-					{messages.misc.viewServices}
 				</Button>
 			</div>
 		</div>
@@ -82,35 +106,55 @@ const serviceCardMeta = [
 	</div>
 </section>
 
+<section class="section" id="booking" aria-labelledby="booking-title">
+	<div class="container stack stack--lg">
+		<SectionIntro id="booking-title" title={messages.booking.title} lede={messages.booking.lede} />
+
+		<div class="booking-ctaCard" aria-label={messages.misc.scheduleNow}>
+			<Button
+				href={vagaroServicesUrl}
+				variant="primary"
+				size="lg"
+				target="_blank"
+				rel="noopener noreferrer"
+				class="booking-ctaCard__button"
+			>
+				{messages.misc.scheduleNow}
+			</Button>
+			<p class="booking-ctaCard__helper">{messages.booking.scheduleHelper}</p>
+		</div>
+
+		<section class="booking-reviews" aria-label={messages.booking.reviewsTitle}>
+			<header class="booking-reviews__header">
+				<h3 class="booking-reviews__title">{messages.booking.reviewsTitle}</h3>
+			</header>
+
+			<div class="reviews-grid" role="list" aria-label={messages.booking.reviewsTitle}>
+				{reviews.map((review) => (
+					<figure class="review" role="listitem">
+						<div class="review__rating" role="img" aria-label="5 out of 5 stars">
+							<Star class="review__star" size={14} aria-hidden="true" focusable="false" fill="currentColor" stroke="none" />
+							<Star class="review__star" size={14} aria-hidden="true" focusable="false" fill="currentColor" stroke="none" />
+							<Star class="review__star" size={14} aria-hidden="true" focusable="false" fill="currentColor" stroke="none" />
+							<Star class="review__star" size={14} aria-hidden="true" focusable="false" fill="currentColor" stroke="none" />
+							<Star class="review__star" size={14} aria-hidden="true" focusable="false" fill="currentColor" stroke="none" />
+						</div>
+						<blockquote class="review__quote">“{review.quote}”</blockquote>
+						<figcaption class="review__meta">
+							<span class="review__author">— {review.author}</span>
+							<time class="review__date" datetime={review.date}>{review.date}</time>
+						</figcaption>
+					</figure>
+				))}
+			</div>
+		</section>
+	</div>
+</section>
+
 <section class="section" id="gallery" aria-labelledby="gallery-title">
 	<div class="container stack">
 		<SectionIntro id="gallery-title" title={messages.sections.galleryTitle} lede={messages.gallery.lede} />
 		<Gallery lang={lang} />
-
-		<div class="back-to-top">
-			<Button href="#top" variant="ghost">{messages.misc.backToTop}</Button>
-		</div>
-	</div>
-</section>
-
-<section class="section" id="find-us" aria-labelledby="find-us-title">
-	<div class="container stack stack--lg">
-		<SectionIntro id="find-us-title" title={messages.nav.findUs} lede={messages.findUs.lede} />
-
-		<div class="find-us-grid" aria-label={messages.nav.findUs}>
-			<div class="find-us-card">
-				<h3 class="find-us-card__title">{messages.footer.address}</h3>
-				<p class="find-us-card__value">{messages.footer.placeholderAddress}</p>
-			</div>
-			<div class="find-us-card">
-				<h3 class="find-us-card__title">{messages.footer.hours}</h3>
-				<p class="find-us-card__value">{messages.footer.placeholderHours}</p>
-			</div>
-			<div class="find-us-card">
-				<h3 class="find-us-card__title">{messages.footer.phone}</h3>
-				<p class="find-us-card__value">{messages.footer.placeholderPhone}</p>
-			</div>
-		</div>
 	</div>
 </section>
 
@@ -140,35 +184,132 @@ const serviceCardMeta = [
 		border-color: var(--color-primary-hover);
 	}
 
-	.find-us-grid {
-		display: grid;
-		grid-template-columns: 1fr;
-		gap: var(--space-md);
-	}
-
-	.find-us-card {
+	.booking-ctaCard {
+		display: flex;
+		flex-direction: column;
+		justify-content: center;
+		align-items: center;
+		text-align: center;
+		gap: var(--space-sm);
 		padding: var(--space-lg);
 		border-radius: var(--radius-lg);
-		background: var(--color-surface);
+		background:
+			radial-gradient(1200px circle at 10% 0%, rgba(0, 0, 0, 0.04), transparent 40%),
+			var(--color-surface);
 		border: 1px solid var(--color-border);
 		box-shadow: var(--shadow-sm);
 	}
 
-	.find-us-card__title {
-		margin: 0 0 var(--space-xs);
-		font-size: var(--text-sm);
-		color: var(--color-text-muted);
-		letter-spacing: 0.01em;
+	.booking-ctaCard__button.btn {
+		min-width: min(22rem, 100%);
+		justify-content: center;
 	}
 
-	.find-us-card__value {
+	.booking-ctaCard__helper {
 		margin: 0;
+		color: var(--color-text-muted);
+		font-size: var(--text-xs);
+		line-height: 1.4;
+	}
+
+	.booking-reviews {
+		width: 100%;
+	}
+
+	.booking-reviews__header {
+		display: flex;
+		align-items: baseline;
+		gap: var(--space-md);
+		margin-bottom: var(--space-md);
+		flex-wrap: wrap;
+	}
+
+	.booking-reviews__title {
+		margin: 0;
+		font-size: var(--text-xl);
 		color: var(--color-text);
+		letter-spacing: -0.01em;
+		line-height: 1.1;
+	}
+
+	.reviews__more {
+		margin: var(--space-sm) 0 0;
+		color: var(--color-text-muted);
+		font-size: var(--text-xs);
+		letter-spacing: 0.01em;
+		text-align: right;
+	}
+
+	@media (max-width: 30rem) {
+		.reviews__more {
+			text-align: center;
+		}
+	}
+
+	.reviews-grid {
+		display: grid;
+		grid-template-columns: 1fr;
+		gap: var(--space-lg);
 	}
 
 	@media (min-width: 48rem) {
-		.find-us-grid {
-			grid-template-columns: repeat(3, minmax(0, 1fr));
+		.reviews-grid {
+			grid-template-columns: repeat(2, minmax(0, 1fr));
+			gap: var(--space-xl);
 		}
+	}
+
+	.review {
+		margin: 0;
+		padding: var(--space-lg);
+		border-radius: var(--radius-lg);
+		background: color-mix(in oklab, var(--color-surface-muted) 60%, var(--color-surface));
+		border: 1px solid var(--color-border);
+		box-shadow: none;
+		display: flex;
+		flex-direction: column;
+		gap: var(--space-sm);
+	}
+
+	.review__rating {
+		display: inline-flex;
+		align-items: center;
+		gap: 0.15rem;
+		color: color-mix(in oklab, var(--color-secondary) 72%, var(--color-primary));
+	}
+
+	.review__star {
+		display: block;
+	}
+
+	.review__quote {
+		margin: 0;
+		color: var(--color-text);
+		line-height: 1.65;
+		font-size: var(--text-sm);
+	}
+
+	.review__meta {
+		margin-top: auto;
+		display: inline-flex;
+		flex-direction: column;
+		align-items: flex-end;
+		justify-content: flex-end;
+		gap: 0.1rem;
+		align-self: flex-end;
+		text-align: right;
+	}
+
+	.review__author {
+		color: color-mix(in oklab, var(--color-text) 65%, var(--color-text-muted));
+		font-size: var(--text-xs);
+		font-weight: 500;
+		letter-spacing: 0.01em;
+	}
+
+	.review__date {
+		color: var(--color-text-muted);
+		font-size: 0.75rem;
+		letter-spacing: 0.01em;
 	}
 </style>
