@@ -47,25 +47,57 @@ import Gallery from '../components/Gallery.astro';
 				lede="Placeholder section for services, using consistent gutters and spacing."
 			/>
 
-			<div class="narrow stack stack--lg">
+			<div class="services-grid" aria-label="Service highlights">
 				<FeatureIconCard
-					title="Fancy icon card"
-					description="Opt-in React island with motion, only loaded when visible."
-					items={["Hover sparkle", "Respects reduced motion", "Token-based color"]}
-					iconName="sparkles"
+					title="Signature Color"
+					description="Dimensional color placed with a soft, natural finish."
+					items={["Consult-first", "Gloss + tone", "Low-contrast grow-out"]}
+					iconName="palette"
 					iconColor="var(--color-primary)"
 				/>
 
 				<FeatureIconCard
-					title="Fancy icon card (variant)"
-					description="Same hover effects, calmer tone via tokens."
-					items={["Client:visible", "No motion when reduced", "Accessible SVG"]}
-					iconName="shield"
+					title="Cut + Style"
+					description="Tailored shape, airy movement, and an easy everyday routine."
+					items={["Face-framing", "Blowout finish", "At-home tips"]}
+					iconName="scissors"
 					iconColor="var(--color-text-muted)"
+				/>
+
+				<FeatureIconCard
+					title="Gloss + Shine"
+					description="A sheer refresh that brings softness and light back in."
+					items={["Warm or cool", "Adds brightness", "No harsh tone"]}
+					iconName="droplet"
+					iconColor="var(--color-secondary)"
+				/>
+
+				<FeatureIconCard
+					title="Scalp Care"
+					description="Comfort-focused care for balance, hydration, and calm."
+					items={["Gentle cleanse", "Massage", "Sensitive-safe"]}
+					iconName="waves"
+					iconColor="var(--color-primary)"
 				/>
 			</div>
 		</div>
 	</section>
+
+	<style>
+		.services-grid {
+			display: grid;
+			gap: var(--space-xl);
+			grid-template-columns: 1fr;
+			align-items: stretch;
+		}
+
+		@media (min-width: 48rem) {
+			.services-grid {
+				grid-template-columns: repeat(2, minmax(0, 1fr));
+				gap: calc(var(--space-xl) + var(--space-sm));
+			}
+		}
+	</style>
 
 	<section class="section" id="about" aria-labelledby="about-title">
 		<div class="container stack stack--lg">

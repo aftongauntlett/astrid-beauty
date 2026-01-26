@@ -3,31 +3,52 @@
 :root {
   color-scheme: light dark;
 
-  --color-bg: #f8fafc;
-  --color-surface: #ffffff;
-  --color-surface-muted: #f1f5f9;
-  --color-text: #0f172a;
-  --color-text-muted: #475569;
-  --color-border: #cbd5e1;
-  --color-primary: #2563eb;
-  --color-primary-hover: #1d4ed8;
-  --color-primary-contrast: #ffffff;
-  --color-focus: #b45309;
+  /* Typography */
+  --font-heading:
+    "Playfair Display", "Cormorant Garamond", ui-serif, Georgia, Cambria,
+    "Times New Roman", Times, serif;
+  --font-body:
+    "Inter", system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial,
+    sans-serif;
 
-  --radius-sm: 0.375rem;
-  --radius-md: 0.5rem;
-  --radius-lg: 0.75rem;
+  /* Chic salon palette (warm, premium) */
+  --color-bg: #fbf6f1; /* warm off-white */
+  --color-surface: #fffaf6; /* softly tinted */
+  --color-surface-muted: #f4ece6;
+  --color-text: #2b2322; /* deep warm charcoal */
+  --color-text-muted: #6a5f5b; /* soft warm gray */
+  --color-border: #dfd2ca80;
+
+  /* Primary brand color = mauve (headings, nav links, accents) */
+  --color-primary: #7e639c;
+  --color-primary-hover: #61477f;
+  --color-primary-contrast: #fffaf6;
+
+  /* Secondary accent = soft gold (CTAs, highlights) */
+  --color-secondary: #feeb72; /* champagne gold */
+  --color-secondary-hover: #d3ad66;
+  --color-secondary-contrast: #1b1512;
+
+  /* Focus ring stays mauve and accessible */
+  --color-focus: #a04a73;
+
+  /* Shadow base (avoid "glow" in dark mode) */
+  --color-shadow: #2b2322;
+
+  --radius-sm: 0.75rem;
+  --radius-md: 9999px;
+  --radius-lg: 1.25rem;
 
   --space-xs: 0.25rem;
   --space-sm: 0.5rem;
   --space-md: 1rem;
-  --space-lg: 1.5rem;
-  --space-xl: 2rem;
+  --space-lg: 1.75rem;
+  --space-xl: 2.5rem;
 
   --container-max: 72rem;
 
   --container-pad: clamp(1rem, 4vw, 1.5rem);
-  --section-pad-y: clamp(2.5rem, 6vw, 4rem);
+  --section-pad-y: clamp(3rem, 7vw, 5rem);
 
   --header-height: 4rem;
   --scroll-pad-top: calc(var(--header-height) + var(--space-lg));
@@ -36,17 +57,18 @@
 
   --measure: 65ch;
 
-  --text-sm: 0.9375rem;
-  --text-base: 1rem;
-  --text-lg: 1.125rem;
-  --text-xl: 1.25rem;
+  /* Type scale: readable on mobile, elegant at large sizes */
+  --text-sm: clamp(0.95rem, 0.15vw + 0.92rem, 1rem);
+  --text-base: clamp(1.03rem, 0.2vw + 0.99rem, 1.125rem);
+  --text-lg: clamp(1.125rem, 0.35vw + 1.05rem, 1.25rem);
+  --text-xl: clamp(1.25rem, 0.55vw + 1.15rem, 1.45rem);
 
-  --heading-1: clamp(2rem, 3vw + 1rem, 3rem);
-  --heading-2: clamp(1.5rem, 1.5vw + 1rem, 2.125rem);
-  --heading-3: 1.25rem;
+  --heading-1: clamp(2.35rem, 3.1vw + 1.2rem, 3.7rem);
+  --heading-2: clamp(1.75rem, 1.9vw + 1rem, 2.55rem);
+  --heading-3: clamp(1.35rem, 0.9vw + 1.05rem, 1.75rem);
 
-  --shadow-color-sm: color-mix(in oklab, var(--color-text) 18%, transparent);
-  --shadow-color-md: color-mix(in oklab, var(--color-text) 26%, transparent);
+  --shadow-color-sm: color-mix(in oklab, var(--color-shadow) 16%, transparent);
+  --shadow-color-md: color-mix(in oklab, var(--color-shadow) 26%, transparent);
   --shadow-sm:
     0 1px 2px 0 var(--shadow-color-sm), 0 1px 1px -1px var(--shadow-color-sm);
   --shadow-md:
@@ -55,16 +77,24 @@
 }
 
 html[data-theme="dark"] {
-  --color-bg: #0b0f14;
-  --color-surface: #111827;
-  --color-surface-muted: #0f172a;
-  --color-text: #e5e7eb;
-  --color-text-muted: #cbd5e1;
-  --color-border: #334155;
-  --color-primary: #60a5fa;
-  --color-primary-hover: #3b82f6;
-  --color-primary-contrast: #0b0f14;
-  --color-focus: #fbbf24;
+  --color-bg: #17110f; /* deep espresso */
+  --color-surface: #211a18;
+  --color-surface-muted: #2a201e;
+  --color-text: #f6efe9; /* warm off-white */
+  --color-text-muted: #d0c2bb;
+  --color-border: #3a2f2c80;
+
+  --color-primary: #cba5d8; /* mauve that pops on dark */
+  --color-primary-hover: #ab72bc;
+  --color-primary-contrast: #17110f;
+
+  --color-secondary: #d8b66a; /* soft glowing gold */
+  --color-secondary-hover: #e6c77f;
+  --color-secondary-contrast: #1a1310;
+
+  --color-focus: #d07aa0;
+
+  --color-shadow: #0e0706;
 }
 
 /* Reset / defaults */
@@ -83,15 +113,8 @@ body {
   margin: 0;
   background: var(--color-bg);
   color: var(--color-text);
-  font-family:
-    system-ui,
-    -apple-system,
-    Segoe UI,
-    Roboto,
-    Helvetica,
-    Arial,
-    sans-serif;
-  line-height: 1.5;
+  font-family: var(--font-body);
+  line-height: 1.6;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
@@ -109,21 +132,32 @@ h4,
 h5,
 h6 {
   margin: 0 0 var(--space-sm);
-  line-height: 1.15;
-  font-weight: 750;
-  letter-spacing: -0.01em;
+  font-family: var(--font-heading);
+  font-optical-sizing: auto;
+  line-height: 1.12;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  color: var(--color-primary);
 }
 
 h1 {
   font-size: var(--heading-1);
+  line-height: 1.05;
 }
 
 h2 {
   font-size: var(--heading-2);
+  line-height: 1.08;
 }
 
 h3 {
   font-size: var(--heading-3);
+  line-height: 1.12;
+}
+
+h4 {
+  font-size: var(--text-xl);
+  line-height: 1.18;
 }
 
 p {
@@ -153,6 +187,11 @@ a {
 
 a:hover {
   color: var(--color-primary-hover);
+}
+
+/* Brand elevation: header reads like a luxury surface, not a toolbar */
+.site-header.site-header {
+  box-shadow: var(--shadow-sm);
 }
 
 hr {
@@ -197,6 +236,37 @@ button {
 
 button:hover {
   background: var(--color-surface-muted);
+}
+
+/* Premium button mapping (token-only): mauve brand + gold CTA */
+.btn.btn--primary {
+  background: var(--color-secondary);
+  color: var(--color-secondary-contrast);
+  border-color: var(--color-secondary);
+}
+
+.btn.btn--primary:hover {
+  background: var(--color-secondary-hover);
+  border-color: var(--color-secondary-hover);
+}
+
+.btn.btn--secondary {
+  background: var(--color-surface);
+  color: var(--color-primary);
+  border-color: color-mix(
+    in oklab,
+    var(--color-primary) 55%,
+    var(--color-border)
+  );
+}
+
+.btn.btn--secondary:hover {
+  background: color-mix(
+    in oklab,
+    var(--color-primary) 10%,
+    var(--color-surface)
+  );
+  border-color: var(--color-primary);
 }
 
 button:disabled {
@@ -270,6 +340,42 @@ button:disabled {
 }
 
 .hero__grid {
+  justify-items: center;
+}
+
+.hero__content {
+  justify-content: center;
+}
+
+.hero__brandmark {
+  justify-content: center;
+}
+
+.hero__brandmarkLogo {
+  width: min(100%, clamp(18rem, 34vw, 30rem));
+  filter: drop-shadow(
+    0 10px 18px color-mix(in oklab, var(--color-shadow) 12%, transparent)
+  );
+}
+
+.hero__actions {
+  align-items: center;
+}
+
+.hero__actionsCopy {
+  text-align: center;
+}
+
+.hero__actionsTitle {
+  font-size: var(--heading-2);
+  letter-spacing: -0.02em;
+}
+
+.hero__actionsLede {
+  font-size: var(--heading-2);
+}
+
+.hero__grid {
   display: grid;
   gap: var(--space-xl);
   align-items: start;
@@ -338,12 +444,18 @@ button:disabled {
 
 @media (min-width: 60rem) {
   .hero__grid {
-    grid-template-columns: minmax(0, 1fr) minmax(0, 2fr);
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
     align-items: center;
+    justify-items: stretch;
   }
 
   .hero__actions {
     justify-self: end;
+    align-items: stretch;
+  }
+
+  .hero__actionsCopy {
+    text-align: left;
   }
 }
 

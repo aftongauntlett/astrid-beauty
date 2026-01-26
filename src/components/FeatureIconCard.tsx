@@ -1,7 +1,14 @@
 import React, { useState } from "react";
 import { motion, useReducedMotion } from "framer-motion";
 import type { MotionStyle } from "framer-motion";
-import { Shield, Sparkles } from "lucide-react";
+import {
+  Droplet,
+  Palette,
+  Scissors,
+  Shield,
+  Sparkles,
+  Waves,
+} from "lucide-react";
 import type { LucideIcon } from "lucide-react";
 
 import styles from "./FeatureIconCard.module.css";
@@ -10,7 +17,13 @@ export interface FeatureIconCardProps {
   title: string;
   items?: string[];
   description?: string;
-  iconName?: "sparkles" | "shield";
+  iconName?:
+    | "sparkles"
+    | "shield"
+    | "palette"
+    | "scissors"
+    | "droplet"
+    | "waves";
   icon?: LucideIcon;
   iconColor?: string;
 }
@@ -33,6 +46,10 @@ export default function FeatureIconCard({
   > = {
     sparkles: Sparkles,
     shield: Shield,
+    palette: Palette,
+    scissors: Scissors,
+    droplet: Droplet,
+    waves: Waves,
   };
 
   const Icon = icon ?? iconByName[iconName];
@@ -74,7 +91,9 @@ export default function FeatureIconCard({
           <motion.div
             className={styles["glowRadial"]}
             animate={
-              shouldAnimate ? { opacity: [0.15, 0.6, 0.2] } : { opacity: 0 }
+              shouldAnimate
+                ? { opacity: [0.12, 0.55, 0.18] }
+                : { opacity: 0.14 }
             }
             transition={
               reducedMotion
@@ -87,7 +106,7 @@ export default function FeatureIconCard({
           <motion.div
             className={styles["glowBlur"]}
             animate={
-              shouldAnimate ? { opacity: [0.1, 0.5, 0.15] } : { opacity: 0 }
+              shouldAnimate ? { opacity: [0.08, 0.45, 0.12] } : { opacity: 0.1 }
             }
             transition={
               reducedMotion
@@ -102,7 +121,7 @@ export default function FeatureIconCard({
             className={styles["icon"]}
             animate={
               shouldAnimate
-                ? { rotate: [0, -8, 8, 0], scale: [1, 1.05, 1] }
+                ? { rotate: [0, -6, 6, 0], scale: [1, 1.03, 1] }
                 : { rotate: 0, scale: 1 }
             }
             transition={
@@ -111,7 +130,7 @@ export default function FeatureIconCard({
                 : { duration: 0.85, ease: "easeInOut" }
             }
           >
-            <Icon aria-hidden="true" focusable="false" size={26} />
+            <Icon aria-hidden="true" focusable="false" size={34} />
           </motion.div>
 
           {shouldAnimate
@@ -123,8 +142,8 @@ export default function FeatureIconCard({
                   animate={{
                     opacity: [0, 1, 0],
                     scale: [0, 1, 0],
-                    y: [-24, -88],
-                    x: [-6, 6],
+                    y: [-18, -64],
+                    x: [-4, 4],
                   }}
                   transition={{
                     duration: 1.6,

@@ -37,7 +37,7 @@ const images: GalleryImage[] = fs
 	.sort((a: string, b: string) => a.localeCompare(b, undefined, { numeric: true, sensitivity: 'base' }))
 	.map((name: string) => ({ src: `${galleryUrlPrefix}${name}`, alt: toAlt(name) }));
 
-const initialCount = 8;
+const initialCount = 6;
 const initialImages = images.slice(0, initialCount);
 const remainingImages = images.slice(initialCount);
 
@@ -51,16 +51,19 @@ const dataId = 'gallery-data';
 	<ul class="gallery__grid" id={gridId} aria-label="Gallery images">
 		{initialImages.map((image) => (
 			<li class="gallery__item">
-				<div class="gallery__card">
-					<img
-						class="gallery__img"
-						src={image.src}
-						alt={image.alt}
-						loading="lazy"
-						decoding="async"
-						width="900"
-						height="1200"
-					/>
+				<div class="gallery__frame">
+					<div class="gallery__media">
+						<img
+							class="gallery__img"
+							src={image.src}
+							alt={image.alt}
+							loading="lazy"
+							decoding="async"
+							width="900"
+							height="1200"
+						/>
+						<span class="gallery__captionHook" aria-hidden="true"></span>
+					</div>
 				</div>
 			</li>
 		))}
@@ -96,7 +99,7 @@ const dataId = 'gallery-data';
 			if (!toggle || !grid || !data) {
 				// Gallery markup not present.
 			} else {
-				const initialCount = 8;
+				const initialCount = 6;
 				/** @type {{src: string, alt: string}[]} */
 				const remaining = JSON.parse(data.textContent || '[]');
 				/** @type {HTMLElement[]} */
@@ -107,8 +110,11 @@ const dataId = 'gallery-data';
 					const li = document.createElement('li');
 					li.className = 'gallery__item gallery__item--extra';
 
-					const card = document.createElement('div');
-					card.className = 'gallery__card';
+					const frame = document.createElement('div');
+					frame.className = 'gallery__frame';
+
+					const media = document.createElement('div');
+					media.className = 'gallery__media';
 
 					const image = document.createElement('img');
 					image.className = 'gallery__img';
@@ -119,8 +125,13 @@ const dataId = 'gallery-data';
 					image.width = 900;
 					image.height = 1200;
 
-					card.append(image);
-					li.append(card);
+					const captionHook = document.createElement('span');
+					captionHook.className = 'gallery__captionHook';
+					captionHook.setAttribute('aria-hidden', 'true');
+
+					media.append(image, captionHook);
+					frame.append(media);
+					li.append(frame);
 					return li;
 				};
 
@@ -160,17 +171,38 @@ const dataId = 'gallery-data';
 		padding: 0;
 		margin: 0;
 		display: grid;
-		gap: var(--space-md);
-		grid-template-columns: repeat(2, minmax(0, 1fr));
+		gap: var(--space-lg);
+		grid-template-columns: 1fr;
 	}
 
-	@media (min-width: 48rem) {
+	@media (min-width: 36rem) {
 		.gallery .gallery__grid {
-			grid-template-columns: repeat(4, minmax(0, 1fr));
+			grid-template-columns: repeat(2, minmax(0, 1fr));
 		}
 	}
 
-	.gallery .gallery__card {
+	@media (min-width: 64rem) {
+		.gallery .gallery__grid {
+			grid-template-columns: repeat(3, minmax(0, 1fr));
+			gap: var(--space-xl);
+		}
+	}
+
+	.gallery .gallery__frame {
+		display: block;
+		border-radius: var(--radius-lg);
+		padding: var(--space-sm);
+		background: color-mix(in oklab, var(--color-primary) 6%, var(--color-surface));
+		border: 1px solid var(--color-border);
+		box-shadow: var(--shadow-sm);
+	}
+
+	.gallery .gallery__frame:hover {
+		box-shadow: var(--shadow-md);
+		border-color: color-mix(in oklab, var(--color-primary) 35%, var(--color-border));
+	}
+
+	.gallery .gallery__media {
 		position: relative;
 		display: block;
 		aspect-ratio: 3 / 4;
@@ -178,7 +210,6 @@ const dataId = 'gallery-data';
 		overflow: hidden;
 		background: var(--color-surface);
 		border: 1px solid color-mix(in oklab, var(--color-border) 70%, transparent);
-		box-shadow: var(--shadow-sm);
 	}
 
 	.gallery .gallery__img {
@@ -188,21 +219,29 @@ const dataId = 'gallery-data';
 		object-fit: cover;
 		transform: translateZ(0) scale(1);
 		backface-visibility: hidden;
-		filter: saturate(1.02) contrast(0.98);
+		filter: saturate(0.94) contrast(0.94) brightness(0.99);
 	}
 
-	.gallery .gallery__card::before {
+	.gallery .gallery__media::before {
 		content: '';
 		position: absolute;
 		inset: 0;
 		pointer-events: none;
 		background:
-			linear-gradient(180deg, color-mix(in oklab, black 6%, transparent), transparent 50%),
-			linear-gradient(0deg, color-mix(in oklab, black 8%, transparent), transparent 60%);
-		opacity: 0.28;
+			linear-gradient(
+				180deg,
+				color-mix(in oklab, var(--color-shadow) 10%, transparent),
+				transparent 52%
+			),
+			linear-gradient(
+				0deg,
+				color-mix(in oklab, var(--color-shadow) 12%, transparent),
+				transparent 62%
+			);
+		opacity: 0.22;
 	}
 
-	.gallery .gallery__card::after {
+	.gallery .gallery__media::after {
 		content: '';
 		position: absolute;
 		inset: 0;
@@ -210,24 +249,18 @@ const dataId = 'gallery-data';
 		background: linear-gradient(
 			120deg,
 			transparent 0%,
-			color-mix(in oklab, white 30%, transparent) 35%,
-			color-mix(in oklab, white 55%, transparent) 45%,
+			color-mix(in oklab, var(--color-secondary) 18%, transparent) 34%,
+			color-mix(in oklab, var(--color-surface) 40%, transparent) 44%,
 			transparent 60%
 		);
 		transform: translateX(-130%) skewX(-15deg);
 		opacity: 0;
 	}
 
-	.gallery .gallery__card:hover {
-		box-shadow: var(--shadow-md);
-		border-color: color-mix(in oklab, var(--color-primary) 35%, var(--color-border));
-	}
-
 	@media (prefers-reduced-motion: no-preference) {
-		.gallery .gallery__card {
+		.gallery .gallery__frame {
 			transition:
 				box-shadow 180ms ease,
-				transform 180ms ease,
 				border-color 180ms ease;
 		}
 
@@ -238,26 +271,48 @@ const dataId = 'gallery-data';
 				filter 240ms ease;
 		}
 
-		.gallery .gallery__card::after {
+		.gallery .gallery__media::after {
 			transition:
 				transform 520ms ease,
 				opacity 240ms ease;
 		}
 
-		.gallery .gallery__card:hover::after {
+		.gallery .gallery__frame:hover .gallery__media::after {
 			opacity: 1;
 			transform: translateX(130%) skewX(-15deg);
 		}
 
-		.gallery .gallery__card:hover .gallery__img {
-			transform: translateZ(0) scale(1.02);
-			filter: saturate(1.04) contrast(0.99);
+		.gallery .gallery__frame:hover .gallery__img {
+			transform: translateZ(0) scale(1.015);
+			filter: saturate(1) contrast(0.98) brightness(1);
+		}
+	}
+
+	@media (prefers-reduced-motion: reduce) {
+		.gallery .gallery__media::after {
+			opacity: 0 !important;
+			transform: none !important;
+		}
+
+		.gallery .gallery__img {
+			transform: none !important;
 		}
 	}
 
 	.gallery .gallery__actions {
 		display: flex;
 		justify-content: center;
-		margin-top: calc(var(--space-xl) + var(--space-lg));
+		margin-top: var(--space-xl);
+	}
+
+	.gallery .gallery__actions .btn {
+		width: min(100%, 20rem);
+	}
+
+	.gallery .gallery__captionHook {
+		position: absolute;
+		inset: auto 0 0 0;
+		min-height: 2.25rem;
+		pointer-events: none;
 	}
 </style>
