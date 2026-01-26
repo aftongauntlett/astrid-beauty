@@ -1,35 +1,44 @@
 ---
+import { getMessages, type Lang } from "../../i18n";
+
+export interface Props {
+	lang: Lang;
+}
+
+const { lang } = Astro.props;
+const messages = getMessages(lang);
+
 const year = new Date().getFullYear();
 ---
 
 <footer class="site-footer" role="contentinfo">
 	<div class="container site-footer__inner">
 		<div class="site-footer__grid">
-			<section class="site-footer__block" aria-label="Address">
-				<h2 class="site-footer__heading">Address</h2>
-				<p class="site-footer__text">Placeholder address</p>
+			<section class="site-footer__block" aria-label={messages.footer.address}>
+				<h2 class="site-footer__heading">{messages.footer.address}</h2>
+				<p class="site-footer__text">{messages.footer.placeholderAddress}</p>
 			</section>
 
-			<section class="site-footer__block" aria-label="Phone">
-				<h2 class="site-footer__heading">Phone</h2>
-				<p class="site-footer__text">Placeholder phone</p>
+			<section class="site-footer__block" aria-label={messages.footer.phone}>
+				<h2 class="site-footer__heading">{messages.footer.phone}</h2>
+				<p class="site-footer__text">{messages.footer.placeholderPhone}</p>
 			</section>
 
-			<section class="site-footer__block" aria-label="Hours">
-				<h2 class="site-footer__heading">Hours</h2>
-				<p class="site-footer__text">Placeholder hours</p>
+			<section class="site-footer__block" aria-label={messages.footer.hours}>
+				<h2 class="site-footer__heading">{messages.footer.hours}</h2>
+				<p class="site-footer__text">{messages.footer.placeholderHours}</p>
 			</section>
 
-			<section class="site-footer__block" aria-label="Social links">
-				<h2 class="site-footer__heading">Social</h2>
+			<section class="site-footer__block" aria-label={messages.footer.social}>
+				<h2 class="site-footer__heading">{messages.footer.social}</h2>
 				<ul class="site-footer__list">
-					<li><a class="site-footer__link" href="/">Placeholder</a></li>
-					<li><a class="site-footer__link" href="/">Placeholder</a></li>
+					<li><a class="site-footer__link" href="/">{messages.footer.placeholderSocial}</a></li>
+					<li><a class="site-footer__link" href="/">{messages.footer.placeholderSocial}</a></li>
 				</ul>
 			</section>
 		</div>
 
-		<small class="site-footer__meta">&copy; {year} Site</small>
+		<small class="site-footer__meta">&copy; {year} {messages.footer.copyright}</small>
 	</div>
 </footer>
 

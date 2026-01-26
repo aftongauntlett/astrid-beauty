@@ -1,0 +1,558 @@
+---
+import { Globe, Moon, Settings, Sun } from "@lucide/astro";
+
+import { toLangPath } from "../../i18n/routes";
+import type { Lang } from "../../i18n";
+
+type Mode = "desktop" | "mobile";
+
+type Props = {
+	lang: Lang;
+	mode?: Mode;
+};
+
+const { lang, mode = "desktop" } = Astro.props;
+
+const isEn = lang === "en";
+const pathname = Astro.url.pathname;
+const enHref = toLangPath(pathname, "en");
+const esHref = toLangPath(pathname, "es");
+
+const menuId = `settings-menu-${mode}`;
+const rootClass =
+	mode === "mobile"
+		? "settings-menu settings-menu--mobile"
+		: "settings-menu settings-menu--desktop";
+---
+
+<div class={rootClass} data-settings-root>
+	<button
+		type="button"
+		class="settings-menu__trigger"
+		aria-haspopup="menu"
+		aria-expanded="false"
+		aria-controls={menuId}
+		data-settings-trigger
+	>
+		<Settings class="settings-menu__icon" size={18} aria-hidden="true" focusable="false" />
+		<span class="sr-only">Settings</span>
+	</button>
+
+	<div
+		class="settings-menu__panel"
+		id={menuId}
+		role="menu"
+		aria-label="Settings"
+		hidden
+		data-settings-panel
+	>
+		<div class="settings-menu__section" role="none">
+			<p class="settings-menu__heading" role="none">Theme</p>
+			<button
+				type="button"
+				class="settings-menu__item"
+				role="menuitemradio"
+				aria-checked="false"
+				data-theme="light"
+			>
+				<span class="settings-menu__itemInner">
+					<Sun class="settings-menu__itemIcon" size={16} aria-hidden="true" focusable="false" />
+					<span class="settings-menu__itemText">Light mode</span>
+				</span>
+			</button>
+			<button
+				type="button"
+				class="settings-menu__item"
+				role="menuitemradio"
+				aria-checked="false"
+				data-theme="dark"
+			>
+				<span class="settings-menu__itemInner">
+					<Moon class="settings-menu__itemIcon" size={16} aria-hidden="true" focusable="false" />
+					<span class="settings-menu__itemText">Dark mode</span>
+				</span>
+			</button>
+		</div>
+
+		<div class="settings-menu__divider" role="none" aria-hidden="true"></div>
+
+		<div class="settings-menu__section" role="none">
+			<p class="settings-menu__heading" role="none">Language</p>
+			<a
+				href={enHref}
+				class="settings-menu__item"
+				role="menuitemradio"
+				aria-checked={isEn ? "true" : "false"}
+				data-lang="en"
+			>
+				<span class="settings-menu__itemInner">
+					<Globe class="settings-menu__itemIcon" size={16} aria-hidden="true" focusable="false" />
+					<span class="settings-menu__itemText">English</span>
+				</span>
+			</a>
+			<a
+				href={esHref}
+				class="settings-menu__item"
+				role="menuitemradio"
+				aria-checked={!isEn ? "true" : "false"}
+				data-lang="es"
+			>
+				<span class="settings-menu__itemInner">
+					<Globe class="settings-menu__itemIcon" size={16} aria-hidden="true" focusable="false" />
+					<span class="settings-menu__itemText">Español</span>
+				</span>
+			</a>
+		</div>
+	</div>
+</div>
+
+<script is:inline>
+	(() => {
+		try {
+			const roots = Array.from(document.querySelectorAll('[data-settings-root]'));
+			for (const root of roots) {
+				if (!(root instanceof HTMLElement)) continue;
+				if (root.dataset.settingsInit === 'true') continue;
+				root.dataset.settingsInit = 'true';
+
+				const trigger = root.querySelector('[data-settings-trigger]');
+				const panel = root.querySelector('[data-settings-panel]');
+				if (!(trigger instanceof HTMLButtonElement) || !(panel instanceof HTMLElement)) continue;
+
+				const getItems = () =>
+					Array.from(panel.querySelectorAll('[role="menuitemradio"]')).filter(
+						(el) => el instanceof HTMLElement
+					);
+
+				const isOpen = () => trigger.getAttribute('aria-expanded') === 'true';
+
+				const setSide = (side) => {
+					if (side !== 'left' && side !== 'right') return;
+					root.dataset.side = side;
+				};
+
+				const syncSideForViewport = () => {
+					// Default: open to the right (panel extends rightward from trigger).
+					// Flip to left if it would overflow the viewport.
+					const viewportWidth = document.documentElement.clientWidth || window.innerWidth;
+					const safeMargin = 8;
+					const rootRect = root.getBoundingClientRect();
+					const panelWidth = panel.getBoundingClientRect().width || panel.offsetWidth;
+					if (!panelWidth) {
+						setSide('right');
+						return;
+					}
+
+					const canOpenRight = rootRect.left + panelWidth <= viewportWidth - safeMargin;
+					const canOpenLeft = rootRect.right - panelWidth >= safeMargin;
+
+					if (canOpenRight) {
+						setSide('right');
+						return;
+					}
+					if (canOpenLeft) {
+						setSide('left');
+						return;
+					}
+
+					// If neither fully fits, pick the side with more room.
+					const roomRight = viewportWidth - safeMargin - rootRect.left;
+					const roomLeft = rootRect.right - safeMargin;
+					setSide(roomRight >= roomLeft ? 'right' : 'left');
+				};
+
+				let closeTimer = 0;
+				const getMotionMs = () => {
+					try {
+						return window.matchMedia?.('(prefers-reduced-motion: reduce)').matches ? 0 : 140;
+					} catch {
+						return 140;
+					}
+				};
+
+				const openMenu = () => {
+					if (closeTimer) {
+						window.clearTimeout(closeTimer);
+						closeTimer = 0;
+					}
+					trigger.setAttribute('aria-expanded', 'true');
+					panel.hidden = false;
+
+					// Measure + decide alignment without flashing.
+					const prevVisibility = panel.style.visibility;
+					const prevPointerEvents = panel.style.pointerEvents;
+					panel.style.visibility = 'hidden';
+					panel.style.pointerEvents = 'none';
+					syncSideForViewport();
+					panel.style.visibility = prevVisibility;
+					panel.style.pointerEvents = prevPointerEvents;
+
+					// Animate in.
+					requestAnimationFrame(() => {
+						root.dataset.open = 'true';
+					});
+
+					// Sync theme checked state from the current DOM theme.
+					const theme = document.documentElement.dataset['theme'] === 'dark' ? 'dark' : 'light';
+					for (const el of getItems()) {
+						if (!(el instanceof HTMLElement)) continue;
+						const t = el.getAttribute('data-theme');
+						if (t === 'light' || t === 'dark') {
+							el.setAttribute('aria-checked', t === theme ? 'true' : 'false');
+						}
+					}
+				};
+
+				const closeMenu = () => {
+					trigger.setAttribute('aria-expanded', 'false');
+					delete root.dataset.open;
+					const ms = getMotionMs();
+					if (ms === 0) {
+						panel.hidden = true;
+						return;
+					}
+					closeTimer = window.setTimeout(() => {
+						if (!isOpen()) panel.hidden = true;
+						closeTimer = 0;
+					}, ms);
+				};
+
+				// Start closed.
+				closeMenu();
+				setSide('right');
+
+				const focusFirst = () => {
+					const items = getItems();
+					const first = items[0];
+					if (first instanceof HTMLElement) first.focus();
+				};
+
+				trigger.addEventListener('click', () => {
+					// Toggle on click.
+					if (isOpen()) closeMenu();
+					else openMenu();
+				});
+
+				trigger.addEventListener('keydown', (event) => {
+					if (event.key === 'ArrowDown') {
+						event.preventDefault();
+						openMenu();
+						focusFirst();
+					}
+					if (event.key === 'Enter' || event.key === ' ') {
+						event.preventDefault();
+						openMenu();
+						focusFirst();
+					}
+					if (event.key === 'Escape') {
+						closeMenu();
+					}
+				});
+
+				root.addEventListener('keydown', (event) => {
+					if (event.key === 'Escape') {
+						closeMenu();
+						trigger.focus();
+						return;
+					}
+
+					if (panel.hidden) return;
+
+					if (event.key === 'ArrowDown' || event.key === 'ArrowUp') {
+						const items = getItems();
+						const active = document.activeElement;
+						const currentIndex = items.findIndex((el) => el === active);
+						if (items.length === 0) return;
+
+						event.preventDefault();
+						const delta = event.key === 'ArrowDown' ? 1 : -1;
+						const nextIndex =
+							currentIndex === -1
+								? 0
+								: (currentIndex + delta + items.length) % items.length;
+						const next = items[nextIndex];
+						if (next instanceof HTMLElement) next.focus();
+					}
+				});
+
+				document.addEventListener('pointerdown', (event) => {
+					const target = event.target;
+					if (!(target instanceof Node)) return;
+					if (!root.contains(target)) closeMenu();
+				});
+
+				document.addEventListener('focusin', (event) => {
+					const target = event.target;
+					if (!(target instanceof Node)) return;
+					if (!root.contains(target)) closeMenu();
+				});
+
+				window.addEventListener('resize', () => {
+					if (!panel.hidden) syncSideForViewport();
+				});
+
+				const setTheme = (nextTheme) => {
+					if (nextTheme !== 'light' && nextTheme !== 'dark') return;
+
+					try {
+						document.documentElement.classList.add('theme-changing');
+					} catch {
+						// ignore
+					}
+
+					try {
+						localStorage.setItem('theme', nextTheme);
+					} catch {
+						// ignore
+					}
+
+					document.documentElement.dataset['theme'] = nextTheme;
+
+					requestAnimationFrame(() => {
+						requestAnimationFrame(() => {
+							document.documentElement.classList.remove('theme-changing');
+						});
+					});
+				};
+
+				panel.addEventListener('click', (event) => {
+					const target = event.target;
+					if (!(target instanceof Element)) return;
+
+					const themeEl = target.closest('[data-theme]');
+					const theme = themeEl?.getAttribute('data-theme');
+					if (theme === 'light' || theme === 'dark') {
+						setTheme(theme);
+						for (const el of getItems()) {
+							const t = el.getAttribute('data-theme');
+							if (t === 'light' || t === 'dark') {
+								el.setAttribute('aria-checked', t === theme ? 'true' : 'false');
+							}
+						}
+						closeMenu();
+						trigger.focus();
+						return;
+					}
+
+					const langEl = target.closest('a[data-lang]');
+					if (langEl instanceof HTMLAnchorElement) {
+						const value = langEl.getAttribute('data-lang');
+						if (value === 'en' || value === 'es') {
+							try {
+								localStorage.setItem('preferredLang', value);
+							} catch {
+								// ignore
+							}
+
+							const currentLang = document.documentElement.lang === 'es' ? 'es' : 'en';
+							if (currentLang === value) {
+								event.preventDefault();
+								closeMenu();
+								trigger.focus();
+								return;
+							}
+
+							// Preserve current hash when switching languages (useful for section anchors).
+							const href = langEl.getAttribute('href') || '';
+							if (window.location.hash && !href.includes('#')) {
+								event.preventDefault();
+								window.location.assign(`${href}${window.location.search}${window.location.hash}`);
+							}
+							closeMenu();
+						}
+					}
+				});
+			}
+		} catch {
+			// ignore
+		}
+	})();
+</script>
+
+<style>
+	.settings-menu {
+		position: relative;
+		display: inline-flex;
+		align-items: center;
+	}
+
+	.settings-menu__trigger {
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		width: var(--control-height);
+		padding: 0;
+		border-radius: var(--radius-sm);
+		background: var(--color-surface);
+		border: 1px solid var(--color-border);
+		box-shadow: none;
+	}
+
+	.settings-menu__trigger:hover {
+		background: var(--color-surface-muted);
+	}
+
+	.settings-menu__trigger:focus-visible {
+		outline: 2px solid var(--color-focus);
+		outline-offset: 2px;
+	}
+
+	.settings-menu__panel {
+		position: absolute;
+		top: calc(100% + var(--space-sm));
+		left: 0;
+		min-width: 16rem;
+		padding: var(--space-md);
+		background: color-mix(in oklab, var(--color-surface) 78%, transparent);
+		border: 1px solid color-mix(in oklab, var(--color-border) 90%, transparent);
+		border-radius: var(--radius-lg);
+		box-shadow: var(--shadow-md);
+		display: grid;
+		gap: var(--space-md);
+		z-index: 60;
+		opacity: 0;
+		transform: translateY(-4px) scale(0.985);
+		pointer-events: none;
+		transition:
+			opacity 140ms ease,
+			transform 140ms ease;
+	}
+
+	@supports (backdrop-filter: blur(1px)) {
+		.settings-menu__panel {
+			backdrop-filter: blur(12px);
+		}
+	}
+
+	.settings-menu[data-open="true"] .settings-menu__panel {
+		opacity: 1;
+		transform: translateY(0) scale(1);
+		pointer-events: auto;
+	}
+
+	@media (prefers-reduced-motion: reduce) {
+		.settings-menu__panel {
+			transition: none;
+			transform: none;
+		}
+	}
+
+	/* Always respect the hidden attribute. */
+	.settings-menu__panel[hidden] {
+		display: none !important;
+	}
+
+	/* Flip the dropdown to open leftwards when needed. */
+	.settings-menu[data-side="left"] .settings-menu__panel {
+		left: auto;
+		right: 0;
+	}
+
+	.settings-menu__section {
+		display: grid;
+		gap: var(--space-sm);
+	}
+
+	.settings-menu__heading {
+		margin: 0;
+		font-size: var(--text-sm);
+		font-weight: 500;
+		color: color-mix(in oklab, var(--color-text-muted) 92%, transparent);
+		letter-spacing: 0.01em;
+	}
+
+	.settings-menu__divider {
+		height: 1px;
+		background: var(--color-border);
+		width: 100%;
+	}
+
+	.settings-menu__item {
+		display: inline-flex;
+		align-items: center;
+		justify-content: flex-start;
+		gap: var(--space-sm);
+		min-height: calc(var(--control-height) + 0.25rem);
+		padding: 0 var(--space-md);
+		border-radius: var(--radius-sm);
+		background: transparent;
+		border: 1px solid transparent;
+		color: var(--color-text);
+		text-decoration: none;
+		font-weight: 500;
+		cursor: pointer;
+	}
+
+	.settings-menu__itemInner {
+		display: inline-flex;
+		align-items: center;
+		gap: var(--space-sm);
+		min-width: 0;
+	}
+
+	.settings-menu__itemIcon {
+		display: block;
+		color: color-mix(in oklab, var(--color-text-muted) 85%, transparent);
+	}
+
+	.settings-menu__itemText {
+		display: inline-block;
+		white-space: nowrap;
+	}
+
+	.settings-menu__item:hover,
+	.settings-menu__item:focus-visible {
+		background: color-mix(in oklab, var(--color-primary) 8%, var(--color-surface));
+		border-color: color-mix(in oklab, var(--color-primary) 18%, transparent);
+	}
+
+	.settings-menu__item:focus-visible {
+		outline: 2px solid color-mix(in oklab, var(--color-focus) 85%, transparent);
+		outline-offset: 2px;
+	}
+
+	.settings-menu__item[aria-checked="true"] {
+		color: var(--color-primary);
+		background: color-mix(in oklab, var(--color-primary) 10%, var(--color-surface));
+		border-color: color-mix(in oklab, var(--color-primary) 20%, transparent);
+	}
+
+	.settings-menu__item[aria-checked="true"] .settings-menu__itemIcon {
+		color: color-mix(in oklab, var(--color-primary) 70%, var(--color-text-muted));
+	}
+
+	/* Desktop instance is hidden on mobile */
+	.settings-menu--desktop {
+		display: none;
+	}
+
+	@media (min-width: 48rem) {
+		.settings-menu--desktop {
+			display: inline-flex;
+		}
+		.settings-menu--mobile {
+			display: none;
+		}
+	}
+
+	/* Mobile instance: panel should flow inside the hamburger menu */
+	.settings-menu--mobile {
+		width: 100%;
+	}
+
+	.settings-menu--mobile .settings-menu__trigger {
+		width: 100%;
+		justify-content: flex-start;
+		gap: var(--space-xs);
+		padding: 0 var(--space-md);
+	}
+
+	.settings-menu--mobile .settings-menu__panel {
+		position: static;
+		min-width: 0;
+		width: 100%;
+		box-shadow: none;
+		background: color-mix(in oklab, var(--color-surface) 50%, transparent);
+		border: 1px solid color-mix(in oklab, var(--color-border) 90%, transparent);
+	}
+</style>

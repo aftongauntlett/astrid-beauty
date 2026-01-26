@@ -1,13 +1,22 @@
 ---
 import Button from './ui/Button.astro';
-import fs from 'fs';
-import path from 'path';
-import { fileURLToPath } from 'url';
+import fs from 'node:fs';
+import path from 'node:path';
+import { fileURLToPath } from 'node:url';
+
+import { getMessages, type Lang } from '../i18n';
+
+export interface Props {
+	lang: Lang;
+}
 
 type GalleryImage = {
 	src: string;
 	alt: string;
 };
+
+const { lang } = Astro.props;
+const messages = getMessages(lang);
 
 const toAlt = (filename: string) => {
 	const base = filename.replace(/\.[^./\\]+$/, '');
@@ -48,7 +57,7 @@ const dataId = 'gallery-data';
 ---
 
 <div class="gallery" data-gallery>
-	<ul class="gallery__grid" id={gridId} aria-label="Gallery images">
+	<ul class="gallery__grid" id={gridId} aria-label={messages.gallery.imagesAriaLabel}>
 		{initialImages.map((image) => (
 			<li class="gallery__item">
 				<div class="gallery__frame">
@@ -78,9 +87,16 @@ const dataId = 'gallery-data';
 				aria-controls={gridId}
 				aria-expanded="false"
 			>
-				Show more
+				{messages.gallery.showMore}
 			</Button>
 			<p class="sr-only" id={statusId} aria-live="polite"></p>
+			<script type="application/json" id="gallery-i18n" is:inline>
+				{JSON.stringify({
+					showMore: messages.gallery.showMore,
+					showLess: messages.gallery.showLess,
+					statusTemplate: messages.gallery.statusTemplate,
+				})}
+			</script>
 			<script
 				type="application/json"
 				id={dataId}
@@ -96,12 +112,17 @@ const dataId = 'gallery-data';
 			const grid = document.getElementById('gallery-grid');
 			const status = document.getElementById('gallery-status');
 			const data = document.getElementById('gallery-data');
+			const i18n = document.getElementById('gallery-i18n');
 			if (!toggle || !grid || !data) {
 				// Gallery markup not present.
 			} else {
 				const initialCount = 6;
 				/** @type {{src: string, alt: string}[]} */
 				const remaining = JSON.parse(data.textContent || '[]');
+				const labels = i18n ? JSON.parse(i18n.textContent || '{}') : {};
+				const showMoreLabel = labels.showMore || 'Show more';
+				const showLessLabel = labels.showLess || 'Show less';
+				const statusTemplate = labels.statusTemplate || 'Showing {count} images.';
 				/** @type {HTMLElement[]} */
 				const extraItems = [];
 				let expanded = false;
@@ -137,13 +158,13 @@ const dataId = 'gallery-data';
 
 				const setStatus = (count) => {
 					if (!status) return;
-					status.textContent = `Showing ${count} images.`;
+					status.textContent = statusTemplate.replace('{count}', String(count));
 				};
 
 				toggle.addEventListener('click', () => {
 					expanded = !expanded;
 					toggle.setAttribute('aria-expanded', expanded ? 'true' : 'false');
-					toggle.textContent = expanded ? 'Show less' : 'Show more';
+					toggle.textContent = expanded ? showLessLabel : showMoreLabel;
 
 					if (expanded) {
 						for (const img of remaining) {

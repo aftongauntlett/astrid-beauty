@@ -39,6 +39,9 @@
   --radius-md: 9999px;
   --radius-lg: 1.25rem;
 
+  /* Stroke widths (use for underlines, dividers, etc.) */
+  --stroke-1: 1px;
+
   --space-xs: 0.25rem;
   --space-sm: 0.5rem;
   --space-md: 1rem;

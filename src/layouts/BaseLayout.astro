@@ -4,18 +4,70 @@ import Footer from '../components/site/Footer.astro';
 import SkipLink from '../components/site/SkipLink.astro';
 import '../styles/global.css';
 
+import { getAlternatePaths, toLangPath, normalizePathname } from "../i18n/routes";
+
 export interface Props {
 	title: string;
 	description?: string;
+	lang?: "en" | "es";
+	canonicalPath?: string;
 }
 
-const { title, description } = Astro.props;
+const { title, description, lang = "en", canonicalPath } = Astro.props;
+
+// Routing convention:
+// - English is the default at `/...`
+// - Spanish lives at `/es/...`
+// This file uses a shared mapping helper so nested pages can follow the same rule.
+const sourcePath = normalizePathname(canonicalPath ?? Astro.url.pathname);
+const canonicalPathFinal = toLangPath(sourcePath, lang);
+const alternates = getAlternatePaths(sourcePath);
+
+const toHref = (path: string) => {
+	const safePath = normalizePathname(path);
+	const site = Astro.site;
+	if (!(site instanceof URL)) return safePath;
+	try {
+		return new URL(safePath, site).toString();
+	} catch {
+		return safePath;
+	}
+};
+
+const canonicalHref = toHref(canonicalPathFinal);
+const enHref = toHref(alternates.en);
+const esHref = toHref(alternates.es);
+const xDefaultHref = toHref(alternates.xDefault);
 ---
 
 <!doctype html>
-<html lang="en" data-theme="light">
+<html lang={lang} data-theme="light">
 	<head>
 		<meta charset="utf-8" />
+		<script
+			is:inline
+			define:vars={{
+				currentLang: lang,
+				enPath: alternates.en,
+				esPath: alternates.es,
+			}}
+		>
+			(() => {
+				// Runs early to avoid visible flash/layout shift.
+				// Redirect only if the user explicitly chose a preferred language.
+				try {
+					const preferred = localStorage.getItem('preferredLang');
+					if (preferred !== 'en' && preferred !== 'es') return;
+					if (preferred === currentLang) return;
+
+					const targetPath = preferred === 'es' ? esPath : enPath;
+					const next = `${targetPath}${window.location.search}${window.location.hash}`;
+					window.location.replace(next);
+				} catch {
+					// ignore
+				}
+			})();
+		</script>
 		<script is:inline>
 			(() => {
 				try {
@@ -43,17 +95,21 @@ const { title, description } = Astro.props;
 		<meta name="viewport" content="width=device-width, initial-scale=1" />
 		<meta name="generator" content={Astro.generator} />
 		{description ? <meta name="description" content={description} /> : null}
+		<link rel="canonical" href={canonicalHref} />
+		<link rel="alternate" hreflang="en" href={enHref} />
+		<link rel="alternate" hreflang="es" href={esHref} />
+		<link rel="alternate" hreflang="x-default" href={xDefaultHref} />
 		<title>{title}</title>
 	</head>
 	<body id="top">
-		<SkipLink />
+		<SkipLink lang={lang} />
 
-		<Header />
+		<Header lang={lang} />
 
 		<main id="main-content" tabindex="-1">
 			<slot />
 		</main>
 
-		<Footer />
+		<Footer lang={lang} />
 	</body>
 </html>

@@ -1,5 +1,19 @@
 ---
+import SettingsMenu from "./SettingsMenu.astro";
+import { getMessages, type Lang } from "../../i18n";
+
+export interface Props {
+	lang: Lang;
+}
+
 const menuId = "primary-nav-menu";
+
+const { lang } = Astro.props;
+const messages = getMessages(lang);
+
+const sectionHref = (id: string) => (lang === "es" ? `/es#${id}` : `/#${id}`);
+
+const bookingUrl = "https://www.vagaro.com/byastridbeautysalon";
 ---
 
 <nav class="nav" aria-label="Primary">
@@ -10,14 +24,24 @@ const menuId = "primary-nav-menu";
 		aria-controls={menuId}
 		data-nav-toggle
 	>
-		Menu
+		{messages.nav.menu}
 	</button>
 
 	<div class="nav__menu" id={menuId} hidden data-nav-menu>
-		<a class="nav__link" href="/" data-home-link>Home</a>
-		<a class="nav__link" href="/#services" data-section-link="services">Services</a>
-		<a class="nav__link" href="/#gallery" data-section-link="gallery">Gallery</a>
-		<a class="nav__link" href="/#contact" data-section-link="contact">Contact</a>
+		<a class="nav__link" href={sectionHref("services")} data-section-link="services">{messages.nav.services}</a>
+		<a class="nav__link" href={sectionHref("gallery")} data-section-link="gallery">{messages.nav.gallery}</a>
+		<a class="nav__link" href={sectionHref("find-us")} data-section-link="find-us">{messages.nav.findUs}</a>
+		<a
+			class="nav__link nav__link--book"
+			href={bookingUrl}
+			target="_blank"
+			rel="noopener noreferrer"
+			aria-label={`${messages.misc.bookNow} (opens in a new tab)`}
+		>
+			{messages.misc.bookNow}
+		</a>
+		<div class="nav__divider" aria-hidden="true"></div>
+		<SettingsMenu lang={lang} mode="mobile" />
 	</div>
 </nav>
 
@@ -70,9 +94,8 @@ const menuId = "primary-nav-menu";
 				}
 			});
 
-			// Active section state (Home page only)
-			if (window.location.pathname === "/") {
-				const homeLink = root.querySelector("[data-home-link]");
+			// Active section state (Home pages only)
+			if (window.location.pathname === "/" || window.location.pathname === "/es" || window.location.pathname === "/es/") {
 				const sectionLinks = Array.from(root.querySelectorAll("[data-section-link]"));
 
 				/** @type {Map<string, HTMLAnchorElement>} */
@@ -92,18 +115,12 @@ const menuId = "primary-nav-menu";
 
 				const clearCurrent = () => {
 					for (const link of linkById.values()) link.removeAttribute("aria-current");
-					if (homeLink instanceof HTMLAnchorElement) homeLink.removeAttribute("aria-current");
 				};
 
 				const setCurrentSection = (id = "") => {
 					clearCurrent();
 					const link = linkById.get(id);
 					if (link) link.setAttribute("aria-current", "location");
-				};
-
-				const setHomeCurrent = () => {
-					clearCurrent();
-					if (homeLink instanceof HTMLAnchorElement) homeLink.setAttribute("aria-current", "page");
 				};
 
 				let observer = new IntersectionObserver(() => {}, {
@@ -131,9 +148,9 @@ const menuId = "primary-nav-menu";
 
 					const nearTop = window.scrollY < 8;
 					if (!bestId && nearTop) {
-						if (activeId !== "__home__") {
-							activeId = "__home__";
-							setHomeCurrent();
+						if (activeId !== "__top__") {
+							activeId = "__top__";
+							clearCurrent();
 						}
 						return;
 					}
@@ -210,6 +227,7 @@ const menuId = "primary-nav-menu";
 		display: flex;
 		align-items: center;
 		gap: var(--space-sm);
+		flex-wrap: nowrap;
 	}
 
 	.nav__link {
@@ -220,17 +238,106 @@ const menuId = "primary-nav-menu";
 		text-decoration: none;
 		padding: 0 var(--space-md);
 		border-radius: var(--radius-md);
+		position: relative;
+		flex: 0 0 auto;
+		white-space: nowrap;
+		transition: color 160ms ease;
 	}
 
-	.nav__link:hover {
+	/* Refined underline: animates in smoothly on hover + focus-visible */
+	.nav__link::after {
+		content: "";
+		position: absolute;
+		left: var(--space-md);
+		right: var(--space-md);
+		bottom: 0.45rem;
+		height: var(--stroke-1);
+		border-radius: 9999px;
+		background: color-mix(in oklab, var(--color-primary) 65%, transparent);
+		opacity: 0;
+		transform: scaleX(0.6);
+		transform-origin: center;
+		transition:
+			opacity 160ms ease,
+			transform 180ms ease,
+			background-color 160ms ease;
+	}
+
+	.nav__link:hover,
+	.nav__link:focus-visible {
 		color: var(--color-primary);
 	}
 
+	.nav__link:hover::after,
+	.nav__link:focus-visible::after {
+		opacity: 1;
+		transform: scaleX(1);
+	}
+
+	/* Subtle current-section treatment (no pill backgrounds). */
 	.nav__link[aria-current="location"],
 	.nav__link[aria-current="page"] {
 		color: var(--color-primary);
-		background: var(--color-surface-muted);
-		text-decoration: none;
+	}
+
+	.nav__link[aria-current="location"]::after,
+	.nav__link[aria-current="page"]::after {
+		opacity: 1;
+		transform: scaleX(1);
+	}
+
+	/* “Book now” is a link, but gently highlighted with a premium glow. */
+	.nav__link--book {
+		isolation: isolate;
+		font-weight: 700;
+		color: var(--color-primary);
+	}
+
+	.nav__link--book:hover,
+	.nav__link--book:focus-visible {
+		color: var(--color-primary-hover);
+	}
+
+	.nav__link--book::before {
+		content: "";
+		position: absolute;
+		inset: 0.35rem 0.5rem;
+		border-radius: var(--radius-md);
+		background: color-mix(in oklab, var(--color-primary) 20%, transparent);
+		filter: blur(14px);
+		opacity: 0.45;
+		z-index: -1;
+		animation: nav-book-breathe 3.4s ease-in-out infinite;
+	}
+
+	@keyframes nav-book-breathe {
+		0%,
+		100% {
+			opacity: 0.35;
+			transform: scale(0.985);
+		}
+		50% {
+			opacity: 0.6;
+			transform: scale(1.01);
+		}
+	}
+
+	@media (prefers-reduced-motion: reduce) {
+		.nav__link::after {
+			transition: none;
+		}
+		.nav__link--book::before {
+			animation: none;
+			opacity: 0.45;
+			transform: none;
+		}
+	}
+
+	.nav__divider {
+		width: 100%;
+		height: 1px;
+		background: var(--color-border);
+		margin: var(--space-xs) 0;
 	}
 
 	/* Mobile: toggle reveals vertical menu */
@@ -256,6 +363,12 @@ const menuId = "primary-nav-menu";
 		.nav__link {
 			width: 100%;
 			justify-content: flex-start;
+		}
+
+		.nav__link::after {
+			left: var(--space-md);
+			right: var(--space-md);
+			bottom: 0.35rem;
 		}
 	}
 

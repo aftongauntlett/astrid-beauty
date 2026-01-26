@@ -1,0 +1,174 @@
+---
+import Button from "../ui/Button.astro";
+import SectionIntro from "../ui/SectionIntro.astro";
+import FeatureIconCard from "../FeatureIconCard.astro";
+import Gallery from "../Gallery.astro";
+
+import { getMessages, type Lang } from "../../i18n";
+
+type Props = {
+	lang: Lang;
+};
+
+const { lang } = Astro.props;
+const messages = getMessages(lang);
+const sectionHref = (id: string) => (lang === "es" ? `/es#${id}` : `/#${id}`);
+
+const bookingUrl = "https://www.vagaro.com/byastridbeautysalon";
+
+const serviceCardMeta = [
+	{ iconName: "palette", iconColor: "var(--color-primary)" },
+	{ iconName: "scissors", iconColor: "var(--color-text-muted)" },
+	{ iconName: "droplet", iconColor: "var(--color-secondary)" },
+	{ iconName: "waves", iconColor: "var(--color-primary)" },	
+] as const;
+---
+
+<section class="section hero" aria-labelledby="page-title">
+	<div class="container hero__grid">
+		<div class="hero__content">
+			<p class="sr-only">{messages.home.brandSrOnly}</p>
+			<div class="hero__brandmark" aria-hidden="true">
+				<img
+					class="hero__brandmarkLogo"
+					src="/by-astrid-beauty-logo.png"
+					alt=""
+					width="801"
+					height="692"
+					decoding="async"
+				/>
+			</div>
+		</div>
+
+		<div class="hero__actions" aria-label="Primary actions">
+			<div class="hero__actionsCopy">
+				<h1 class="hero__actionsTitle" id="page-title">{messages.sections.homeTitle}</h1>
+				<p class="hero__actionsLede">{messages.home.heroLede}</p>
+			</div>
+			<div class="hero__actionsRow">
+				<Button
+					href={bookingUrl}
+					variant="primary"
+					size="lg"
+					target="_blank"
+					rel="noopener noreferrer"
+					class="hero__bookNow"
+				>
+					{messages.misc.bookNow}
+				</Button>
+				<Button href={sectionHref("services")} variant="secondary" size="lg">
+					{messages.misc.viewServices}
+				</Button>
+			</div>
+		</div>
+	</div>
+</section>
+
+<section class="section" id="services" aria-labelledby="services-title">
+	<div class="container stack stack--lg">
+		<SectionIntro id="services-title" title={messages.sections.servicesTitle} lede={messages.services.lede} />
+
+		<div class="services-grid" aria-label="Service highlights">
+			{messages.services.cards.map((card, index) => (
+				<FeatureIconCard
+					title={card.title}
+					description={card.description}
+					items={card.items}
+					iconName={serviceCardMeta[index]?.iconName ?? "palette"}
+					iconColor={serviceCardMeta[index]?.iconColor ?? "var(--color-primary)"}
+				/>
+			))}
+		</div>
+	</div>
+</section>
+
+<section class="section" id="gallery" aria-labelledby="gallery-title">
+	<div class="container stack">
+		<SectionIntro id="gallery-title" title={messages.sections.galleryTitle} lede={messages.gallery.lede} />
+		<Gallery lang={lang} />
+
+		<div class="back-to-top">
+			<Button href="#top" variant="ghost">{messages.misc.backToTop}</Button>
+		</div>
+	</div>
+</section>
+
+<section class="section" id="find-us" aria-labelledby="find-us-title">
+	<div class="container stack stack--lg">
+		<SectionIntro id="find-us-title" title={messages.nav.findUs} lede={messages.findUs.lede} />
+
+		<div class="find-us-grid" aria-label={messages.nav.findUs}>
+			<div class="find-us-card">
+				<h3 class="find-us-card__title">{messages.footer.address}</h3>
+				<p class="find-us-card__value">{messages.footer.placeholderAddress}</p>
+			</div>
+			<div class="find-us-card">
+				<h3 class="find-us-card__title">{messages.footer.hours}</h3>
+				<p class="find-us-card__value">{messages.footer.placeholderHours}</p>
+			</div>
+			<div class="find-us-card">
+				<h3 class="find-us-card__title">{messages.footer.phone}</h3>
+				<p class="find-us-card__value">{messages.footer.placeholderPhone}</p>
+			</div>
+		</div>
+	</div>
+</section>
+
+<style>
+	.services-grid {
+		display: grid;
+		gap: var(--space-xl);
+		grid-template-columns: 1fr;
+		align-items: stretch;
+	}
+
+	@media (min-width: 48rem) {
+		.services-grid {
+			grid-template-columns: repeat(2, minmax(0, 1fr));
+			gap: calc(var(--space-xl) + var(--space-sm));
+		}
+	}
+
+	.hero__bookNow.btn {
+		background: var(--color-primary);
+		border-color: var(--color-primary);
+		color: var(--color-primary-contrast);
+	}
+
+	.hero__bookNow.btn:hover {
+		background: var(--color-primary-hover);
+		border-color: var(--color-primary-hover);
+	}
+
+	.find-us-grid {
+		display: grid;
+		grid-template-columns: 1fr;
+		gap: var(--space-md);
+	}
+
+	.find-us-card {
+		padding: var(--space-lg);
+		border-radius: var(--radius-lg);
+		background: var(--color-surface);
+		border: 1px solid var(--color-border);
+		box-shadow: var(--shadow-sm);
+	}
+
+	.find-us-card__title {
+		margin: 0 0 var(--space-xs);
+		font-size: var(--text-sm);
+		color: var(--color-text-muted);
+		letter-spacing: 0.01em;
+	}
+
+	.find-us-card__value {
+		margin: 0;
+		color: var(--color-text);
+	}
+
+	@media (min-width: 48rem) {
+		.find-us-grid {
+			grid-template-columns: repeat(3, minmax(0, 1fr));
+		}
+	}
+</style>

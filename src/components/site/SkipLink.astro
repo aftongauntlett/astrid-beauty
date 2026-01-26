@@ -1,1 +1,12 @@
-<a class="skip-link" href="#main-content">Skip to content</a>
+---
+import { getMessages, type Lang } from "../../i18n";
+
+export interface Props {
+	lang: Lang;
+}
+
+const { lang } = Astro.props;
+const messages = getMessages(lang);
+---
+
+<a class="skip-link" href="#main-content">{messages.skipLink.skipToContent}</a>
