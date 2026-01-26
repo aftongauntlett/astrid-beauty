@@ -416,7 +416,7 @@ button:disabled {
 
 .hero__actionsCopy {
   display: grid;
-  gap: var(--space-xs);
+  gap: var(--space-sm);
 }
 
 .hero__actionsTitle {
@@ -502,4 +502,14 @@ main :is(section)[id] {
   height: auto;
   width: auto;
   overflow: visible;
+}
+
+/* Hero: visible H1 tuned to be slightly larger than section H2s */
+.hero__actionsTitle {
+  font-size: calc(var(--heading-2) * 1.06);
+  line-height: 1.05;
+}
+
+.hero__actionsLede {
+  font-size: var(--text-base);
 }

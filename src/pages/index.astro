@@ -1,7 +1,6 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Button from '../components/ui/Button.astro';
-import Accordion from '../components/ui/Accordion.astro';
 import SectionIntro from '../components/ui/SectionIntro.astro';
 import FeatureIconCard from '../components/FeatureIconCard.astro';
 import Gallery from '../components/Gallery.astro';
@@ -11,7 +10,7 @@ import Gallery from '../components/Gallery.astro';
 	<section class="section hero" aria-labelledby="page-title">
 		<div class="container hero__grid">
 			<div class="hero__content">
-				<h1 class="sr-only" id="page-title">By Astrid Beauty</h1>
+				<p class="sr-only">By Astrid Beauty</p>
 				<div class="hero__brandmark" aria-hidden="true">
 					<img
 						class="hero__brandmarkLogo"
@@ -26,7 +25,7 @@ import Gallery from '../components/Gallery.astro';
 
 			<div class="hero__actions" aria-label="Primary actions">
 				<div class="hero__actionsCopy">
-					<h2 class="hero__actionsTitle">Ready when you are</h2>
+					<h1 class="hero__actionsTitle" id="page-title">Ready when you are</h1>
 					<p class="hero__actionsLede">
 						Placeholder copy for booking and services. Short, confident, and salon-appropriate.
 					</p>
@@ -98,22 +97,6 @@ import Gallery from '../components/Gallery.astro';
 			}
 		}
 	</style>
-
-	<section class="section" id="about" aria-labelledby="about-title">
-		<div class="container stack stack--lg">
-			<SectionIntro id="about-title" title="About" lede="Placeholder section for about information." />
-
-			<div class="narrow">
-				<Accordion
-					items={[
-						{ id: 'about-1', title: 'What we do', content: 'Placeholder accordion content.', iconName: 'sparkles' },
-						{ id: 'about-2', title: 'How to book', content: 'Placeholder accordion content.', iconName: 'shield' },
-						{ id: 'about-3', title: 'Accessibility', content: 'Placeholder accordion content.', iconName: 'sparkles' },
-					]}
-				/>
-			</div>
-		</div>
-	</section>
 
 	<section class="section" id="gallery" aria-labelledby="gallery-title">
 		<div class="container stack">

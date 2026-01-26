@@ -19,7 +19,7 @@ const { items } = Astro.props;
 	{items.map((item) => {
 		const Icon = item.iconName === "shield" ? Shield : Sparkles;
 		return (
-			<details class="accordion__item" name="accordion">
+			<details class="accordion__item">
 				<summary class="accordion__summary capitalize" id={item.id}>
 					<span class="accordion__summaryInner">
 						<Icon class="accordion__icon" size={18} aria-hidden="true" focusable="false" />
@@ -36,23 +36,27 @@ const { items } = Astro.props;
 
 <style>
 	.accordion {
-		display: grid;
-		gap: var(--space-sm);
+		display: block;
+		width: 100%;
 	}
 
 	.accordion__item {
-		border: 1px solid var(--color-border);
-		border-radius: var(--radius-md);
-		background: var(--color-surface);
-		overflow: hidden;
-		box-shadow: var(--shadow-sm);
+		border: 0;
+		border-radius: 0;
+		background: transparent;
+		overflow: visible;
+		box-shadow: none;
+	}
+
+	.accordion__item + .accordion__item {
+		border-top: 1px solid var(--color-border);
 	}
 
 	.accordion__summary {
 		list-style: none;
 		cursor: pointer;
-		padding: 0 var(--space-lg);
-		min-height: var(--control-height);
+		padding: var(--space-md) var(--space-lg);
+		min-height: calc(var(--control-height) + var(--space-md));
 		display: flex;
 		align-items: center;
 		justify-content: space-between;
@@ -60,6 +64,7 @@ const { items } = Astro.props;
 		font-weight: 600;
 		color: var(--color-text);
 		background: transparent;
+		width: 100%;
 	}
 
 	.accordion__summaryInner {
@@ -83,7 +88,7 @@ const { items } = Astro.props;
 	}
 
 	.accordion__summary:hover {
-		background: var(--color-surface-muted);
+		background: color-mix(in oklab, var(--color-surface-muted) 70%, transparent);
 	}
 
 	.accordion__summary:hover {
@@ -116,7 +121,7 @@ const { items } = Astro.props;
 	}
 
 	.accordion__item[open] > .accordion__summary {
-		background: var(--color-surface-muted);
+		background: color-mix(in oklab, var(--color-surface-muted) 80%, transparent);
 	}
 
 	.accordion__item[open] > .accordion__summary::after {
