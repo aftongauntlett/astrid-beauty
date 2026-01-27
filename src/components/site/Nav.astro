@@ -13,6 +13,8 @@ const { lang } = Astro.props;
 const messages = getMessages(lang);
 
 const sectionHref = (id: string) => (lang === "es" ? `/es#${id}` : `/#${id}`);
+
+const vagaroServicesUrl = "https://www.vagaro.com/byastridbeautysalon/services";
 ---
 
 <nav class="nav" aria-label="Primary">
@@ -30,11 +32,12 @@ const sectionHref = (id: string) => (lang === "es" ? `/es#${id}` : `/#${id}`);
 
 	<div class="nav__menu" id={menuId} hidden data-nav-menu>
 		<a class="nav__link" href={sectionHref("services")} data-section-link="services">{messages.nav.services}</a>
-		<a class="nav__link" href={sectionHref("booking")} data-section-link="booking">{messages.nav.booking}</a>
-		<a class="nav__link" href={sectionHref("gallery")} data-section-link="gallery">{messages.nav.gallery}</a>
+		<a class="nav__link" href={sectionHref("about")} data-section-link="about">{messages.nav.gallery}</a>
 		<a
 			class="nav__link nav__link--book"
-			href={sectionHref("booking")}
+			href={vagaroServicesUrl}
+			target="_blank"
+			rel="noopener noreferrer"
 		>
 			{messages.misc.bookNow}
 		</a>
@@ -44,15 +47,11 @@ const sectionHref = (id: string) => (lang === "es" ? `/es#${id}` : `/#${id}`);
 </nav>
 
 <script>
-	// @ts-check
-	/** @type {HTMLElement | null} */
 	const root = document.currentScript?.closest("nav");
-	if (!root) {
+	if (!(root instanceof HTMLElement)) {
 		// no-op
 	} else {
-		/** @type {HTMLButtonElement | null} */
 		const toggle = root.querySelector("[data-nav-toggle]");
-		/** @type {HTMLElement | null} */
 		const menu = root.querySelector("[data-nav-menu]");
 
 		if (!(toggle instanceof HTMLButtonElement) || !(menu instanceof HTMLElement)) {
@@ -96,7 +95,6 @@ const sectionHref = (id: string) => (lang === "es" ? `/es#${id}` : `/#${id}`);
 			if (window.location.pathname === "/" || window.location.pathname === "/es" || window.location.pathname === "/es/") {
 				const sectionLinks = Array.from(root.querySelectorAll("[data-section-link]"));
 
-				/** @type {Map<string, HTMLAnchorElement>} */
 				const linkById = new Map();
 				for (const el of sectionLinks) {
 					if (el instanceof HTMLAnchorElement) {

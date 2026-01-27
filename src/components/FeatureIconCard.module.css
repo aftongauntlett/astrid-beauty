@@ -5,7 +5,7 @@
 
   background: linear-gradient(
     180deg,
-    color-mix(in oklab, var(--color-primary) 6%, var(--color-surface)) 0%,
+    color-mix(in oklab, var(--fic-icon-color) 6%, var(--color-surface)) 0%,
     var(--color-surface) 72%
   );
   border: 1px solid color-mix(in oklab, var(--color-border) 65%, transparent);
@@ -49,21 +49,21 @@
     transform: translateY(-2px);
     border-color: color-mix(
       in oklab,
-      var(--color-primary) 30%,
+      var(--fic-icon-color) 42%,
       var(--color-border)
     );
   }
 
+  .card:hover::before {
+    opacity: 0.22;
+  }
+
   .card:hover .title {
-    color: var(--color-primary);
+    color: var(--fic-icon-color);
   }
 
   .card:hover .list li::before {
-    background: color-mix(
-      in oklab,
-      var(--color-primary) 88%,
-      var(--color-text)
-    );
+    background: color-mix(in oklab, var(--fic-icon-color) 92%, white);
   }
 }
 
@@ -126,6 +126,24 @@
   filter: blur(18px);
 }
 
+/* Light theme: tone down icon glow (keep luxe, avoid “neon halo”) */
+html[data-theme="light"] .glowRadial {
+  background: radial-gradient(
+    circle,
+    color-mix(in oklab, var(--fic-icon-color) 26%, transparent) 0%,
+    transparent 70%
+  );
+}
+
+html[data-theme="light"] .glowBlur {
+  background: radial-gradient(
+    circle,
+    color-mix(in oklab, var(--fic-icon-color) 34%, transparent) 0%,
+    transparent 74%
+  );
+  filter: blur(16px);
+}
+
 .icon {
   position: relative;
   z-index: 2;
@@ -176,12 +194,12 @@
 
 .list li::before {
   content: "";
-  width: 0.75rem;
-  height: 0.14rem;
+  width: 12px;
+  height: 2px;
   border-radius: 999px;
   background: color-mix(
     in oklab,
-    var(--color-primary) 80%,
+    var(--fic-icon-color) 72%,
     var(--color-text-muted)
   );
   margin-top: 0.72em;

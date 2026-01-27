@@ -1,5 +1,6 @@
 ---
 import Button from './ui/Button.astro';
+import { ChevronDown } from '@lucide/astro';
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -83,11 +84,14 @@ const dataId = 'gallery-data';
 			<Button
 				id={toggleId}
 				type="button"
-				variant="secondary"
+				variant="primary"
+				class="gallery__toggle"
 				aria-controls={gridId}
 				aria-expanded="false"
 			>
-				{messages.gallery.showMore}
+				<span class="gallery__toggleSpacer" aria-hidden="true"></span>
+				<span class="gallery__toggleLabel">{messages.gallery.showMore}</span>
+				<ChevronDown class="gallery__toggleChevron" size={18} aria-hidden="true" focusable="false" />
 			</Button>
 			<p class="sr-only" id={statusId} aria-live="polite"></p>
 			<script
@@ -119,6 +123,7 @@ const dataId = 'gallery-data';
 			if (!toggle || !grid || !data) {
 				// Gallery markup not present.
 			} else {
+				const label = toggle.querySelector('.gallery__toggleLabel');
 				const initialCount = 6;
 				const safeParse = (node, fallback) => {
 					if (!node) return fallback;
@@ -175,7 +180,8 @@ const dataId = 'gallery-data';
 				toggle.addEventListener('click', () => {
 					expanded = !expanded;
 					toggle.setAttribute('aria-expanded', expanded ? 'true' : 'false');
-					toggle.textContent = expanded ? showLessLabel : showMoreLabel;
+					if (label) label.textContent = expanded ? showLessLabel : showMoreLabel;
+					toggle.toggleAttribute('data-collapsed', !expanded);
 
 					if (expanded) {
 						for (const img of remaining) {
@@ -192,6 +198,7 @@ const dataId = 'gallery-data';
 				});
 
 				setStatus(initialCount);
+				toggle.toggleAttribute('data-collapsed', true);
 			}
 		</script>
 	) : null}
@@ -252,6 +259,39 @@ const dataId = 'gallery-data';
 		transform: translateZ(0) scale(1);
 		backface-visibility: hidden;
 		filter: saturate(0.94) contrast(0.94) brightness(0.99);
+	}
+
+	.gallery .gallery__toggle.btn {
+		display: grid;
+		grid-template-columns: 18px 1fr 18px;
+		column-gap: 0.25rem;
+		align-items: center;
+		justify-items: center;
+	}
+
+	.gallery .gallery__toggleSpacer {
+		width: 18px;
+		height: 1px;
+	}
+
+	.gallery .gallery__toggleLabel {
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+	}
+
+	.gallery .gallery__toggleChevron {
+		transform: rotate(0deg);
+	}
+
+	@media (prefers-reduced-motion: no-preference) {
+		.gallery .gallery__toggleChevron {
+			transition: transform 160ms ease;
+		}
+	}
+
+	.gallery .gallery__toggle[aria-expanded='true'] .gallery__toggleChevron {
+		transform: rotate(180deg);
 	}
 
 	.gallery .gallery__media::before {
@@ -334,7 +374,7 @@ const dataId = 'gallery-data';
 	.gallery .gallery__actions {
 		display: flex;
 		justify-content: center;
-		margin-top: var(--space-xl);
+		margin-top: var(--space-lg);
 	}
 
 	.gallery .gallery__actions .btn {

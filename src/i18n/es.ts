@@ -3,7 +3,7 @@ import type { Messages } from "./types";
 export const es: Messages = {
   nav: {
     services: "Servicios",
-    gallery: "Galería",
+    gallery: "Sobre",
     findUs: "Encuéntranos",
     booking: "Reservas",
     menu: "Menú",
@@ -15,7 +15,9 @@ export const es: Messages = {
   sections: {
     homeTitle: "Listo cuando tú lo estés",
     servicesTitle: "Servicios",
-    galleryTitle: "Galería",
+    galleryTitle: "Sobre",
+    aboutLede:
+      "Mira algunos de mis trabajos, lee lo que dicen mis clientes y agenda tu cita hoy.",
   },
   misc: {
     bookNow: "Agendar cita",

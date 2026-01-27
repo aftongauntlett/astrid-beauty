@@ -31,12 +31,19 @@ const appleMapsHref = `https://maps.apple.com/?q=${mapsQuery}`;
 
 const hoursLines = messages.footer.placeholderHours.split("\n").map((line) => line.trim()).filter(Boolean);
 const dayLines = hoursLines.slice(1);
+
+const stripMeridiem = (value: string) =>
+	value
+		.replace(/\s*(a\.?m\.?|p\.?m\.?|am|pm)\b/gi, "")
+		.replace(/\s{2,}/g, " ")
+		.trim();
+
 const hours = dayLines
 	.map((line) => {
 		const idx = line.indexOf(":");
 		if (idx === -1) return null;
 		const day = line.slice(0, idx).trim();
-		const time = line.slice(idx + 1).trim();
+		const time = stripMeridiem(line.slice(idx + 1).trim());
 		return { day, time };
 	})
 	.filter(Boolean) as Array<{ day: string; time: string }>;
@@ -57,21 +64,19 @@ const year = new Date().getFullYear();
 						<span class="site-footer__line">{line}</span>
 					))}
 				</address>
-				<Button
-					class="site-footer__mapsBtn"
-					variant="secondary"
-					size="sm"
+				<a
+					class="site-footer__mapLink"
 					href={googleMapsHref}
 					data-apple-maps-href={appleMapsHref}
 					target="_blank"
 					rel="noopener noreferrer"
 				>
-					<MapPin size={18} aria-hidden="true" focusable="false" />
+					<MapPin class="site-footer__mapIcon" size={18} aria-hidden="true" focusable="false" />
 					<span>{messages.footer.findUsCta}</span>
-				</Button>
+				</a>
 			</section>
 
-			<section class="site-footer__block" aria-label={messages.footer.contact}>
+			<section class="site-footer__block site-footer__block--contact" aria-label={messages.footer.contact}>
 				<h2 class="site-footer__title">{messages.footer.contact}</h2>
 				<div class="site-footer__contact">
 					<div class="site-footer__contactLinks">
@@ -131,13 +136,13 @@ const year = new Date().getFullYear();
 				</div>
 			</section>
 
-			<section class="site-footer__block" aria-label={messages.footer.hours}>
+			<section class="site-footer__block site-footer__block--hours" aria-label={messages.footer.hours}>
 				<h2 class="sr-only">{messages.footer.hours}</h2>
 				<table class="site-footer__hoursTable" aria-label={messages.footer.hours}>
 					<tbody>
 						{hours.map((item) => (
 							<tr class="site-footer__hoursRow">
-								<th class="site-footer__hoursDay" scope="row">{item.day}</th>
+								<th class="site-footer__hoursDay" scope="row">{item.day}:</th>
 								<td class="site-footer__hoursTime">{item.time}</td>
 							</tr>
 						))}
@@ -154,7 +159,7 @@ const year = new Date().getFullYear();
 			<small class="site-footer__metaText site-footer__metaCopyright">&copy; {year} {messages.footer.copyright}</small>
 			<Button
 				class="site-footer__toTop"
-				variant="secondary"
+				variant="primary"
 				size="sm"
 				href="#top"
 				aria-label={messages.misc.backToTop}
@@ -204,7 +209,8 @@ const year = new Date().getFullYear();
 		margin: 0 0 var(--space-sm);
 		font-size: var(--text-xs);
 		letter-spacing: 0.01em;
-		color: var(--color-text-muted);
+		color: var(--color-primary);
+		font-weight: 700;
 		text-transform: none;
 	}
 
@@ -222,36 +228,26 @@ const year = new Date().getFullYear();
 		display: block;
 	}
 
-	.site-footer__mapsBtn {
+	.site-footer__mapLink {
 		display: inline-flex;
 		align-items: center;
-		justify-content: center;
 		gap: 0.45rem;
 		margin-top: var(--space-sm);
-		padding: 0.45rem 0.85rem;
-		border-radius: 999px;
-		text-decoration: none;
-		font-weight: 600;
-		font-size: var(--text-sm);
 		color: var(--color-text);
-		background: linear-gradient(
-			180deg,
-			rgba(255, 255, 255, 0.06),
-			rgba(255, 255, 255, 0.03)
-		);
-		border: 1px solid color-mix(in oklab, var(--color-border) 60%, transparent);
-		box-shadow:
-			inset 0 1px 0 rgba(255, 255, 255, 0.06),
-			var(--shadow-sm);
+		text-decoration: none;
+		font-size: var(--text-sm);
+		font-weight: 600;
+		align-self: start;
 	}
 
-	.site-footer__mapsBtn.btn {
-		min-height: auto;
-	}
-
-	.site-footer__mapsBtn:hover {
+	.site-footer__mapLink:hover {
 		color: var(--color-primary);
-		border-color: color-mix(in oklab, var(--color-primary) 35%, var(--color-border));
+		text-decoration: underline;
+		text-underline-offset: 0.2em;
+	}
+
+	.site-footer__mapIcon {
+		opacity: 0.9;
 	}
 
 	.site-footer__contact {
@@ -572,14 +568,21 @@ const year = new Date().getFullYear();
 	}
 
 	.site-footer__hoursTable {
-		width: 100%;
+		width: auto;
+		margin-left: auto;
 		border-collapse: collapse;
 		font-size: var(--text-sm);
 	}
 
+	@media (min-width: 48rem) {
+		.site-footer__hoursTable {
+			width: 100%;
+		}
+	}
+
 	.site-footer__hoursRow th,
 	.site-footer__hoursRow td {
-		padding: 0.15rem 0;
+		padding-block: 0.08rem;
 		vertical-align: top;
 	}
 
@@ -588,7 +591,7 @@ const year = new Date().getFullYear();
 		color: var(--color-text);
 		font-weight: 600;
 		white-space: nowrap;
-		padding-right: var(--space-md);
+		padding-right: 1.25rem;
 		font-size: var(--text-sm);
 	}
 
@@ -596,6 +599,25 @@ const year = new Date().getFullYear();
 		text-align: right;
 		color: var(--color-text-muted);
 		white-space: nowrap;
+		padding-left: 0.75rem;
 		font-size: var(--text-sm);
+	}
+
+	@media (min-width: 48rem) {
+		.site-footer__block--hours {
+			justify-self: end;
+		}
+
+		.site-footer__block--contact {
+			text-align: center;
+		}
+
+		.site-footer__block--contact .site-footer__contactLinks {
+			justify-items: center;
+		}
+
+		.site-footer__block--contact .site-footer__socialRow {
+			justify-content: center;
+		}
 	}
 </style>

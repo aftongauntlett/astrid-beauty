@@ -14,6 +14,7 @@ export type Messages = {
     homeTitle: string;
     servicesTitle: string;
     galleryTitle: string;
+    aboutLede: string;
   };
   misc: {
     bookNow: string;

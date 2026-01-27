@@ -3,7 +3,7 @@ import type { Messages } from "./types";
 export const en: Messages = {
   nav: {
     services: "Services",
-    gallery: "Gallery",
+    gallery: "About",
     findUs: "Find Us",
     booking: "Booking",
     menu: "Menu",
@@ -15,7 +15,9 @@ export const en: Messages = {
   sections: {
     homeTitle: "Ready when you are",
     servicesTitle: "Services",
-    galleryTitle: "Gallery",
+    galleryTitle: "About",
+    aboutLede:
+      "See some of my work, read what clients are saying, and schedule your appointment today.",
   },
   misc: {
     bookNow: "Book Now",
@@ -25,7 +27,7 @@ export const en: Messages = {
   },
   home: {
     heroLede:
-      "Dimensional color, cuts, and gloss treatments in Herndon—book online anytime.",
+      "Dimensional color, cuts, and gloss treatments in Herndon, book online anytime.",
     brandSrOnly: "By Astrid Beauty",
   },
   findUs: {

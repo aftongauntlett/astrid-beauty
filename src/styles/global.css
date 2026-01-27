@@ -12,28 +12,34 @@
     sans-serif;
 
   /* Chic salon palette (warm, premium) */
-  --color-bg: #fbf6f1; /* warm off-white */
-  --color-surface: #fffaf6; /* softly tinted */
-  --color-surface-muted: #f4ece6;
-  --color-text: #2b2322; /* deep warm charcoal */
-  --color-text-muted: #6a5f5b; /* soft warm gray */
-  --color-border: #dfd2ca80;
+  --color-bg: #fcf8f4; /* warm porcelain */
+  --color-surface: #fffaf7; /* softly tinted, low-glare */
+  --color-surface-muted: #f3ebe5;
+  --color-text: #2a2221; /* deep warm charcoal */
+  --color-text-muted: #625755; /* softer warm gray */
+  --color-border: #d8cbc380;
 
   /* Primary brand color = mauve (headings, nav links, accents) */
-  --color-primary: #7e639c;
-  --color-primary-hover: #61477f;
+  --color-primary: #7a5b98;
+  --color-primary-hover: #5f437f;
   --color-primary-contrast: #fffaf6;
 
   /* Secondary accent = soft gold (CTAs, highlights) */
-  --color-secondary: #feeb72; /* champagne gold */
-  --color-secondary-hover: #d3ad66;
+  --color-secondary: #e7c77a; /* calmer champagne (less lemon) */
+  --color-secondary-hover: #d1ab63;
   --color-secondary-contrast: #1b1512;
 
+  /* Service icon accents (used by Services cards) */
+  --color-icon-signature: #7a5b98; /* purple */
+  --color-icon-gloss: #c75aa7; /* pink */
+  --color-icon-cut: #2aa39a; /* teal */
+  --color-icon-scalp: #3b7fcf; /* blue */
+
   /* Focus ring stays mauve and accessible */
-  --color-focus: #a04a73;
+  --color-focus: #a14b76;
 
   /* Shadow base (avoid "glow" in dark mode) */
-  --color-shadow: #2b2322;
+  --color-shadow: #241b1a;
 
   --radius-sm: 0.75rem;
   --radius-md: 9999px;
@@ -80,24 +86,30 @@
 }
 
 html[data-theme="dark"] {
-  --color-bg: #17110f; /* deep espresso */
-  --color-surface: #211a18;
-  --color-surface-muted: #2a201e;
-  --color-text: #f6efe9; /* warm off-white */
-  --color-text-muted: #d0c2bb;
-  --color-border: #3a2f2c80;
+  --color-bg: #201816; /* lifted espresso */
+  --color-surface: #2b211f;
+  --color-surface-muted: #352a28;
+  --color-text: #f7f1ec; /* warm off-white */
+  --color-text-muted: #e0d4cc;
+  --color-border: #5a474280;
 
-  --color-primary: #d395b3; /* mauve that pops on dark */
-  --color-primary-hover: #b36796;
-  --color-primary-contrast: #17110f;
+  --color-primary: #e0a9c4; /* brighter mauve for legibility */
+  --color-primary-hover: #c77aa6;
+  --color-primary-contrast: #1a1211;
 
-  --color-secondary: #d8b66a; /* soft glowing gold */
-  --color-secondary-hover: #e6c77f;
+  --color-secondary: #d7b06a; /* warm champagne on dark */
+  --color-secondary-hover: #e3bf7a;
   --color-secondary-contrast: #1a1310;
 
-  --color-focus: #d07aa0;
+  /* Service icon accents (lifted for dark backgrounds) */
+  --color-icon-signature: #d7b3f0; /* purple */
+  --color-icon-gloss: #f2a1cf; /* pink */
+  --color-icon-cut: #5fd0c7; /* teal */
+  --color-icon-scalp: #7bb2ff; /* blue */
 
-  --color-shadow: #0e0706;
+  --color-focus: #e79bbb;
+
+  --color-shadow: #0b0504;
 }
 
 /* Reset / defaults */
@@ -109,7 +121,7 @@ html[data-theme="dark"] {
 
 html,
 body {
-  height: 100%;
+  min-height: 100%;
 }
 
 body {
@@ -139,8 +151,15 @@ h6 {
   font-optical-sizing: auto;
   line-height: 1.12;
   font-weight: 600;
-  letter-spacing: -0.02em;
+  letter-spacing: -0.012em;
   color: var(--color-primary);
+}
+
+/* Headings only: refined tracking (do not affect body copy) */
+h1,
+h2,
+h3 {
+  letter-spacing: 0.006em;
 }
 
 h1 {
@@ -243,33 +262,25 @@ button:hover {
 
 /* Premium button mapping (token-only): mauve brand + gold CTA */
 .btn.btn--primary {
+  background: var(--color-primary);
+  color: var(--color-primary-contrast);
+  border-color: var(--color-primary);
+}
+
+.btn.btn--primary:hover {
+  background: var(--color-primary-hover);
+  border-color: var(--color-primary-hover);
+}
+
+.btn.btn--secondary {
   background: var(--color-secondary);
   color: var(--color-secondary-contrast);
   border-color: var(--color-secondary);
 }
 
-.btn.btn--primary:hover {
+.btn.btn--secondary:hover {
   background: var(--color-secondary-hover);
   border-color: var(--color-secondary-hover);
-}
-
-.btn.btn--secondary {
-  background: var(--color-surface);
-  color: var(--color-primary);
-  border-color: color-mix(
-    in oklab,
-    var(--color-secondary) 55%,
-    var(--color-border)
-  );
-}
-
-.btn.btn--secondary:hover {
-  background: color-mix(
-    in oklab,
-    var(--color-secondary) 14%,
-    var(--color-surface)
-  );
-  border-color: var(--color-secondary);
 }
 
 button:disabled {
@@ -290,7 +301,19 @@ button:disabled {
 }
 
 .section + .section {
-  border-top: 1px solid var(--color-border);
+  position: relative;
+  border-top: none;
+}
+
+.section + .section::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: min(calc(100% - (2 * var(--container-pad))), var(--container-max));
+  height: 1px;
+  background: var(--color-border);
 }
 
 .stack {
