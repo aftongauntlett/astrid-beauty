@@ -37,6 +37,58 @@ const homeHref = lang === "es" ? "/es" : "/";
 	</div>
 </header>
 
+<script>
+	const initHeaderAutoHide = () => {
+		const header = document.querySelector(".site-header");
+		if (!(header instanceof HTMLElement)) return;
+		if (header.dataset["autoHideInitialized"] === "true") return;
+		header.dataset["autoHideInitialized"] = "true";
+
+		const about = document.getElementById("about");
+		if (!(about instanceof HTMLElement)) return;
+
+		let raf = 0;
+		const computeHidden = () => {
+			raf = 0;
+			const nav = header.querySelector("nav[data-primary-nav]");
+			const navOpen = nav instanceof HTMLElement && nav.dataset["open"] === "true";
+			if (navOpen) {
+				header.dataset["hidden"] = "false";
+				return;
+			}
+
+			const headerHeight = header.getBoundingClientRect().height;
+			const aboutTop = about.getBoundingClientRect().top;
+			const hide = aboutTop <= headerHeight + 8;
+			header.dataset["hidden"] = hide ? "true" : "false";
+		};
+
+		const schedule = () => {
+			if (raf) return;
+			raf = requestAnimationFrame(computeHidden);
+		};
+
+		computeHidden();
+		window.addEventListener("scroll", schedule, { passive: true });
+		window.addEventListener("resize", schedule);
+
+		document.addEventListener("click", schedule);
+		document.addEventListener("keydown", schedule);
+	};
+
+	if (document.readyState === "loading") {
+		document.addEventListener("DOMContentLoaded", initHeaderAutoHide, { once: true });
+	} else {
+		initHeaderAutoHide();
+	}
+
+	document.addEventListener("astro:page-load", () => {
+		const header = document.querySelector(".site-header");
+		if (header instanceof HTMLElement) header.dataset["autoHideInitialized"] = "false";
+		initHeaderAutoHide();
+	});
+</script>
+
 <style>
 	.site-header {
 		position: sticky;
@@ -44,6 +96,19 @@ const homeHref = lang === "es" ? "/es" : "/";
 		z-index: 50;
 		background: var(--color-surface);
 		border-bottom: 1px solid var(--color-border);
+		transform: translateY(0);
+	}
+
+	@media (prefers-reduced-motion: no-preference) {
+		.site-header {
+			transition: transform 200ms ease, opacity 200ms ease;
+		}
+	}
+
+	.site-header[data-hidden="true"] {
+		transform: translateY(-110%);
+		opacity: 0;
+		pointer-events: none;
 	}
 
 	.site-header__inner {

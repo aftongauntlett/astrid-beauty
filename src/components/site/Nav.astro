@@ -37,15 +37,17 @@ const vagaroServicesUrl = "https://www.vagaro.com/byastridbeautysalon/services";
 	<div class="nav__menu" id={menuId} data-nav-menu>
 		<a class="nav__link" href={sectionHref("services")} data-section-link="services">{messages.nav.services}</a>
 		<a class="nav__link" href={sectionHref("about")} data-section-link="about">{messages.nav.gallery}</a>
-		<a
-			class="nav__link nav__link--external"
+		<Button
+			class="nav__bookNow"
+			variant="ghost"
+			size="sm"
 			href={vagaroServicesUrl}
 			target="_blank"
 			rel="noopener noreferrer"
 		>
 			<span class="nav__linkText">{messages.misc.bookNow}</span>
-			<ExternalLink class="nav__externalIcon" size={20} aria-hidden="true" focusable="false" />
-		</a>
+			<ExternalLink class="nav__externalIcon" size={18} aria-hidden="true" focusable="false" />
+		</Button>
 		<div class="nav__divider" aria-hidden="true"></div>
 		<div class="nav__settings" aria-label="Settings">
 			<ThemeToggle mode="segmented" label="Theme" />
@@ -289,6 +291,28 @@ const vagaroServicesUrl = "https://www.vagaro.com/byastridbeautysalon/services";
 		flex: 0 0 auto;
 		white-space: nowrap;
 		transition: color 160ms ease;
+	}
+
+	.nav__bookNow.btn {
+		background: transparent;
+		border: 1px solid var(--color-border);
+		box-shadow: none;
+		white-space: nowrap;
+		border-radius: var(--radius-sm);
+		padding: 0 var(--space-md);
+		font-weight: 400;
+		gap: 0.6rem;
+	}
+
+	.nav__bookNow.btn:hover {
+		background: var(--color-surface-muted);
+		color: var(--color-primary);
+	}
+
+	.nav__bookNow .nav__externalIcon {
+		opacity: 1;
+		transform: none;
+		pointer-events: none;
 	}
 
 	/* Refined underline: animates in smoothly on hover + focus-visible */
