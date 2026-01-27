@@ -4,8 +4,8 @@ export const en: Messages = {
   nav: {
     services: "Services",
     gallery: "About",
-    findUs: "Find Us",
-    booking: "Booking",
+    findUs: "Visit",
+    booking: "Book",
     menu: "Menu",
   },
   common: {
@@ -13,83 +13,127 @@ export const en: Messages = {
     languageToggleLabel: "Language",
   },
   sections: {
-    homeTitle: "Ready when you are",
-    servicesTitle: "Services",
+    homeTitle: "Your beautiful hair starts here",
+    servicesTitle: "Our Services",
     galleryTitle: "About",
     aboutLede:
-      "See some of my work, read what clients are saying, and schedule your appointment today.",
+      "Take a peek at recent transformations, hear from happy clients, and book your next visit.",
   },
   misc: {
-    bookNow: "Book Now",
-    scheduleAppointment: "Schedule Appointment",
-    viewServices: "View Services",
+    bookNow: "Book Your Visit",
+    scheduleAppointment: "Reserve Your Chair",
+    viewServices: "Explore Services",
     backToTop: "Back to top",
-    scheduleNow: "Schedule Now",
+    scheduleNow: "Book Now",
   },
   home: {
     heroLede:
-      "Dimensional color, cuts, and gloss treatments in Herndon, book online anytime.",
+      "Beautiful color, fresh cuts, and luminous gloss treatments - right here in Herndon. Book your appointment anytime.",
     brandSrOnly: "By Astrid Beauty",
   },
   findUs: {
-    lede: "Visit us in Herndon. Business hours can change—call to confirm.",
+    lede: "We'd love to see you at our Herndon studio. Hours may vary, so give us a call to confirm.",
   },
   booking: {
-    title: "Booking Information",
-    lede: "For the most up-to-date service options, pricing, and availability, please book directly through Vagaro. This ensures you are selecting the exact service that best fits your hair and your goals.",
-    scheduleHelper: "Instant online booking via Vagaro.",
-    reviewsTitle: "Client Reviews",
+    title: "Reserve Your Appointment",
+    lede: "For current services, pricing, and availability, please book through Vagaro. This helps you find the perfect service for your hair and your vision.",
+    scheduleHelper: "Easy online booking through Vagaro.",
+    reviewsTitle: "What Our Clients Say",
   },
+  reviews: [
+    {
+      quote:
+        "Always takes great care of me to where I had to bring my sister in. She got my sister and I right lol if you aren't already going here you should.",
+      author: "Elizabeth C",
+      date: "Aug 14, 2025",
+    },
+    {
+      quote:
+        "if you are thinking of going to this salon, do it! she's amazing, she does a very good job & she's really nice & sweet, thank you Astrid you are incredible. 🤍",
+      author: "Anyi F",
+      date: "Jul 21, 2023",
+    },
+    {
+      quote:
+        "Astrid did such a beautiful job with my haircut! Got the exact results I was looking for. I definitely will be back.",
+      author: "Jules D",
+      date: "Dec 02, 2022",
+    },
+    {
+      quote:
+        "She did an amazing job. I am more than happy with the results. She is very friendly and makes you comfortable. She didn't rush through the process instead took her time , and explained what she did and why she did throughout. Will come again!",
+      author: "Ramsha S",
+      date: "May 06, 2021",
+    },
+  ],
   services: {
-    lede: "A focused menu of color, cut, and care—tailored to your hair and your schedule.",
+    lede: "Thoughtfully crafted color, cuts, and care—designed around you.",
     cards: [
       {
         title: "Signature Color",
-        description: "Dimensional color placed with a soft, natural finish.",
-        items: ["Consult-first", "Gloss + tone", "Low-contrast grow-out"],
-      },
-      {
-        title: "Cut + Style",
         description:
-          "Tailored shape, airy movement, and an easy everyday routine.",
-        items: ["Face-framing", "Blowout finish", "At-home tips"],
+          "Rich, dimensional color with a beautifully natural finish.",
+        items: ["Personal consultation", "Gloss & tone", "Effortless grow-out"],
       },
       {
-        title: "Gloss + Shine",
-        description: "A sheer refresh that brings softness and light back in.",
-        items: ["Warm or cool", "Adds brightness", "No harsh tone"],
+        title: "Cut & Style",
+        description:
+          "A shape that moves with you and feels effortless every day.",
+        items: [
+          "Face-framing layers",
+          "Polished blowout",
+          "Styling tips to go",
+        ],
       },
       {
-        title: "Scalp Care",
-        description: "Comfort-focused care for balance, hydration, and calm.",
-        items: ["Gentle cleanse", "Massage", "Sensitive-safe"],
+        title: "Gloss & Shine",
+        description:
+          "A luminous refresh that brings back softness and radiance.",
+        items: ["Warm or cool tones", "Added brilliance", "Gentle on hair"],
+      },
+      {
+        title: "Scalp Wellness",
+        description:
+          "A soothing ritual for balance, hydration, and relaxation.",
+        items: [
+          "Gentle cleanse",
+          "Relaxing massage",
+          "Sensitive-skin friendly",
+        ],
       },
     ],
   },
   gallery: {
-    lede: "A curated set of recent looks. Use “Show more” to view the full set.",
+    lede: "A glimpse of recent transformations. Tap below to see more.",
     imagesAriaLabel: "Gallery images",
-    showMore: "Show more",
-    showLess: "Show less",
+    showMore: "See more",
+    showLess: "See less",
     statusTemplate: "Showing {count} images.",
   },
   skipLink: {
     skipToContent: "Skip to content",
   },
+  settings: {
+    label: "Settings",
+    theme: "Theme",
+    lightMode: "Light mode",
+    darkMode: "Dark mode",
+    language: "Language",
+  },
   footer: {
     address: "Address",
-    contact: "Contact",
+    contact: "Get in Touch",
     phone: "Phone",
     hours: "Hours",
-    social: "Social",
-    findUsCta: "Open Maps",
+    social: "Follow Along",
+    findUsCta: "Get Directions",
     email: "Email",
     facebook: "Facebook",
     instagram: "Instagram",
     placeholderAddress: "384 Elden Street, Suite 210\nHerndon, VA 20170",
     placeholderPhone: "(703) 786-3707",
     placeholderHours:
-      "Business hours can change—please call to confirm.\nSunday: Closed\nMonday: 9:00 AM – 5:00 PM\nTuesday: Closed\nWednesday: 9:00 AM – 6:30 PM\nThursday: Closed\nFriday: 9:00 AM – 6:30 PM\nSaturday: 9:30 AM – 4:30 PM",
+      "Hours may vary—please call to confirm.\nSunday: Closed\nMonday: 9:00 AM – 5:00 PM\nTuesday: Closed\nWednesday: 9:00 AM – 6:30 PM\nThursday: Closed\nFriday: 9:00 AM – 6:30 PM\nSaturday: 9:30 AM – 4:30 PM",
     copyright: "By Astrid Beauty",
     builtByLabel: "Built by",
   },

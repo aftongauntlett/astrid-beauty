@@ -39,32 +39,7 @@ const balanceForTwoColumnGrid = <T,>(items: readonly T[], getText: (item: T) => 
 	return balanced;
 };
 
-const reviews = [
-	{
-		quote:
-			"Always takes great care of me to where I had to bring my sister in. She got my sister and I right lol if you aren’t already going here you should ",
-		author: "Elizabeth C",
-		date: "Aug 14, 2025",
-	},
-	{
-		quote:
-			"if you are thinking of going to this salon, do it! she’s amazing, she does a very good job & she’s really nice & sweet, thank you Astrid you are incredible 🤍",
-		author: "Anyi F",
-		date: "Jul 21, 2023",
-	},
-	{
-		quote:
-			"Astrid did such a beautiful job with my haircut! Got the exact results I was looking for. I definitely will be back.",
-		author: "Jules D",
-		date: "Dec 02, 2022",
-	},
-	{
-		quote:
-			"She did an amazing job. I am more than happy with the results. She is very friendly and makes you comfortable. She didn't rush through the process instead took her time , and explained what she did and why she did throughout. Will come again!",
-		author: "Ramsha S",
-		date: "May 06, 2021",
-	},
-] as const;
+const reviews = messages.reviews;
 
 const balancedReviews = balanceForTwoColumnGrid(reviews, (review) => stripOuterQuotes(review.quote));
 

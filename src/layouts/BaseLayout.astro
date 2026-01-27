@@ -54,15 +54,32 @@ const xDefaultHref = toHref(alternates.xDefault);
 		>
 			(() => {
 				// Runs early to avoid visible flash/layout shift.
-				// Redirect only if the user explicitly chose a preferred language.
+				// Redirect based on: 1) explicit user preference, or 2) browser language for first-time visitors.
 				try {
 					const preferred = localStorage.getItem('preferredLang');
-					if (preferred !== 'en' && preferred !== 'es') return;
-					if (preferred === currentLang) return;
+					
+					// If user has explicitly chosen a language, respect that choice
+					if (preferred === 'en' || preferred === 'es') {
+						if (preferred !== currentLang) {
+							const targetPath = preferred === 'es' ? esPath : enPath;
+							const next = `${targetPath}${window.location.search}${window.location.hash}`;
+							window.location.replace(next);
+						}
+						return;
+					}
 
-					const targetPath = preferred === 'es' ? esPath : enPath;
-					const next = `${targetPath}${window.location.search}${window.location.hash}`;
-					window.location.replace(next);
+					// First-time visitor: check browser language preference
+					// Only redirect if browser prefers Spanish and we're on English page
+					const browserLang = navigator.language || navigator.userLanguage || '';
+					const prefersSpanish = browserLang.toLowerCase().startsWith('es');
+					
+					if (prefersSpanish && currentLang === 'en') {
+						// Mark as auto-detected so we don't keep redirecting
+						// (user can override by clicking English in settings)
+						localStorage.setItem('preferredLang', 'es');
+						const next = `${esPath}${window.location.search}${window.location.hash}`;
+						window.location.replace(next);
+					}
 				} catch {
 					// ignore
 				}

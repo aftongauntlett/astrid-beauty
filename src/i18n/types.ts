@@ -36,6 +36,11 @@ export type Messages = {
     scheduleHelper: string;
     reviewsTitle: string;
   };
+  reviews: Array<{
+    quote: string;
+    author: string;
+    date: string;
+  }>;
   services: {
     lede: string;
     cards: Array<{
@@ -53,6 +58,13 @@ export type Messages = {
   };
   skipLink: {
     skipToContent: string;
+  };
+  settings: {
+    label: string;
+    theme: string;
+    lightMode: string;
+    darkMode: string;
+    language: string;
   };
   footer: {
     address: string;
