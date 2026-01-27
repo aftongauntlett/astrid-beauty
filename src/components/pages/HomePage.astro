@@ -3,6 +3,7 @@ import Button from "../ui/Button.astro";
 import SectionIntro from "../ui/SectionIntro.astro";
 import FeatureIconCard from "../FeatureIconCard.astro";
 import Gallery from "../Gallery.astro";
+import HeroBookNowCta from "../motion/HeroBookNowCta";
 
 import { ExternalLink, Star } from "@lucide/astro";
 
@@ -94,7 +95,7 @@ const serviceCardMeta = [
 	<div class="container hero__grid">
 		<div class="hero__content">
 			<p class="sr-only">{messages.home.brandSrOnly}</p>
-			<div class="hero__brandmark" aria-hidden="true">
+			<div class="hero__brandmark" aria-hidden="true" data-reveal>
 				<img
 					class="hero__brandmarkLogo"
 					src="/by-astrid-beauty-logo.png"
@@ -107,23 +108,18 @@ const serviceCardMeta = [
 		</div>
 
 		<div class="hero__actions" aria-label="Primary actions">
-			<div class="hero__actionsCopy">
+			<div class="hero__actionsCopy" data-reveal data-reveal-delay="80">
 				<h1 class="hero__actionsTitle" id="page-title">{messages.sections.homeTitle}</h1>
 				<p class="hero__actionsLede">{messages.home.heroLede}</p>
 			</div>
 			<div class="hero__actionsRow">
-				<Button
+				<HeroBookNowCta
+					client:load
 					href={vagaroServicesUrl}
-					variant="primary"
-					size="lg"
-					target="_blank"
-					rel="noopener noreferrer"
-					class="hero__bookNow btn--external"
-				>
-					<span class="btn__externalSpacer" aria-hidden="true"></span>
-					<span class="btn__externalLabel">{messages.misc.bookNow}</span>
-					<ExternalLink class="btn__externalIcon" size={20} aria-hidden="true" focusable="false" />
-				</Button>
+					label={messages.misc.scheduleAppointment}
+					labelMobile={messages.misc.bookNow}
+					className="hero__bookNow btn--external"
+				/>
 			</div>
 		</div>
 	</div>
@@ -131,17 +127,21 @@ const serviceCardMeta = [
 
 <section class="section" id="services" aria-labelledby="services-title">
 	<div class="container stack stack--lg">
-		<SectionIntro id="services-title" title={messages.sections.servicesTitle} lede={messages.services.lede} />
+		<div data-reveal>
+			<SectionIntro id="services-title" title={messages.sections.servicesTitle} lede={messages.services.lede} />
+		</div>
 
 		<div class="services-grid" aria-label="Service highlights">
 			{messages.services.cards.map((card, index) => (
-				<FeatureIconCard
-					title={card.title}
-					description={card.description}
-					items={card.items}
-					iconName={serviceCardMeta[index]?.iconName ?? "palette"}
-					iconColor={serviceCardMeta[index]?.iconColor ?? "var(--color-primary)"}
-				/>
+				<div data-reveal data-reveal-delay={String(index * 70)}>
+					<FeatureIconCard
+						title={card.title}
+						description={card.description}
+						items={card.items}
+						iconName={serviceCardMeta[index]?.iconName ?? "palette"}
+						iconColor={serviceCardMeta[index]?.iconColor ?? "var(--color-primary)"}
+					/>
+				</div>
 			))}
 		</div>
 	</div>
@@ -149,16 +149,20 @@ const serviceCardMeta = [
 
 <section class="section" id="about" aria-labelledby="about-title">
 	<div class="container stack stack--lg about__stack">
-		<SectionIntro id="about-title" title={messages.sections.galleryTitle} lede={messages.sections.aboutLede} />
+		<div data-reveal>
+			<SectionIntro id="about-title" title={messages.sections.galleryTitle} lede={messages.sections.aboutLede} />
+		</div>
 
-		<Gallery lang={lang} />
+		<div data-reveal data-reveal-delay="80">
+			<Gallery lang={lang} />
+		</div>
 
 		<div class="about__divider" aria-hidden="true"></div>
 
 		<section class="booking-reviews" aria-label={messages.booking.reviewsTitle}>
 			<div class="reviews-grid" role="list" aria-label={messages.booking.reviewsTitle}>
-				{orderedReviews.map((review) => (
-					<figure class="review" role="listitem">
+				{orderedReviews.map((review, index) => (
+					<figure class="review" role="listitem" data-reveal data-reveal-delay={String(index * 70)}>
 						<div class="review__rating" role="img" aria-label="5 out of 5 stars">
 							<Star class="review__star" size={16} aria-hidden="true" focusable="false" fill="currentColor" stroke="none" />
 							<Star class="review__star" size={16} aria-hidden="true" focusable="false" fill="currentColor" stroke="none" />
@@ -178,7 +182,7 @@ const serviceCardMeta = [
 
 		<div class="about__divider" aria-hidden="true"></div>
 
-		<div class="booking-ctaCard" aria-label={messages.misc.bookNow}>
+		<div class="booking-ctaCard" aria-label={messages.misc.bookNow} data-reveal>
 			<div class="booking-ctaCard__panel">
 				<p class="booking-ctaCard__lede">{messages.booking.lede}</p>
 				<div class="booking-ctaCard__actions" aria-label={messages.booking.scheduleHelper}>
@@ -225,51 +229,6 @@ const serviceCardMeta = [
 	.hero__bookNow.btn:hover {
 		background: var(--color-primary-hover);
 		border-color: var(--color-primary-hover);
-	}
-
-	.btn--external .btn__externalIcon {
-		opacity: 0;
-		transform: translateY(1px);
-		pointer-events: none;
-	}
-
-	@media (max-width: 48rem) {
-		.btn--external .btn__externalIcon {
-			opacity: 1;
-			transform: translateY(0);
-		}
-	}
-
-	@media (prefers-reduced-motion: no-preference) {
-		.btn--external .btn__externalIcon {
-			transition:
-				opacity 140ms ease,
-				transform 140ms ease;
-		}
-	}
-
-	.btn--external.btn:hover .btn__externalIcon,
-	.btn--external.btn:focus-visible .btn__externalIcon {
-		opacity: 1;
-		transform: translateY(0);
-	}
-
-	.btn--external.btn {
-		display: grid;
-		grid-template-columns: 20px 1fr 20px;
-		column-gap: 0.35rem;
-		align-items: center;
-		justify-items: center;
-	}
-
-	.btn__externalSpacer {
-		width: 20px;
-		height: 1px;
-	}
-
-	.btn__externalLabel {
-		display: inline-flex;
-		align-items: center;
 	}
 
 	.about__stack {

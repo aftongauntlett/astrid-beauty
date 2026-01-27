@@ -70,7 +70,11 @@ const dataId = 'gallery-data';
 <div class="gallery" data-gallery>
 	<ul class="gallery__grid" id={gridId} aria-label={messages.gallery.imagesAriaLabel}>
 		{preloadedImages.map((image, idx) => (
-			<li class:list={["gallery__item", idx >= initialMobileCount && "gallery__item--preload"]}>
+			<li
+				class:list={[("gallery__item"), idx >= initialMobileCount && "gallery__item--preload"]}
+				data-reveal
+				data-reveal-delay={String(Math.min(260, (idx % 3) * 70 + Math.floor(idx / 3) * 40))}
+			>
 				<div class="gallery__frame">
 					<div class="gallery__media">
 						<img
@@ -90,7 +94,11 @@ const dataId = 'gallery-data';
 	</ul>
 
 	{showToggle ? (
-		<div class:list={["gallery__actions", toggleMobileOnly && "gallery__actions--mobileOnly"]}>
+		<div
+			class:list={["gallery__actions", toggleMobileOnly && "gallery__actions--mobileOnly"]}
+			data-reveal
+			data-reveal-delay="80"
+		>
 			<Button
 				id={toggleId}
 				type="button"
@@ -159,6 +167,11 @@ const dataId = 'gallery-data';
 				const baseCount = baseItems.length;
 
 				const isOneColumn = () => window.matchMedia('(max-width: 35.999rem)').matches;
+				const columns = () => {
+					if (window.matchMedia('(min-width: 64rem)').matches) return 3;
+					if (window.matchMedia('(min-width: 36rem)').matches) return 2;
+					return 1;
+				};
 				const collapsedCount = () => (isOneColumn() ? Math.min(MOBILE_INITIAL, baseCount) : baseCount);
 				const expandedCount = () => baseCount + remaining.length;
 
@@ -173,9 +186,18 @@ const dataId = 'gallery-data';
 					}
 				};
 
-				const buildItem = (img) => {
+				const computeDelay = (itemIndex) => {
+					const cols = columns();
+					const colDelay = (itemIndex % cols) * 70;
+					const rowDelay = Math.floor(itemIndex / cols) * 40;
+					return Math.min(260, colDelay + rowDelay);
+				};
+
+				const buildItem = (img, itemIndex) => {
 					const li = document.createElement('li');
 					li.className = 'gallery__item gallery__item--extra';
+					li.setAttribute('data-reveal', '');
+					li.setAttribute('data-reveal-delay', String(computeDelay(itemIndex)));
 
 					const frame = document.createElement('div');
 					frame.className = 'gallery__frame';
@@ -217,11 +239,13 @@ const dataId = 'gallery-data';
 						if (actions) actions.hidden = false;
 						for (const item of preloadItems) item.style.display = '';
 						for (const img of remaining) {
-							const item = buildItem(img);
+							const itemIndex = baseCount + extraItems.length;
+							const item = buildItem(img, itemIndex);
 							extraItems.push(item);
 							grid.append(item);
 						}
 						setStatus(expandedCount());
+						window.dispatchEvent(new Event('scroll-reveal:refresh'));
 					} else {
 						for (const item of extraItems) item.remove();
 						extraItems.length = 0;

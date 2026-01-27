@@ -83,6 +83,19 @@ const xDefaultHref = toHref(alternates.xDefault);
 				}
 			})();
 		</script>
+		<script is:inline>
+			(() => {
+				// Progressive enhancement: only enable reveal styles when JS is running.
+				// Skip entirely for reduced-motion users.
+				try {
+					const reduce = window.matchMedia?.('(prefers-reduced-motion: reduce)').matches;
+					if (reduce) return;
+					document.documentElement.classList.add('has-scroll-reveal');
+				} catch {
+					// ignore
+				}
+			})();
+		</script>
 		<link rel="preconnect" href="https://fonts.googleapis.com" />
 		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 		<link
@@ -111,5 +124,13 @@ const xDefaultHref = toHref(alternates.xDefault);
 		</main>
 
 		<Footer lang={lang} />
+
+		<script>
+			import { initScrollReveal } from "../lib/scrollReveal";
+			const run = () => initScrollReveal();
+			run();
+			window.addEventListener("scroll-reveal:refresh", run);
+			document.addEventListener("astro:page-load", run);
+		</script>
 	</body>
 </html>

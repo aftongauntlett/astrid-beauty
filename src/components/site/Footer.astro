@@ -630,6 +630,23 @@ const year = new Date().getFullYear();
 		.site-footer__meta {
 			box-shadow: none;
 			padding-top: 0;
+			grid-template-columns: 1fr;
+			justify-items: center;
+			text-align: center;
+		}
+
+		.site-footer__metaLeft {
+			align-items: center;
+		}
+
+		.site-footer__metaBuiltBy,
+		.site-footer__metaCopyright {
+			justify-self: center;
+			text-align: center;
+		}
+
+		.site-footer__toTop {
+			justify-self: center;
 		}
 	}
 
@@ -699,6 +716,22 @@ const year = new Date().getFullYear();
 	@media (min-width: 36rem) {
 		.site-footer__grid {
 			grid-template-columns: repeat(2, minmax(0, 1fr));
+		}
+	}
+
+	@media (min-width: 36rem) and (max-width: 47.999rem) {
+		.site-footer__block--contact > .site-footer__mobileDivider {
+			display: none;
+		}
+
+		.site-footer__mobileDivider {
+			grid-column: 1 / -1;
+		}
+
+		.site-footer__block--hours {
+			grid-column: 1 / -1;
+			text-align: center;
+			align-items: center;
 		}
 	}
 

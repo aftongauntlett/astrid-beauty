@@ -18,6 +18,7 @@ export type Messages = {
   };
   misc: {
     bookNow: string;
+    scheduleAppointment: string;
     viewServices: string;
     backToTop: string;
     scheduleNow: string;

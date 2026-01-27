@@ -21,6 +21,7 @@ export const en: Messages = {
   },
   misc: {
     bookNow: "Book Now",
+    scheduleAppointment: "Schedule Appointment",
     viewServices: "View Services",
     backToTop: "Back to top",
     scheduleNow: "Schedule Now",

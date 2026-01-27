@@ -1,0 +1,19 @@
+.labelDesktop {
+  display: inline-flex;
+  align-items: center;
+}
+
+.labelMobile {
+  display: none;
+  align-items: center;
+}
+
+@media (max-width: 48rem) {
+  .labelDesktop {
+    display: none;
+  }
+
+  .labelMobile {
+    display: inline-flex;
+  }
+}
