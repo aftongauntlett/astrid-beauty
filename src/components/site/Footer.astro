@@ -48,6 +48,68 @@ const hours = dayLines
 	})
 	.filter(Boolean) as Array<{ day: string; time: string }>;
 
+const isClosedTime = (value: string) => /^(closed|cerrado)$/i.test(value.trim());
+
+const abbreviateDay = (value: string) => {
+	const normalized = value
+		.normalize("NFD")
+		.replace(/[\u0300-\u036f]/g, "")
+		.replace(/\./g, "")
+		.trim()
+		.toLowerCase();
+
+	// English
+	if (normalized === "monday") return "Mon";
+	if (normalized === "tuesday") return "Tues";
+	if (normalized === "wednesday") return "Weds";
+	if (normalized === "thursday") return "Thurs";
+	if (normalized === "friday") return "Fri";
+	if (normalized === "saturday") return "Sat";
+	if (normalized === "sunday") return "Sun";
+
+	// Spanish
+	if (normalized === "lunes") return "Lun";
+	if (normalized === "martes") return "Mar";
+	if (normalized === "miercoles") return "Mie";
+	if (normalized === "jueves") return "Jue";
+	if (normalized === "viernes") return "Vie";
+	if (normalized === "sabado") return "Sab";
+	if (normalized === "domingo") return "Dom";
+
+	// Already abbreviated or unknown format.
+	return value;
+};
+
+const closedDays = hours.filter((item) => isClosedTime(item.time)).map((item) => abbreviateDay(item.day));
+const closedLabel = hours.find((item) => isClosedTime(item.time))?.time;
+
+const openGroups = new Map<string, { days: string[]; firstIndex: number }>();
+const openTimesInOrder: string[] = [];
+
+for (const [index, item] of hours.entries()) {
+	if (isClosedTime(item.time)) continue;
+	const time = item.time;
+	const day = abbreviateDay(item.day);
+	const existing = openGroups.get(time);
+	if (!existing) {
+		openGroups.set(time, { days: [day], firstIndex: index });
+		openTimesInOrder.push(time);
+		continue;
+	}
+
+	existing.days.push(day);
+}
+
+const displayHours = openTimesInOrder.map((time) => {
+	const group = openGroups.get(time);
+	if (!group) return { day: "", time };
+	return { day: group.days.join(", "), time };
+});
+
+if (closedDays.length > 0) {
+	displayHours.push({ day: closedDays.join(", "), time: closedLabel ?? "Closed" });
+}
+
 const phoneDigits = messages.footer.placeholderPhone.replace(/\D/g, "");
 const phoneHref = phoneDigits.length === 10 ? `tel:+1${phoneDigits}` : `tel:+${phoneDigits}`;
 
@@ -96,7 +158,7 @@ const year = new Date().getFullYear();
 						<div class="site-footer__socialRow" aria-label={messages.footer.social}>
 						<a
 							class="site-footer__iconLink"
-							href="https://www.facebook.com/hair.by.astridmLets"
+							href="https://www.facebook.com/hair.by.astridm"
 							target="_blank"
 							rel="noopener noreferrer"
 							aria-label={messages.footer.facebook}
@@ -150,12 +212,12 @@ const year = new Date().getFullYear();
 			<div class="site-footer__mobileDivider" aria-hidden="true"></div>
 
 			<section class="site-footer__block site-footer__block--hours" aria-label={messages.footer.hours}>
-				<h2 class="sr-only">{messages.footer.hours}</h2>
+				<h2 class="site-footer__title">{messages.footer.hours}</h2>
 				<table class="site-footer__hoursTable" aria-label={messages.footer.hours}>
 					<tbody>
-						{hours.map((item) => (
+						{displayHours.map((item) => (
 							<tr class="site-footer__hoursRow">
-								<th class="site-footer__hoursDay" scope="row">{item.day}:</th>
+								<th class:list={["site-footer__hoursDay", item.day.includes(",") ? "site-footer__hoursDay--wrap" : ""]} scope="row">{item.day}:</th>
 								<td class="site-footer__hoursTime">{item.time}</td>
 							</tr>
 						))}
@@ -561,7 +623,7 @@ const year = new Date().getFullYear();
 		color: var(--color-text-muted);
 		padding-top: var(--space-md);
 		box-shadow: inset 0 1px 0 var(--color-border);
-		font-size: 0.8rem;
+		font-size: 0.875rem;
 	}
 
 	@media (max-width: 47.999rem) {
@@ -706,6 +768,10 @@ const year = new Date().getFullYear();
 		white-space: nowrap;
 		padding-left: 0.75rem;
 		font-size: var(--text-sm);
+	}
+
+	.site-footer__hoursDay--wrap {
+		white-space: normal;
 	}
 
 	@media (min-width: 48rem) {
