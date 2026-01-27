@@ -1,9 +1,7 @@
 ---
 import Button from './ui/Button.astro';
 import { ChevronDown } from '@lucide/astro';
-import fs from 'node:fs';
-import path from 'node:path';
-import { fileURLToPath } from 'node:url';
+import * as fs from 'node:fs';
 
 import { getMessages, type Lang } from '../i18n';
 
@@ -26,30 +24,42 @@ const toAlt = (filename: string) => {
 };
 
 const projectRootUrl = new URL('../../', import.meta.url);
-const publicRootPath = fileURLToPath(new URL('./public/', projectRootUrl));
+const publicRootUrl = new URL('./public/', projectRootUrl);
 const allowedExt = new Set(['.jpg', '.jpeg', '.png', '.webp', '.avif']);
+
+const urlToFsPath = (url: URL) => decodeURIComponent(url.pathname);
+
+const extname = (filename: string) => {
+	const idx = filename.lastIndexOf('.');
+	return idx === -1 ? '' : filename.slice(idx).toLowerCase();
+};
 
 const galleryDirName = (() => {
 	const candidates = ['images', 'image'];
 	for (const name of candidates) {
-		if (fs.existsSync(path.join(publicRootPath, name))) return name;
+		if (fs.existsSync(urlToFsPath(new URL(`./${name}/`, publicRootUrl.href)))) return name;
 	}
 	return '';
 })();
 
-const galleryDirPath = galleryDirName ? path.join(publicRootPath, galleryDirName) : publicRootPath;
+const galleryDirUrl = galleryDirName ? new URL(`./${galleryDirName}/`, publicRootUrl.href) : publicRootUrl;
+const galleryDirPath = urlToFsPath(galleryDirUrl);
 const galleryUrlPrefix = galleryDirName ? `/${galleryDirName}/` : '/';
 
 const images: GalleryImage[] = fs
 	.readdirSync(galleryDirPath)
-	.filter((name: string) => allowedExt.has(path.extname(name).toLowerCase()))
+	.filter((name: string) => allowedExt.has(extname(name)))
 	.filter((name: string) => !name.toLowerCase().startsWith('favicon'))
 	.sort((a: string, b: string) => a.localeCompare(b, undefined, { numeric: true, sensitivity: 'base' }))
 	.map((name: string) => ({ src: `${galleryUrlPrefix}${name}`, alt: toAlt(name) }));
 
-const initialCount = 6;
-const initialImages = images.slice(0, initialCount);
-const remainingImages = images.slice(initialCount);
+const initialMobileCount = 3;
+const initialDesktopCount = 6;
+const preloadCount = Math.min(initialDesktopCount, images.length);
+const preloadedImages = images.slice(0, preloadCount);
+const remainingImages = images.slice(preloadCount);
+const showToggle = images.length > initialMobileCount;
+const toggleMobileOnly = remainingImages.length === 0 && images.length <= initialDesktopCount;
 
 const gridId = 'gallery-grid';
 const toggleId = 'gallery-toggle';
@@ -59,8 +69,8 @@ const dataId = 'gallery-data';
 
 <div class="gallery" data-gallery>
 	<ul class="gallery__grid" id={gridId} aria-label={messages.gallery.imagesAriaLabel}>
-		{initialImages.map((image) => (
-			<li class="gallery__item">
+		{preloadedImages.map((image, idx) => (
+			<li class:list={["gallery__item", idx >= initialMobileCount && "gallery__item--preload"]}>
 				<div class="gallery__frame">
 					<div class="gallery__media">
 						<img
@@ -79,8 +89,8 @@ const dataId = 'gallery-data';
 		))}
 	</ul>
 
-	{remainingImages.length ? (
-		<div class="gallery__actions">
+	{showToggle ? (
+		<div class:list={["gallery__actions", toggleMobileOnly && "gallery__actions--mobileOnly"]}>
 			<Button
 				id={toggleId}
 				type="button"
@@ -113,7 +123,7 @@ const dataId = 'gallery-data';
 		</div>
 	) : null}
 
-	{remainingImages.length ? (
+	{showToggle ? (
 		<script type="module" is:inline>
 			const toggle = document.getElementById('gallery-toggle');
 			const grid = document.getElementById('gallery-grid');
@@ -124,7 +134,7 @@ const dataId = 'gallery-data';
 				// Gallery markup not present.
 			} else {
 				const label = toggle.querySelector('.gallery__toggleLabel');
-				const initialCount = 6;
+				const MOBILE_INITIAL = 3;
 				const safeParse = (node, fallback) => {
 					if (!node) return fallback;
 					try {
@@ -142,6 +152,26 @@ const dataId = 'gallery-data';
 				/** @type {HTMLElement[]} */
 				const extraItems = [];
 				let expanded = false;
+
+				const actions = toggle.closest('.gallery__actions');
+				const preloadItems = Array.from(grid.querySelectorAll('.gallery__item--preload'));
+				const baseItems = Array.from(grid.querySelectorAll('.gallery__item'));
+				const baseCount = baseItems.length;
+
+				const isOneColumn = () => window.matchMedia('(max-width: 35.999rem)').matches;
+				const collapsedCount = () => (isOneColumn() ? Math.min(MOBILE_INITIAL, baseCount) : baseCount);
+				const expandedCount = () => baseCount + remaining.length;
+
+				const applyCollapsedVisibility = () => {
+					if (expanded) return;
+					const oneCol = isOneColumn();
+					for (const item of preloadItems) {
+						item.style.display = oneCol ? 'none' : '';
+					}
+					if (actions && remaining.length === 0) {
+						actions.hidden = !oneCol;
+					}
+				};
 
 				const buildItem = (img) => {
 					const li = document.createElement('li');
@@ -184,21 +214,31 @@ const dataId = 'gallery-data';
 					toggle.toggleAttribute('data-collapsed', !expanded);
 
 					if (expanded) {
+						if (actions) actions.hidden = false;
+						for (const item of preloadItems) item.style.display = '';
 						for (const img of remaining) {
 							const item = buildItem(img);
 							extraItems.push(item);
 							grid.append(item);
 						}
-						setStatus(initialCount + remaining.length);
+						setStatus(expandedCount());
 					} else {
 						for (const item of extraItems) item.remove();
 						extraItems.length = 0;
-						setStatus(initialCount);
+						applyCollapsedVisibility();
+						setStatus(collapsedCount());
 					}
 				});
 
-				setStatus(initialCount);
+				applyCollapsedVisibility();
+				setStatus(collapsedCount());
 				toggle.toggleAttribute('data-collapsed', true);
+
+				const mq = window.matchMedia('(max-width: 35.999rem)');
+				mq.addEventListener('change', () => {
+					applyCollapsedVisibility();
+					if (!expanded) setStatus(collapsedCount());
+				});
 			}
 		</script>
 	) : null}
@@ -212,6 +252,22 @@ const dataId = 'gallery-data';
 		display: grid;
 		gap: var(--space-lg);
 		grid-template-columns: 1fr;
+	}
+
+	@media (max-width: 35.999rem) {
+		.gallery .gallery__item--preload {
+			display: none;
+		}
+
+		.gallery .gallery__actions--mobileOnly {
+			display: block;
+		}
+	}
+
+	@media (min-width: 36rem) {
+		.gallery .gallery__actions--mobileOnly {
+			display: none;
+		}
 	}
 
 	@media (min-width: 36rem) {

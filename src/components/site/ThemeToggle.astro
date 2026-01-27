@@ -4,46 +4,140 @@ import { Moon, Sun } from "@lucide/astro";
 
 export interface Props {
 	label?: string;
+	mode?: "icon" | "segmented";
 }
 
-const { label = "Toggle theme" } = Astro.props;
+const { label = "Theme", mode = "icon" } = Astro.props;
 ---
 
-<Button
-	type="button"
-	variant="ghost"
-	size="sm"
-	class="theme-toggle"
-	aria-label={label}
-	aria-pressed="false"
-	data-theme-toggle
->
-	<span class="sr-only">{label}</span>
-	<Sun class="theme-toggle__icon" size={18} aria-hidden="true" focusable="false" data-icon="sun" />
-	<Moon class="theme-toggle__icon" size={18} aria-hidden="true" focusable="false" data-icon="moon" />
-</Button>
+{mode === "segmented" ? (
+	<nav class="theme-toggle theme-toggle--segmented" aria-label={label} data-theme-toggle>
+		<button class="theme-toggle__link" type="button" data-theme="light" aria-pressed="false">
+			<Sun class="theme-toggle__segIcon" size={18} aria-hidden="true" focusable="false" />
+			<span>Light</span>
+		</button>
+		<button class="theme-toggle__link" type="button" data-theme="dark" aria-pressed="false">
+			<Moon class="theme-toggle__segIcon" size={18} aria-hidden="true" focusable="false" />
+			<span>Dark</span>
+		</button>
+	</nav>
+) : (
+	<Button
+		type="button"
+		variant="ghost"
+		size="sm"
+		class="theme-toggle theme-toggle--icon"
+		aria-label={label}
+		aria-pressed="false"
+		data-theme-toggle
+	>
+		<span class="sr-only">{label}</span>
+		<Sun class="theme-toggle__icon" size={18} aria-hidden="true" focusable="false" data-icon="sun" />
+		<Moon class="theme-toggle__icon" size={18} aria-hidden="true" focusable="false" data-icon="moon" />
+	</Button>
+)}
 
 <script>
 	import { toggleTheme } from "../../lib/theme";
 
-	const button = document.querySelector("[data-theme-toggle]");
-	if (button instanceof HTMLButtonElement) {
-		const syncPressed = () => {
-			const theme = document.documentElement.dataset["theme"];
-			button.setAttribute("aria-pressed", theme === "dark" ? "true" : "false");
+	const applyLightTheme = () => {
+		const nextTheme = "light";
+		try {
+			document.documentElement.classList.add("theme-changing");
+		} catch {
+			// ignore
+		}
+		try {
+			localStorage.setItem("theme", nextTheme);
+		} catch {
+			// ignore
+		}
+		document.documentElement.dataset["theme"] = nextTheme;
+		requestAnimationFrame(() => {
+			requestAnimationFrame(() => {
+				document.documentElement.classList.remove("theme-changing");
+			});
+		});
+	};
+
+	const applyDarkTheme = () => {
+		const nextTheme = "dark";
+		try {
+			document.documentElement.classList.add("theme-changing");
+		} catch {
+			// ignore
+		}
+		try {
+			localStorage.setItem("theme", nextTheme);
+		} catch {
+			// ignore
+		}
+		document.documentElement.dataset["theme"] = nextTheme;
+		requestAnimationFrame(() => {
+			requestAnimationFrame(() => {
+				document.documentElement.classList.remove("theme-changing");
+			});
+		});
+	};
+
+	const roots = Array.from(document.querySelectorAll("[data-theme-toggle]"));
+	for (const root of roots) {
+		if (!(root instanceof HTMLElement)) continue;
+		if (root.dataset["themeToggleInit"] === "true") continue;
+		root.dataset["themeToggleInit"] = "true";
+
+		const isSegmented = root.matches("nav");
+		const sync = () => {
+			const theme = document.documentElement.dataset["theme"] === "dark" ? "dark" : "light";
+			if (!isSegmented && root instanceof HTMLButtonElement) {
+				root.setAttribute("aria-pressed", theme === "dark" ? "true" : "false");
+				return;
+			}
+			for (const btn of Array.from(root.querySelectorAll("button[data-theme]"))) {
+				if (!(btn instanceof HTMLButtonElement)) continue;
+				const t = btn.getAttribute("data-theme");
+				btn.setAttribute("aria-pressed", t === theme ? "true" : "false");
+			}
 		};
 
-		syncPressed();
+		sync();
 
-		button.addEventListener("click", () => {
-			toggleTheme();
-			syncPressed();
-		});
+		if (!isSegmented && root instanceof HTMLButtonElement) {
+			root.addEventListener("click", () => {
+				toggleTheme();
+				sync();
+			});
+		} else {
+			root.addEventListener("click", (event) => {
+				const target = event.target;
+				if (!(target instanceof Element)) return;
+				const btn = target.closest("button[data-theme]");
+				if (!(btn instanceof HTMLButtonElement)) return;
+				const next = btn.getAttribute("data-theme");
+				if (next === "light") {
+					applyLightTheme();
+					sync();
+					return;
+				}
+				if (next === "dark") {
+					applyDarkTheme();
+					sync();
+				}
+			});
+		}
+
+		window.addEventListener(
+			"storage",
+			(event) => {
+				if (event.key === "theme") sync();
+			},
+			{ passive: true }
+		);
 	}
 </script>
 
 <style is:global>
-	.theme-toggle {
+	.theme-toggle--icon {
 		display: inline-flex;
 		align-items: center;
 		justify-content: center;
@@ -54,7 +148,7 @@ const { label = "Toggle theme" } = Astro.props;
 		box-shadow: none;
 	}
 
-	.theme-toggle.btn {
+	.theme-toggle--icon.btn {
 		min-height: var(--control-height);
 		border: 1px solid transparent;
 		background: transparent;
@@ -71,5 +165,56 @@ const { label = "Toggle theme" } = Astro.props;
 
 	html[data-theme="light"] .theme-toggle [data-icon="moon"] {
 		display: none;
+	}
+
+	/* Segmented variant (matches LanguageToggle look) */
+	.theme-toggle--segmented {
+		display: inline-flex;
+		align-items: center;
+		gap: var(--space-xs);
+		padding: var(--space-xs);
+		border: 1px solid var(--color-border);
+		border-radius: var(--radius-md);
+		background: var(--color-surface);
+	}
+
+	.theme-toggle--segmented .theme-toggle__link {
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		gap: 0.45rem;
+		min-height: calc(var(--control-height) - 0.5rem);
+		padding: 0 var(--space-sm);
+		border-radius: var(--radius-md);
+		color: var(--color-text);
+		background: transparent;
+		border: 0;
+		font-weight: 600;
+		white-space: nowrap;
+		cursor: pointer;
+	}
+
+	.theme-toggle--segmented .theme-toggle__segIcon {
+		display: block;
+		color: color-mix(in oklab, var(--color-text-muted) 85%, transparent);
+	}
+
+	.theme-toggle--segmented .theme-toggle__link:hover {
+		color: var(--color-primary);
+		background: var(--color-surface-muted);
+	}
+
+	.theme-toggle--segmented .theme-toggle__link[aria-pressed="true"] {
+		color: var(--color-primary);
+		background: var(--color-surface-muted);
+	}
+
+	.theme-toggle--segmented .theme-toggle__link[aria-pressed="true"] .theme-toggle__segIcon {
+		color: color-mix(in oklab, var(--color-primary) 75%, var(--color-text-muted));
+	}
+
+	.theme-toggle--segmented .theme-toggle__link:focus-visible {
+		outline: 2px solid var(--color-focus);
+		outline-offset: 2px;
 	}
 </style>

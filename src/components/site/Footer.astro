@@ -77,6 +77,7 @@ const year = new Date().getFullYear();
 			</section>
 
 			<section class="site-footer__block site-footer__block--contact" aria-label={messages.footer.contact}>
+				<div class="site-footer__mobileDivider" aria-hidden="true"></div>
 				<h2 class="site-footer__title">{messages.footer.contact}</h2>
 				<div class="site-footer__contact">
 					<div class="site-footer__contactLinks">
@@ -136,6 +137,8 @@ const year = new Date().getFullYear();
 				</div>
 			</section>
 
+			<div class="site-footer__mobileDivider" aria-hidden="true"></div>
+
 			<section class="site-footer__block site-footer__block--hours" aria-label={messages.footer.hours}>
 				<h2 class="sr-only">{messages.footer.hours}</h2>
 				<table class="site-footer__hoursTable" aria-label={messages.footer.hours}>
@@ -151,12 +154,16 @@ const year = new Date().getFullYear();
 			</section>
 		</div>
 
+		<div class="site-footer__mobileDivider" aria-hidden="true"></div>
+
 		<div class="site-footer__meta">
-			<small class="site-footer__metaText site-footer__metaBuiltBy">
-				{messages.footer.builtByLabel}{" "}
-				<a class="site-footer__link" href="https://www.aftongauntlett.com/" target="_blank" rel="noopener noreferrer">AG</a>
-			</small>
-			<small class="site-footer__metaText site-footer__metaCopyright">&copy; {year} {messages.footer.copyright}</small>
+			<div class="site-footer__metaLeft">
+				<small class="site-footer__metaText site-footer__metaBuiltBy">
+					{messages.footer.builtByLabel}{" "}
+					<a class="site-footer__link" href="https://www.aftongauntlett.com/" target="_blank" rel="noopener noreferrer">AG</a>
+				</small>
+				<small class="site-footer__metaText site-footer__metaCopyright">&copy; {year} {messages.footer.copyright}</small>
+			</div>
 			<Button
 				class="site-footer__toTop"
 				variant="primary"
@@ -205,6 +212,15 @@ const year = new Date().getFullYear();
 		gap: var(--space-lg);
 	}
 
+	/* Mobile-first: stacked blocks centered for nicer rhythm */
+	.site-footer__block {
+		text-align: center;
+		display: grid;
+		justify-items: center;
+		align-content: start;
+		gap: var(--space-sm);
+	}
+
 	.site-footer__title {
 		margin: 0 0 var(--space-sm);
 		font-size: var(--text-xs);
@@ -237,7 +253,7 @@ const year = new Date().getFullYear();
 		text-decoration: none;
 		font-size: var(--text-sm);
 		font-weight: 600;
-		align-self: start;
+		align-self: center;
 	}
 
 	.site-footer__mapLink:hover {
@@ -258,6 +274,7 @@ const year = new Date().getFullYear();
 	.site-footer__contactLinks {
 		display: grid;
 		gap: var(--space-xs);
+		justify-items: center;
 	}
 
 	.site-footer__note {
@@ -279,7 +296,29 @@ const year = new Date().getFullYear();
 		display: flex;
 		align-items: center;
 		gap: var(--space-sm);
-		flex-wrap: nowrap;
+		justify-content: center;
+		flex-wrap: wrap;
+	}
+
+	.site-footer__mobileDivider {
+		height: 1px;
+		width: 100%;
+		justify-self: stretch;
+		background: var(--color-border);
+		margin-block: var(--space-md);
+		opacity: 0.9;
+	}
+
+	@media (max-width: 47.999rem) {
+		.site-footer__block--hours {
+			padding-top: var(--space-sm);
+		}
+	}
+
+	@media (min-width: 48rem) {
+		.site-footer__mobileDivider {
+			display: none;
+		}
 	}
 
 	.site-footer__iconLink {
@@ -485,7 +524,7 @@ const year = new Date().getFullYear();
 
 	.site-footer__meta {
 		display: grid;
-		grid-template-columns: 1fr;
+		grid-template-columns: 1fr auto;
 		align-items: center;
 		gap: var(--space-sm);
 		color: var(--color-text-muted);
@@ -494,10 +533,29 @@ const year = new Date().getFullYear();
 		font-size: var(--text-xs);
 	}
 
+	@media (max-width: 47.999rem) {
+		.site-footer__meta {
+			box-shadow: none;
+			padding-top: 0;
+		}
+	}
+
+	.site-footer__metaLeft {
+		display: flex;
+		flex-direction: column-reverse;
+		gap: 0.15rem;
+		align-items: flex-start;
+		min-width: 0;
+	}
+
 	@media (min-width: 36rem) {
 		.site-footer__meta {
 			grid-template-columns: auto 1fr auto;
 			gap: var(--space-md);
+		}
+
+		.site-footer__metaLeft {
+			display: contents;
 		}
 	}
 
@@ -531,7 +589,7 @@ const year = new Date().getFullYear();
 		padding: 0;
 		border-radius: var(--radius-md);
 		text-decoration: none;
-		justify-self: start;
+		justify-self: end;
 	}
 
 	.site-footer__toTop.btn {
@@ -539,11 +597,6 @@ const year = new Date().getFullYear();
 		gap: 0;
 	}
 
-	@media (min-width: 36rem) {
-		.site-footer__toTop {
-			justify-self: end;
-		}
-	}
 
 	.site-footer__toTop:hover {
 		color: var(--color-primary);
@@ -569,9 +622,29 @@ const year = new Date().getFullYear();
 
 	.site-footer__hoursTable {
 		width: auto;
-		margin-left: auto;
+		margin-inline: auto;
 		border-collapse: collapse;
 		font-size: var(--text-sm);
+	}
+
+	@media (min-width: 48rem) {
+		.site-footer__block {
+			text-align: left;
+			justify-items: start;
+		}
+
+		.site-footer__mapLink {
+			align-self: start;
+		}
+
+		.site-footer__contactLinks {
+			justify-items: start;
+		}
+
+		.site-footer__socialRow {
+			justify-content: flex-start;
+			flex-wrap: nowrap;
+		}
 	}
 
 	@media (min-width: 48rem) {
@@ -610,6 +683,7 @@ const year = new Date().getFullYear();
 
 		.site-footer__block--contact {
 			text-align: center;
+			justify-items: center;
 		}
 
 		.site-footer__block--contact .site-footer__contactLinks {

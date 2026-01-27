@@ -122,7 +122,7 @@ const serviceCardMeta = [
 				>
 					<span class="btn__externalSpacer" aria-hidden="true"></span>
 					<span class="btn__externalLabel">{messages.misc.bookNow}</span>
-					<ExternalLink class="btn__externalIcon" size={18} aria-hidden="true" focusable="false" />
+					<ExternalLink class="btn__externalIcon" size={20} aria-hidden="true" focusable="false" />
 				</Button>
 			</div>
 		</div>
@@ -192,7 +192,7 @@ const serviceCardMeta = [
 					>
 						<span class="btn__externalSpacer" aria-hidden="true"></span>
 						<span class="btn__externalLabel">{messages.misc.bookNow}</span>
-						<ExternalLink class="btn__externalIcon" size={18} aria-hidden="true" focusable="false" />
+						<ExternalLink class="btn__externalIcon" size={20} aria-hidden="true" focusable="false" />
 					</Button>
 				</div>
 				<p class="booking-ctaCard__helper">{messages.booking.scheduleHelper}</p>
@@ -233,6 +233,13 @@ const serviceCardMeta = [
 		pointer-events: none;
 	}
 
+	@media (max-width: 48rem) {
+		.btn--external .btn__externalIcon {
+			opacity: 1;
+			transform: translateY(0);
+		}
+	}
+
 	@media (prefers-reduced-motion: no-preference) {
 		.btn--external .btn__externalIcon {
 			transition:
@@ -249,14 +256,14 @@ const serviceCardMeta = [
 
 	.btn--external.btn {
 		display: grid;
-		grid-template-columns: 18px 1fr 18px;
-		column-gap: 1px;
+		grid-template-columns: 20px 1fr 20px;
+		column-gap: 0.35rem;
 		align-items: center;
 		justify-items: center;
 	}
 
 	.btn__externalSpacer {
-		width: 18px;
+		width: 20px;
 		height: 1px;
 	}
 

@@ -1,7 +1,9 @@
 ---
 import Button from "../ui/Button.astro";
-import SettingsMenu from "./SettingsMenu.astro";
+import ThemeToggle from "./ThemeToggle.astro";
+import LanguageToggle from "./LanguageToggle.astro";
 import { getMessages, type Lang } from "../../i18n";
+import { ExternalLink, Menu, X } from "@lucide/astro";
 
 export interface Props {
 	lang: Lang;
@@ -17,7 +19,7 @@ const sectionHref = (id: string) => (lang === "es" ? `/es#${id}` : `/#${id}`);
 const vagaroServicesUrl = "https://www.vagaro.com/byastridbeautysalon/services";
 ---
 
-<nav class="nav" aria-label="Primary">
+<nav class="nav" aria-label="Primary" data-primary-nav data-open="false">
 	<Button
 		type="button"
 		variant="ghost"
@@ -27,69 +29,79 @@ const vagaroServicesUrl = "https://www.vagaro.com/byastridbeautysalon/services";
 		aria-controls={menuId}
 		data-nav-toggle
 	>
-		{messages.nav.menu}
+		<span class="sr-only">{messages.nav.menu}</span>
+		<Menu class="nav__toggleIcon nav__toggleIcon--menu" size={18} aria-hidden="true" focusable="false" />
+		<X class="nav__toggleIcon nav__toggleIcon--close" size={18} aria-hidden="true" focusable="false" />
 	</Button>
 
-	<div class="nav__menu" id={menuId} hidden data-nav-menu>
+	<div class="nav__menu" id={menuId} data-nav-menu>
 		<a class="nav__link" href={sectionHref("services")} data-section-link="services">{messages.nav.services}</a>
 		<a class="nav__link" href={sectionHref("about")} data-section-link="about">{messages.nav.gallery}</a>
 		<a
-			class="nav__link nav__link--book"
+			class="nav__link nav__link--external"
 			href={vagaroServicesUrl}
 			target="_blank"
 			rel="noopener noreferrer"
 		>
-			{messages.misc.bookNow}
+			<span class="nav__linkText">{messages.misc.bookNow}</span>
+			<ExternalLink class="nav__externalIcon" size={20} aria-hidden="true" focusable="false" />
 		</a>
 		<div class="nav__divider" aria-hidden="true"></div>
-		<SettingsMenu lang={lang} mode="mobile" />
+		<div class="nav__settings" aria-label="Settings">
+			<ThemeToggle mode="segmented" label="Theme" />
+			<LanguageToggle lang={lang} mode="mobile" />
+		</div>
 	</div>
 </nav>
 
 <script>
-	const root = document.currentScript?.closest("nav");
-	if (!(root instanceof HTMLElement)) {
-		// no-op
-	} else {
+	const initPrimaryNav = () => {
+		const root = document.querySelector("nav[data-primary-nav]");
+		if (!(root instanceof HTMLElement)) return;
+		if (root.dataset["navInitialized"] === "true") return;
+		root.dataset["navInitialized"] = "true";
+
 		const toggle = root.querySelector("[data-nav-toggle]");
 		const menu = root.querySelector("[data-nav-menu]");
+		if (!(toggle instanceof HTMLButtonElement) || !(menu instanceof HTMLElement)) return;
 
-		if (!(toggle instanceof HTMLButtonElement) || !(menu instanceof HTMLElement)) {
-			// no-op
-		} else {
-			const toggleButton = toggle;
-			const menuEl = menu;
+		const toggleButton = toggle;
+		const menuEl = menu;
 
-			const openMenu = () => {
-				toggleButton.setAttribute("aria-expanded", "true");
-				menuEl.hidden = false;
-			};
-			const closeMenu = () => {
-				toggleButton.setAttribute("aria-expanded", "false");
-				menuEl.hidden = true;
-			};
+		const applyState = (open: boolean) => {
+			root.dataset["open"] = open ? "true" : "false";
+			toggleButton.setAttribute("aria-expanded", open ? "true" : "false");
+			menuEl.toggleAttribute("hidden", !open);
+		};
 
-			closeMenu();
+		applyState(false);
 
-			toggleButton.addEventListener("click", () => {
-				const isOpen = toggleButton.getAttribute("aria-expanded") === "true";
-				if (isOpen) closeMenu();
-				else openMenu();
-			});
+		toggleButton.addEventListener("click", () => {
+			const isOpen = toggleButton.getAttribute("aria-expanded") === "true";
+			applyState(!isOpen);
+		});
 
-			root.addEventListener("keydown", (event) => {
-				if (event.key === "Escape") {
-					closeMenu();
-					toggleButton.focus();
-				}
-			});
+		document.addEventListener("click", (event) => {
+			if (!(event.target instanceof Node)) return;
+			const isOpen = toggleButton.getAttribute("aria-expanded") === "true";
+			if (!isOpen) return;
+			if (root.contains(event.target)) return;
+			applyState(false);
+		});
 
-			menuEl.addEventListener("click", (event) => {
-				const target = event.target;
-				if (target instanceof HTMLAnchorElement) {
-					closeMenu();
-				}
-			});
+		root.addEventListener("keydown", (event) => {
+			if (event.key === "Escape") {
+				applyState(false);
+				toggleButton.focus();
+			}
+		});
+
+		menuEl.addEventListener("click", (event) => {
+			const target = event.target;
+			if (target instanceof HTMLAnchorElement) {
+				applyState(false);
+			}
+		});
 
 			// Active section state (Home pages only)
 			if (window.location.pathname === "/" || window.location.pathname === "/es" || window.location.pathname === "/es/") {
@@ -199,8 +211,20 @@ const vagaroServicesUrl = "https://www.vagaro.com/byastridbeautysalon/services";
 					applyBestActive();
 				}, { passive: true });
 			}
-		}
+	};
+
+	if (document.readyState === "loading") {
+		document.addEventListener("DOMContentLoaded", initPrimaryNav, { once: true });
+	} else {
+		initPrimaryNav();
 	}
+
+	document.addEventListener("astro:page-load", () => {
+		// Re-init after Astro client-side navigation (if enabled)
+		const root = document.querySelector("nav[data-primary-nav]");
+		if (root instanceof HTMLElement) root.dataset["navInitialized"] = "false";
+		initPrimaryNav();
+	});
 </script>
 
 <style>
@@ -227,10 +251,30 @@ const vagaroServicesUrl = "https://www.vagaro.com/byastridbeautysalon/services";
 	}
 
 	.nav__menu {
-		display: flex;
+		display: none;
 		align-items: center;
 		gap: var(--space-sm);
 		flex-wrap: nowrap;
+	}
+
+	.nav[data-open="true"] .nav__menu {
+		display: flex;
+	}
+
+	.nav__toggleIcon {
+		display: block;
+	}
+
+	.nav__toggleIcon--close {
+		display: none;
+	}
+
+	.nav__toggle[aria-expanded="true"] .nav__toggleIcon--menu {
+		display: none;
+	}
+
+	.nav__toggle[aria-expanded="true"] .nav__toggleIcon--close {
+		display: block;
 	}
 
 	.nav__link {
@@ -289,49 +333,38 @@ const vagaroServicesUrl = "https://www.vagaro.com/byastridbeautysalon/services";
 		transform: scaleX(1);
 	}
 
-	/* “Book now” is a link, but gently highlighted with a premium glow. */
-	.nav__link--book {
-		isolation: isolate;
-		font-weight: 700;
-		color: var(--color-primary);
+	/* External-link affordance */
+	.nav__link--external {
+		gap: 0.75rem;
 	}
 
-	.nav__link--book:hover,
-	.nav__link--book:focus-visible {
-		color: var(--color-primary-hover);
+	.nav__externalIcon {
+		opacity: 0;
+		transform: translateY(1px);
+		pointer-events: none;
+		flex: 0 0 auto;
 	}
 
-	.nav__link--book::before {
-		content: "";
-		position: absolute;
-		inset: 0.35rem 0.5rem;
-		border-radius: var(--radius-md);
-		background: color-mix(in oklab, var(--color-primary) 20%, transparent);
-		filter: blur(14px);
-		opacity: 0.45;
-		z-index: -1;
-		animation: nav-book-breathe 3.4s ease-in-out infinite;
-	}
-
-	@keyframes nav-book-breathe {
-		0%,
-		100% {
-			opacity: 0.35;
-			transform: scale(0.985);
+	@media (prefers-reduced-motion: no-preference) {
+		.nav__externalIcon {
+			transition:
+				opacity 140ms ease,
+				transform 140ms ease;
 		}
-		50% {
-			opacity: 0.6;
-			transform: scale(1.01);
-		}
+	}
+
+	.nav__link--external:hover .nav__externalIcon,
+	.nav__link--external:focus-visible .nav__externalIcon {
+		opacity: 1;
+		transform: translateY(0);
 	}
 
 	@media (prefers-reduced-motion: reduce) {
 		.nav__link::after {
 			transition: none;
 		}
-		.nav__link--book::before {
-			animation: none;
-			opacity: 0.45;
+		.nav__externalIcon {
+			transition: none;
 			transform: none;
 		}
 	}
@@ -341,6 +374,12 @@ const vagaroServicesUrl = "https://www.vagaro.com/byastridbeautysalon/services";
 		height: 1px;
 		background: var(--color-border);
 		margin: var(--space-xs) 0;
+	}
+
+	.nav__settings {
+		display: grid;
+		grid-template-columns: 1fr;
+		gap: var(--space-sm);
 	}
 
 	/* Mobile: toggle reveals vertical menu */
@@ -354,12 +393,13 @@ const vagaroServicesUrl = "https://www.vagaro.com/byastridbeautysalon/services";
 			top: calc(100% + var(--space-sm));
 			right: 0;
 			flex-direction: column;
-			align-items: stretch;
-			min-width: 14rem;
+			align-items: flex-start;
+			width: max-content;
+			max-width: calc(100vw - (var(--container-pad) * 2));
 			padding: var(--space-sm);
 			background: var(--color-surface);
 			border: 1px solid var(--color-border);
-			border-radius: var(--radius-md);
+			border-radius: var(--radius-lg);
 			box-shadow: var(--shadow-md);
 		}
 
@@ -368,10 +408,24 @@ const vagaroServicesUrl = "https://www.vagaro.com/byastridbeautysalon/services";
 			justify-content: flex-start;
 		}
 
+		/* No animated underline inside the dropdown panel */
 		.nav__link::after {
-			left: var(--space-md);
-			right: var(--space-md);
-			bottom: 0.35rem;
+			display: none;
+		}
+
+		/* Always show external-link icon on mobile (no hover) */
+		.nav__externalIcon {
+			opacity: 1;
+			transform: none;
+		}
+
+		/* Let toggles size naturally (so panel sizes to longest item) */
+		.nav__menu .lang-toggle--mobile {
+			width: auto;
+		}
+
+		.nav__menu .lang-toggle--mobile .lang-toggle__link {
+			flex: 0 0 auto;
 		}
 	}
 
@@ -381,7 +435,14 @@ const vagaroServicesUrl = "https://www.vagaro.com/byastridbeautysalon/services";
 			display: none;
 		}
 
+		/* Desktop uses the SettingsMenu; keep inline toggles mobile-only */
+		.nav__divider,
+		.nav__settings {
+			display: none;
+		}
+
 		.nav__menu {
+			display: flex;
 			position: static;
 			padding: 0;
 			border: 0;
