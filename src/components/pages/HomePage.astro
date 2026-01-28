@@ -77,6 +77,8 @@ const serviceCardMeta = [
 					alt=""
 					width="801"
 					height="692"
+					loading="eager"
+					fetchpriority="high"
 					decoding="async"
 				/>
 			</div>
@@ -89,7 +91,7 @@ const serviceCardMeta = [
 			</div>
 			<div class="hero__actionsRow">
 				<HeroBookNowCta
-					client:load
+					client:idle
 					href={vagaroServicesUrl}
 					label={messages.misc.scheduleAppointment}
 					labelMobile={messages.misc.bookNow}

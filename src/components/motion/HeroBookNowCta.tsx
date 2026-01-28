@@ -50,8 +50,15 @@ export default function HeroBookNowCta({
       return () => mq.removeEventListener("change", onChange);
     }
 
-    mq.addListener(onChange);
-    return () => mq.removeListener(onChange);
+    const legacyMq = mq as unknown as {
+      addListener?: (callback: () => void) => void;
+      removeListener?: (callback: () => void) => void;
+    };
+
+    if (typeof legacyMq.addListener === "function") {
+      legacyMq.addListener(onChange);
+      return () => legacyMq.removeListener?.(onChange);
+    }
   }, []);
 
   const triggerHoverFx = () => {

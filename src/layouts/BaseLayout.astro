@@ -25,12 +25,11 @@ const alternates = getAlternatePaths(sourcePath);
 
 const toHref = (path: string) => {
 	const safePath = normalizePathname(path);
-	const site = Astro.site;
-	if (!(site instanceof URL)) return safePath;
+	const base = Astro.site instanceof URL ? Astro.site : new URL(Astro.url.origin);
 	try {
-		return new URL(safePath, site).toString();
+		return new URL(safePath, base).toString();
 	} catch {
-		return safePath;
+		return new URL("/", base).toString();
 	}
 };
 
@@ -115,9 +114,30 @@ const xDefaultHref = toHref(alternates.xDefault);
 		<link rel="preconnect" href="https://fonts.googleapis.com" />
 		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 		<link
-			rel="stylesheet"
+			rel="preload"
+			as="style"
 			href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@500;600;700&display=swap"
 		/>
+		<script is:inline>
+			(() => {
+				try {
+					const href =
+						"https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@500;600;700&display=swap";
+					const link = document.createElement("link");
+					link.rel = "stylesheet";
+					link.href = href;
+					document.head.append(link);
+				} catch {
+					// ignore
+				}
+			})();
+		</script>
+		<noscript>
+			<link
+				rel="stylesheet"
+				href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@500;600;700&display=swap"
+			/>
+		</noscript>
 		<link rel="icon" href="/favicon.ico" sizes="any" />
 		<link rel="icon" href="/favicon-light.ico" media="(prefers-color-scheme: light)" sizes="any" />
 		<link rel="icon" href="/favicon-dark.ico" media="(prefers-color-scheme: dark)" sizes="any" />
@@ -128,6 +148,7 @@ const xDefaultHref = toHref(alternates.xDefault);
 		<link rel="alternate" hreflang="en" href={enHref} />
 		<link rel="alternate" hreflang="es" href={esHref} />
 		<link rel="alternate" hreflang="x-default" href={xDefaultHref} />
+		<slot name="head" />
 		<title>{title}</title>
 	</head>
 	<body id="top">
@@ -143,10 +164,18 @@ const xDefaultHref = toHref(alternates.xDefault);
 
 		<script>
 			import { initScrollReveal } from "../lib/scrollReveal";
-			const run = () => initScrollReveal();
-			run();
-			window.addEventListener("scroll-reveal:refresh", run);
-			document.addEventListener("astro:page-load", run);
+			const schedule = () => {
+				if (typeof window === "undefined") return;
+				const requestIdleCallback = /** @type {any} */ (window).requestIdleCallback;
+				if (typeof requestIdleCallback === "function") {
+					requestIdleCallback(() => initScrollReveal());
+					return;
+				}
+				setTimeout(() => initScrollReveal(), 1);
+			};
+			schedule();
+			window.addEventListener("scroll-reveal:refresh", schedule);
+			document.addEventListener("astro:page-load", schedule);
 		</script>
 	</body>
 </html>
