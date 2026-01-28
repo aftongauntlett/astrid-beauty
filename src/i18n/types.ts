@@ -25,7 +25,56 @@ export type Messages = {
   };
   home: {
     heroLede: string;
+    heroSupporting: string;
+    heroCtaHelper: string;
     brandSrOnly: string;
+  };
+  about: {
+    workTitle: string;
+    staff: {
+      title: string;
+      members: {
+        astrid: {
+          title: string;
+          paragraphs: string[];
+        };
+        cindy: {
+          title: string;
+          paragraphs: string[];
+        };
+      };
+    };
+    policies: {
+      title: string;
+      items: {
+        rescheduling: {
+          title: string;
+          bullets: {
+            notice: string;
+            fee: string;
+            contactIntro: string;
+            contactOutro: string;
+          };
+          why: string;
+        };
+        policies: {
+          title: string;
+          body: string;
+        };
+        paymentMethods: {
+          title: string;
+          items: string[];
+        };
+        parking: {
+          title: string;
+          items: string[];
+        };
+        spokenLanguages: {
+          title: string;
+          items: string[];
+        };
+      };
+    };
   };
   findUs: {
     lede: string;
@@ -42,11 +91,18 @@ export type Messages = {
     date: string;
   }>;
   services: {
+    eyebrow: string;
     lede: string;
+    startingAtLabel: string;
+    disclaimer: {
+      line1: string;
+      line2: string;
+    };
     cards: Array<{
       title: string;
+      startingAt: string;
       description: string;
-      items: [string, string, string];
+      items: string[];
     }>;
   };
   gallery: {

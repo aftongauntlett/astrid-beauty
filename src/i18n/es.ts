@@ -17,7 +17,7 @@ export const es: Messages = {
     servicesTitle: "Nuestros Servicios",
     galleryTitle: "Sobre",
     aboutLede:
-      "Descubre transformaciones recientes, conoce lo que dicen nuestras clientas y reserva tu próxima visita.",
+      "Conoce al equipo, mira trabajos recientes y revisa la información de reserva antes de agendar.",
   },
   misc: {
     bookNow: "Reservar",
@@ -29,7 +29,76 @@ export const es: Messages = {
   home: {
     heroLede:
       "Color vibrante, cortes frescos y tratamientos de brillo luminoso - aquí en Herndon. Reserva tu cita cuando quieras.",
-    brandSrOnly: "Por Astrid Beauty Salon",
+    heroSupporting: "Color dimensional y cortes modernos en Herndon, VA.",
+    heroCtaHelper: "Reserva segura a través de Vagaro.",
+    brandSrOnly: "By Astrid Beauty Salon",
+  },
+  about: {
+    workTitle: "Ver mi trabajo",
+    staff: {
+      title: "Conoce al equipo",
+      members: {
+        astrid: {
+          title: "Astrid (Propietaria/Estilista)",
+          paragraphs: [
+            "Estoy inmersa en la industria de la belleza desde los 18 años. Mi camino comenzó después de graduarme de Chantilly High School Academy con una licencia de cosmetología.",
+            "En 2016 comencé mi carrera en un salón, donde ascendí rápidamente a Salon Leader y más adelante me especialicé como Color Specialist.",
+            "En agosto de 2021 tuve el honor de dar el siguiente paso convirtiéndome en dueña del salón. Me enorgullece profundamente ser la propietaria de By Astrid Beauty Salon y agradezco el apoyo constante de mis amistades, familia y clientas, quienes han sido fundamentales en mi camino.",
+          ],
+        },
+        cindy: {
+          title: "Cindy (Cosmetóloga)",
+          paragraphs: [
+            "Hola, soy Cindy, cosmetóloga licenciada desde 2019. Comencé mi carrera en un salón, donde desarrollé una base sólida en cortes y color. Me apasiona mantenerme al día con las últimas tendencias y técnicas para asegurarme de que cada clienta se vaya sintiéndose segura y renovada.",
+            "Mi objetivo es crear un espacio acogedor donde puedas relajarte, desconectarte y sentirte como en casa. Ya sea que busques un cambio de look o solo un retoque de mantenimiento, estoy aquí para ayudarte a verte y sentirte mejor.",
+            "Siempre estoy aprendiendo y creciendo en mi oficio, y me encanta traer esa energía a mi trabajo. ¡Estoy emocionada de conocerte y ayudarte a hacer realidad tus metas para tu cabello!",
+          ],
+        },
+      },
+    },
+    policies: {
+      title: "Información de reserva",
+      items: {
+        rescheduling: {
+          title: "Reprogramaciones y cancelaciones",
+          bullets: {
+            notice:
+              "Se requiere aviso con 3 días de anticipación para reprogramar o cancelar",
+            fee: "Las citas cambiadas con menos de 3 días de aviso se cobran al 100%",
+            contactIntro: "Cancela en línea o manda un texto al ",
+            contactOutro: "",
+          },
+          why: "Ese tiempo se reserva exclusivamente para cada clienta.",
+        },
+        policies: {
+          title: "Políticas",
+          body: "Para mantener una experiencia tranquila y enfocada, no se permiten niños en el estudio.",
+        },
+        paymentMethods: {
+          title: "Métodos de pago",
+          items: [
+            "Visa y MasterCard",
+            "Discover",
+            "American Express",
+            "Tarjeta de débito",
+            "Efectivo",
+            "Cheque",
+            "Vagaro Pay Later",
+          ],
+        },
+        parking: {
+          title: "Estacionamiento",
+          items: [
+            "Estacionamiento gratis",
+            "Ubicado dentro de my salon suites en la habitación 210.",
+          ],
+        },
+        spokenLanguages: {
+          title: "Idiomas",
+          items: ["Inglés", "Español"],
+        },
+      },
+    },
   },
   findUs: {
     lede: "Nos encantaría verte en nuestro estudio en Herndon. El horario puede variar, así que llámanos para confirmar.",
@@ -67,41 +136,84 @@ export const es: Messages = {
     },
   ],
   services: {
-    lede: "Color, cortes y cuidados pensados con cariño - diseñados para ti.",
+    eyebrow: "Servicios",
+    lede: "Un menú seleccionado de color, cortes y tratamientos - guiado por tu consulta.",
+    startingAtLabel: "Desde",
+    disclaimer: {
+      line1:
+        "Se muestran precios desde. El precio final puede variar según el largo, la densidad y el plan definido durante tu consulta.",
+      line2:
+        "Para ver precios y disponibilidad más actualizados, reserva a través de Vagaro.",
+    },
     cards: [
       {
-        title: "Color Signature",
+        title: "Consultas",
+        startingAt: "$25",
         description:
-          "Color rico y dimensional con un acabado natural y hermoso.",
+          "Un buen punto de partida para clientas nuevas o cambios grandes.",
         items: [
-          "Consulta personalizada",
-          "Gloss y tono",
-          "Crecimiento sin esfuerzo",
+          "Consulta en persona",
+          "Mecha de prueba (si hace falta)",
+          "Plan de servicio + tiempos",
+          "Guía de precio desde",
         ],
       },
       {
         title: "Corte y estilo",
+        startingAt: "$55",
+        description: "Una forma moderna con un acabado pulido - sin exagerar.",
+        items: [
+          "Corte según densidad y estilo de vida",
+          "Blowdry final",
+          "Peinado con calor (opcional)",
+          "Tips para peinar en casa",
+        ],
+      },
+      {
+        title: "Color Signature",
+        startingAt: "$80",
         description:
-          "Una forma que se mueve contigo y se siente fácil cada día.",
-        items: ["Capas que enmarcan", "Blowout pulido", "Tips de peinado"],
+          "Color de un solo proceso y tonificación para un resultado rico y dimensional.",
+        items: [
+          "Retoque de raíz y color completo",
+          "Difuminado de canas y refresh",
+          "Tóner o gloss",
+          "Brillo saludable",
+        ],
+      },
+      {
+        title: "Aclarado y dimensión",
+        startingAt: "$170",
+        description:
+          "Mechas y balayage personalizados para iluminar y crecer bonito.",
+        items: [
+          "Mechas, balayage y color lived-in",
+          "Luz en el contorno del rostro",
+          "Colocación pensada para el crecimiento",
+          "Tóner + acabado",
+        ],
       },
       {
         title: "Gloss y brillo",
-        description: "Un toque luminoso que devuelve suavidad y resplandor.",
+        startingAt: "$50",
+        description: "Un refresh rápido para tono, suavidad y brillo espejo.",
         items: [
-          "Tonos cálidos o fríos",
-          "Brillo extra",
-          "Suave con el cabello",
+          "Ajustes de tonos cálidos o fríos",
+          "Brillo entre citas de color",
+          "Fórmulas suaves",
+          "Ideal con blowdry",
         ],
       },
       {
         title: "Salud capilar",
+        startingAt: "$250",
         description:
-          "Un ritual relajante para equilibrio, hidratación y calma.",
+          "Cuidado enfocado - desde un reset del cuero cabelludo hasta servicios de alisado, según tu consulta.",
         items: [
-          "Limpieza suave",
-          "Masaje relajante",
-          "Apto para piel sensible",
+          "Limpieza del cuero cabelludo + masaje",
+          "Apoyo de hidratación y balance",
+          "Alisado con keratina (según consulta)",
+          "Guía de cuidados",
         ],
       },
     ],

@@ -59,8 +59,10 @@ const orderedReviews = (() => {
 })();
 
 const serviceCardMeta = [
-	{ iconName: "palette", iconColor: "var(--color-icon-signature)" },
+	{ iconName: "shield", iconColor: "var(--color-icon-scalp)" },
 	{ iconName: "scissors", iconColor: "var(--color-icon-cut)" },
+	{ iconName: "palette", iconColor: "var(--color-icon-signature)" },
+	{ iconName: "sparkles", iconColor: "var(--color-icon-signature)" },
 	{ iconName: "droplet", iconColor: "var(--color-icon-gloss)" },
 	{ iconName: "waves", iconColor: "var(--color-icon-scalp)" },
 ] as const;
@@ -90,13 +92,16 @@ const serviceCardMeta = [
 				<p class="hero__actionsLede">{messages.home.heroLede}</p>
 			</div>
 			<div class="hero__actionsRow">
-				<HeroBookNowCta
-					client:idle
-					href={vagaroServicesUrl}
-					label={messages.misc.scheduleAppointment}
-					labelMobile={messages.misc.bookNow}
-					className="hero__bookNow btn--external"
-				/>
+				<div class="hero__ctaStack">
+					<HeroBookNowCta
+						client:idle
+						href={vagaroServicesUrl}
+						label={messages.misc.scheduleAppointment}
+						labelMobile={messages.misc.bookNow}
+						className="hero__bookNow btn--external"
+					/>
+					<p class="hero__ctaHelper">{messages.home.heroCtaHelper}</p>
+				</div>
 			</div>
 		</div>
 	</div>
@@ -105,7 +110,11 @@ const serviceCardMeta = [
 <section class="section" id="services" aria-labelledby="services-title">
 	<div class="container stack stack--lg">
 		<div data-reveal>
-			<SectionIntro id="services-title" title={messages.sections.servicesTitle} lede={messages.services.lede} />
+			<SectionIntro
+				id="services-title"
+				title={messages.sections.servicesTitle}
+				lede={messages.services.lede}
+			/>
 		</div>
 
 		<div class="services-grid" aria-label="Service highlights">
@@ -113,6 +122,7 @@ const serviceCardMeta = [
 				<div data-reveal data-reveal-delay={String(index * 70)}>
 					<FeatureIconCard
 						title={card.title}
+						meta={`${messages.services.startingAtLabel} ${card.startingAt}`}
 						description={card.description}
 						items={card.items}
 						iconName={serviceCardMeta[index]?.iconName ?? "palette"}
@@ -120,6 +130,11 @@ const serviceCardMeta = [
 					/>
 				</div>
 			))}
+		</div>
+
+		<div class="services-disclaimer" data-reveal data-reveal-delay="80">
+			<p class="services-disclaimer__text">{messages.services.disclaimer.line1}</p>
+			<p class="services-disclaimer__text">{messages.services.disclaimer.line2}</p>
 		</div>
 	</div>
 </section>
@@ -130,13 +145,82 @@ const serviceCardMeta = [
 			<SectionIntro id="about-title" title={messages.sections.galleryTitle} lede={messages.sections.aboutLede} />
 		</div>
 
-		<div data-reveal data-reveal-delay="80">
+
+		<div class="about__staff" data-accordion>
+			<h3 class="about__sectionTitle" id="staff-title" data-reveal data-reveal-delay="80">{messages.about.staff.title}</h3>
+			<div class="accordion" role="group" aria-labelledby="staff-title">
+				<div class="accordion__item" data-reveal data-reveal-delay="120">
+					<button
+						type="button"
+						class="accordion__trigger"
+						aria-expanded="false"
+						aria-controls="accordion-panel-staff-astrid"
+						id="accordion-trigger-staff-astrid"
+					>
+						<span class="accordion__triggerText capitalize">
+							{messages.about.staff.members.astrid.title}
+						</span>
+						<span class="accordion__chevron" aria-hidden="true"></span>
+					</button>
+					<div
+						class="accordion__panel"
+						id="accordion-panel-staff-astrid"
+						role="region"
+						aria-labelledby="accordion-trigger-staff-astrid"
+						hidden
+					>
+						<div class="accordion__panelInner">
+							{messages.about.staff.members.astrid.paragraphs.map((paragraph) => (
+								<p class="accordion__text">{paragraph}</p>
+							))}
+						</div>
+					</div>
+				</div>
+
+				<div class="accordion__item" data-reveal data-reveal-delay="170">
+					<button
+						type="button"
+						class="accordion__trigger"
+						aria-expanded="false"
+						aria-controls="accordion-panel-staff-cindy"
+						id="accordion-trigger-staff-cindy"
+					>
+						<span class="accordion__triggerText capitalize">
+							{messages.about.staff.members.cindy.title}
+						</span>
+						<span class="accordion__chevron" aria-hidden="true"></span>
+					</button>
+					<div
+						class="accordion__panel"
+						id="accordion-panel-staff-cindy"
+						role="region"
+						aria-labelledby="accordion-trigger-staff-cindy"
+						hidden
+					>
+						<div class="accordion__panelInner">
+							{messages.about.staff.members.cindy.paragraphs.map((paragraph) => (
+								<p class="accordion__text">{paragraph}</p>
+							))}
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<div class="about__divider" aria-hidden="true"></div>
+
+		<h3 class="about__sectionTitle" data-reveal data-reveal-delay="80">{messages.about.workTitle}</h3>
+
+		<div data-reveal data-reveal-delay="120">
 			<Gallery lang={lang} />
 		</div>
 
 		<div class="about__divider" aria-hidden="true"></div>
 
 		<section class="booking-reviews" aria-label={messages.booking.reviewsTitle}>
+			<header class="booking-reviews__header">
+				<h3 class="about__sectionTitle booking-reviews__title">{messages.booking.reviewsTitle}</h3>
+			</header>
 			<div class="reviews-grid" role="list" aria-label={messages.booking.reviewsTitle}>
 				{orderedReviews.map((review, index) => (
 					<figure class="review" role="listitem" data-reveal data-reveal-delay={String(index * 70)}>
@@ -158,6 +242,158 @@ const serviceCardMeta = [
 		</section>
 
 		<div class="about__divider" aria-hidden="true"></div>
+
+		<div class="about__policies" data-accordion>
+			<h3 class="about__sectionTitle" id="policies-title" data-reveal data-reveal-delay="80">{messages.about.policies.title}</h3>
+			<div class="accordion" role="group" aria-labelledby="policies-title">
+				<div class="accordion__item" data-reveal data-reveal-delay="120">
+					<button
+						type="button"
+						class="accordion__trigger"
+						aria-expanded="false"
+						aria-controls="accordion-panel-rescheduling"
+						id="accordion-trigger-rescheduling"
+					>
+						<span class="accordion__triggerText capitalize">{messages.about.policies.items.rescheduling.title}</span>
+						<span class="accordion__chevron" aria-hidden="true"></span>
+					</button>
+					<div
+						class="accordion__panel"
+						id="accordion-panel-rescheduling"
+						role="region"
+						aria-labelledby="accordion-trigger-rescheduling"
+						hidden
+					>
+						<div class="accordion__panelInner">
+							<ul class="accordion__list" aria-label={messages.about.policies.items.rescheduling.title}>
+								<li>
+									{messages.about.policies.items.rescheduling.bullets.notice}
+								</li>
+								<li>
+									{messages.about.policies.items.rescheduling.bullets.fee}
+								</li>
+								<li>
+									{messages.about.policies.items.rescheduling.bullets.contactIntro}
+									<a class="accordion__link" href="tel:+17037863707">703-786-3707</a>
+									{messages.about.policies.items.rescheduling.bullets.contactOutro}
+								</li>
+							</ul>
+							<p class="accordion__note">{messages.about.policies.items.rescheduling.why}</p>
+						</div>
+					</div>
+				</div>
+
+				<div class="accordion__item" data-reveal data-reveal-delay="170">
+					<button
+						type="button"
+						class="accordion__trigger"
+						aria-expanded="false"
+						aria-controls="accordion-panel-children"
+						id="accordion-trigger-children"
+					>
+						<span class="accordion__triggerText capitalize">{messages.about.policies.items.policies.title}</span>
+						<span class="accordion__chevron" aria-hidden="true"></span>
+					</button>
+					<div
+						class="accordion__panel"
+						id="accordion-panel-children"
+						role="region"
+						aria-labelledby="accordion-trigger-children"
+						hidden
+					>
+						<div class="accordion__panelInner">
+							<ul class="accordion__list" aria-label={messages.about.policies.items.policies.title}>
+								<li>{messages.about.policies.items.policies.body}</li>
+							</ul>
+						</div>
+					</div>
+				</div>
+
+				<div class="accordion__item" data-reveal data-reveal-delay="220">
+					<button
+						type="button"
+						class="accordion__trigger"
+						aria-expanded="false"
+						aria-controls="accordion-panel-payment"
+						id="accordion-trigger-payment"
+					>
+						<span class="accordion__triggerText capitalize">{messages.about.policies.items.paymentMethods.title}</span>
+						<span class="accordion__chevron" aria-hidden="true"></span>
+					</button>
+					<div
+						class="accordion__panel"
+						id="accordion-panel-payment"
+						role="region"
+						aria-labelledby="accordion-trigger-payment"
+						hidden
+					>
+						<div class="accordion__panelInner">
+							<ul class="accordion__list accordion__list--cols3" aria-label={messages.about.policies.items.paymentMethods.title}>
+								{messages.about.policies.items.paymentMethods.items.map((item) => (
+									<li>{item}</li>
+								))}
+							</ul>
+						</div>
+					</div>
+				</div>
+
+				<div class="accordion__item" data-reveal data-reveal-delay="270">
+					<button
+						type="button"
+						class="accordion__trigger"
+						aria-expanded="false"
+						aria-controls="accordion-panel-parking"
+						id="accordion-trigger-parking"
+					>
+						<span class="accordion__triggerText capitalize">{messages.about.policies.items.parking.title}</span>
+						<span class="accordion__chevron" aria-hidden="true"></span>
+					</button>
+					<div
+						class="accordion__panel"
+						id="accordion-panel-parking"
+						role="region"
+						aria-labelledby="accordion-trigger-parking"
+						hidden
+					>
+						<div class="accordion__panelInner">
+							<ul class="accordion__list" aria-label={messages.about.policies.items.parking.title}>
+								{messages.about.policies.items.parking.items.map((item) => (
+									<li>{item}</li>
+								))}
+							</ul>
+						</div>
+					</div>
+				</div>
+
+				<div class="accordion__item" data-reveal data-reveal-delay="320">
+					<button
+						type="button"
+						class="accordion__trigger"
+						aria-expanded="false"
+						aria-controls="accordion-panel-languages"
+						id="accordion-trigger-languages"
+					>
+						<span class="accordion__triggerText capitalize">{messages.about.policies.items.spokenLanguages.title}</span>
+						<span class="accordion__chevron" aria-hidden="true"></span>
+					</button>
+					<div
+						class="accordion__panel"
+						id="accordion-panel-languages"
+						role="region"
+						aria-labelledby="accordion-trigger-languages"
+						hidden
+					>
+						<div class="accordion__panelInner">
+							<ul class="accordion__list" aria-label={messages.about.policies.items.spokenLanguages.title}>
+								{messages.about.policies.items.spokenLanguages.items.map((item) => (
+									<li>{item}</li>
+								))}
+							</ul>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
 
 		<div class="booking-ctaCard" aria-label={messages.misc.bookNow} data-reveal>
 			<div class="booking-ctaCard__panel">
@@ -181,6 +417,53 @@ const serviceCardMeta = [
 		</div>
 	</div>
 </section>
+
+<script>
+	const initAccordions = () => {
+		const roots = Array.from(document.querySelectorAll<HTMLElement>("[data-accordion]"));
+		for (const root of roots) {
+			const triggers = Array.from(root.querySelectorAll<HTMLButtonElement>(".accordion__trigger"));
+			for (const trigger of triggers) {
+				const panelId = trigger.getAttribute("aria-controls");
+				if (!panelId) continue;
+				const panel = root.querySelector<HTMLElement>(`#${CSS.escape(panelId)}`);
+				if (!panel) continue;
+
+				const setExpanded = (nextExpanded: boolean) => {
+					trigger.setAttribute("aria-expanded", String(nextExpanded));
+					panel.hidden = !nextExpanded;
+				};
+
+				setExpanded(false);
+
+				trigger.addEventListener("click", () => {
+					const expanded = trigger.getAttribute("aria-expanded") === "true";
+					setExpanded(!expanded);
+				});
+
+				trigger.addEventListener("keydown", (event) => {
+					if (event.key === "Escape") {
+						const expanded = trigger.getAttribute("aria-expanded") === "true";
+						if (expanded) {
+							event.preventDefault();
+							setExpanded(false);
+							trigger.focus();
+						}
+					}
+				});
+			}
+		}
+	};
+
+	const run = () => initAccordions();
+	if (document.readyState === "loading") {
+		document.addEventListener("DOMContentLoaded", run, { once: true });
+	} else {
+		run();
+	}
+
+	document.addEventListener("astro:page-load", run);
+</script>
 
 <style>
 	.services-grid {
@@ -208,8 +491,334 @@ const serviceCardMeta = [
 		border-color: var(--color-primary-hover);
 	}
 
+	.hero__actionsRow {
+		display: grid;
+		justify-items: start;
+	}
+
+	.hero__ctaStack {
+		display: grid;
+		gap: var(--space-xs);
+		justify-items: start;
+	}
+
+	@media (min-width: 48rem) {
+		.hero__actionsRow {
+			justify-items: end;
+		}
+
+		.hero__ctaStack {
+			justify-items: end;
+		}
+	}
+
+	.hero__ctaHelper {
+		margin: 0;
+		font-size: 0.68rem;
+		color: color-mix(in oklab, var(--color-text-muted) 80%, transparent);
+		letter-spacing: 0.012em;
+		text-align: right;
+	}
+
 	.about__stack {
 		--stack-gap: var(--space-lg);
+	}
+
+	.about__sectionTitle {
+		margin: 0;
+		font-size: var(--heading-3);
+		text-align: center;
+	}
+
+	.about__staff {
+		display: grid;
+		gap: var(--space-md);
+	}
+
+	.about__staff > .about__sectionTitle {
+		margin-bottom: var(--space-sm);
+	}
+
+	.about__policies {
+		display: grid;
+		gap: var(--space-md);
+	}
+
+	.about__policies + .booking-ctaCard {
+		margin-top: var(--space-md);
+	}
+
+	.about__policies > .about__sectionTitle {
+		margin-bottom: var(--space-sm);
+	}
+
+	.about__meetCard {
+		position: relative;
+		overflow: hidden;
+		border-radius: var(--radius-lg);
+		padding: calc(var(--space-xl) + var(--space-xs));
+		background:
+			linear-gradient(
+				180deg,
+				color-mix(in oklab, var(--color-surface) 90%, var(--color-surface-muted)) 0%,
+				var(--color-surface) 72%
+			);
+		border: 1px solid color-mix(in oklab, var(--color-border) 70%, transparent);
+		box-shadow: none;
+		max-width: 56rem;
+		margin: 0 auto;
+		display: grid;
+		gap: var(--space-md);
+		text-align: center;
+	}
+
+	.about__meetCard::before {
+		content: "";
+		position: absolute;
+		inset: -45%;
+		background: radial-gradient(
+			circle at 50% 20%,
+			color-mix(in oklab, var(--color-primary) 18%, transparent) 0%,
+			transparent 60%
+		);
+		opacity: 0.35;
+		pointer-events: none;
+		transform: translate3d(0, 0, 0);
+	}
+
+	.about__meetBody {
+		display: grid;
+		gap: var(--space-sm);
+		position: relative;
+		z-index: 1;
+	}
+
+	.about__text {
+		margin: 0;
+		color: var(--color-text-muted);
+		line-height: 1.6;
+	}
+
+	.services-disclaimer {
+		max-width: 52rem;
+		margin: 0 auto;
+		text-align: center;
+		display: grid;
+		gap: var(--space-xs);
+		opacity: 0.75;
+	}
+
+	.services-disclaimer__text {
+		margin: 0;
+		font-size: 0.68rem;
+		color: color-mix(in oklab, var(--color-text-muted) 78%, transparent);
+		line-height: 1.55;
+	}
+
+	.accordion {
+		display: grid;
+		gap: var(--space-sm);
+	}
+
+	.accordion__item {
+		border: 1px solid color-mix(in oklab, var(--color-border) 70%, transparent);
+		border-radius: var(--radius-lg);
+		background: color-mix(in oklab, var(--color-surface) 92%, var(--color-surface-muted));
+		overflow: hidden;
+	}
+
+	.accordion__trigger {
+		appearance: none;
+		width: 100%;
+		text-align: left;
+		border: 0;
+		background: transparent;
+		color: var(--color-text);
+		padding: var(--space-md) var(--space-lg);
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		gap: var(--space-md);
+		font: inherit;
+		font-weight: 650;
+		cursor: pointer;
+		position: relative;
+		isolation: isolate;
+	}
+
+	.accordion__trigger::before {
+		content: "";
+		position: absolute;
+		inset: 0;
+		border-radius: var(--radius-lg);
+		background: color-mix(
+			in oklab,
+			var(--color-primary) 12%,
+			var(--color-surface)
+		);
+		opacity: 0;
+		pointer-events: none;
+		z-index: 0;
+	}
+
+	.accordion__trigger[aria-expanded="true"]::before {
+		border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+	}
+
+	.accordion__triggerText,
+	.accordion__chevron {
+		position: relative;
+		z-index: 1;
+	}
+
+	@media (prefers-reduced-motion: no-preference) {
+		.accordion__trigger {
+			transition:
+				color 240ms ease,
+				background-color 240ms ease;
+		}
+
+		.accordion__trigger::before {
+			transition: opacity 240ms ease;
+		}
+	}
+
+	.accordion__trigger:hover,
+	.accordion__trigger:focus-visible {
+		color: var(--color-primary);
+		background-color: transparent;
+	}
+
+	.accordion__trigger:hover::before,
+	.accordion__trigger:focus-visible::before {
+		opacity: 0.42;
+	}
+
+	.accordion__trigger:active {
+		background-color: transparent;
+	}
+
+	.accordion__trigger:active::before {
+		opacity: 0.55;
+	}
+
+	.accordion__trigger[aria-expanded="true"] {
+		color: var(--color-primary);
+		background-color: transparent;
+	}
+
+	.accordion__trigger[aria-expanded="true"]::before {
+		opacity: 0.62;
+	}
+
+	.accordion__trigger:focus-visible {
+		outline: 2px solid var(--color-focus);
+		outline-offset: 2px;
+	}
+
+	.accordion__chevron {
+		width: 10px;
+		height: 10px;
+		color: currentColor;
+		border-right: 2px solid currentColor;
+		border-bottom: 2px solid currentColor;
+		transform: rotate(45deg);
+		flex: 0 0 auto;
+		opacity: 0.78;
+	}
+
+	.accordion__trigger:hover .accordion__chevron,
+	.accordion__trigger:focus-visible .accordion__chevron,
+	.accordion__trigger[aria-expanded="true"] .accordion__chevron {
+		opacity: 0.98;
+	}
+
+	@media (prefers-reduced-motion: no-preference) {
+		.accordion__chevron {
+			transition:
+				transform 240ms ease,
+				opacity 240ms ease;
+		}
+	}
+
+	@media (prefers-reduced-motion: reduce) {
+		.accordion__trigger,
+		.accordion__chevron {
+			transition: none;
+		}
+	}
+
+	.accordion__trigger[aria-expanded="true"] .accordion__chevron {
+		transform: rotate(-135deg);
+	}
+
+	.accordion__panelInner {
+		padding: var(--space-md) var(--space-lg) var(--space-lg);
+		display: grid;
+		gap: var(--space-xs);
+	}
+
+	.accordion__list {
+		margin: 0;
+		padding: 0;
+		list-style: none;
+		display: grid;
+		gap: var(--space-xs);
+		color: var(--color-text-muted);
+		font-size: var(--text-sm);
+		line-height: 1.55;
+	}
+
+	.accordion__list--cols2 {
+		grid-template-columns: repeat(2, minmax(0, 1fr));
+		column-gap: var(--space-lg);
+	}
+
+	.accordion__list--cols3 {
+		grid-template-columns: repeat(3, minmax(0, 1fr));
+		column-gap: var(--space-lg);
+	}
+
+	@media (max-width: 47.999rem) {
+		.accordion__list--cols2,
+		.accordion__list--cols3 {
+			grid-template-columns: 1fr;
+		}
+	}
+
+	.accordion__list li {
+		display: flex;
+		align-items: flex-start;
+		gap: var(--space-sm);
+	}
+
+	.accordion__list li::before {
+		content: "-";
+		color: color-mix(in oklab, var(--color-text-muted) 82%, var(--color-text));
+		margin-top: 0.02em;
+		flex: 0 0 auto;
+	}
+
+	.accordion__text {
+		margin: 0;
+		color: var(--color-text-muted);
+		font-size: var(--text-sm);
+		line-height: 1.55;
+	}
+
+	.accordion__note {
+		margin: 0;
+		margin-top: var(--space-sm);
+		color: var(--color-text-muted);
+		font-size: var(--text-sm);
+		line-height: 1.55;
+	}
+
+	.accordion__link {
+		color: inherit;
+		text-decoration: underline;
+		text-underline-offset: 0.16em;
+		font-weight: 650;
 	}
 
 	.booking-ctaCard {
@@ -342,19 +951,13 @@ const serviceCardMeta = [
 	}
 
 	.booking-reviews__header {
-		display: flex;
-		align-items: baseline;
-		gap: var(--space-md);
-		margin-bottom: var(--space-md);
-		flex-wrap: wrap;
+		display: grid;
+		justify-items: center;
+		margin-bottom: var(--space-lg);
 	}
 
 	.booking-reviews__title {
 		margin: 0;
-		font-size: var(--text-xl);
-		color: var(--color-text);
-		letter-spacing: -0.01em;
-		line-height: 1.1;
 	}
 
 	.reviews__more {

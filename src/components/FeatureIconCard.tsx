@@ -15,6 +15,7 @@ import styles from "./FeatureIconCard.module.css";
 
 export interface FeatureIconCardProps {
   title: string;
+  meta?: string;
   items?: string[];
   description?: string;
   iconName?:
@@ -30,6 +31,7 @@ export interface FeatureIconCardProps {
 
 export default function FeatureIconCard({
   title,
+  meta,
   items,
   description,
   iconName = "sparkles",
@@ -72,15 +74,23 @@ export default function FeatureIconCard({
       onBlur={() => setIsHovered(false)}
     >
       <div className={styles["header"]}>
+        <div className={styles["content"]}>
+          <h3 className={`${styles["title"]} capitalize`}>{title}</h3>
+          {meta ? <p className={styles["meta"]}>{meta}</p> : null}
+          {description ? (
+            <p className={styles["description"]}>{description}</p>
+          ) : null}
+        </div>
+
         <motion.div
           className={styles["iconWrap"]}
           style={{ transformStyle: "preserve-3d" }}
           animate={
             shouldAnimate
               ? {
-                  rotateX: [0, 7, -5, 0],
-                  rotateY: [0, -6, 5, 0],
-                  scale: [1, 1.04, 1],
+                  rotateX: [0, 6, -4, 0],
+                  rotateY: [0, -5, 4, 0],
+                  scale: [1, 1.03, 1],
                 }
               : { rotateX: 0, rotateY: 0, scale: 1 }
           }
@@ -94,27 +104,27 @@ export default function FeatureIconCard({
             className={styles["glowRadial"]}
             animate={
               shouldAnimate
-                ? { opacity: [0.12, 0.55, 0.18] }
-                : { opacity: 0.14 }
+                ? { opacity: [0.08, 0.28, 0.12] }
+                : { opacity: 0.08 }
             }
             transition={
               reducedMotion
                 ? { duration: 0 }
                 : shouldAnimate
-                  ? { duration: 1.4, ease: "easeInOut", repeat: Infinity }
+                  ? { duration: 1.6, ease: "easeInOut", repeat: Infinity }
                   : { duration: 0.2, ease: "easeOut" }
             }
           />
           <motion.div
             className={styles["glowBlur"]}
             animate={
-              shouldAnimate ? { opacity: [0.08, 0.45, 0.12] } : { opacity: 0.1 }
+              shouldAnimate ? { opacity: [0.05, 0.2, 0.08] } : { opacity: 0.06 }
             }
             transition={
               reducedMotion
                 ? { duration: 0 }
                 : shouldAnimate
-                  ? { duration: 1.8, ease: "easeInOut", repeat: Infinity }
+                  ? { duration: 1.9, ease: "easeInOut", repeat: Infinity }
                   : { duration: 0.2, ease: "easeOut" }
             }
           />
@@ -123,7 +133,7 @@ export default function FeatureIconCard({
             className={styles["icon"]}
             animate={
               shouldAnimate
-                ? { rotate: [0, -6, 6, 0], scale: [1, 1.03, 1] }
+                ? { rotate: [0, -5, 5, 0], scale: [1, 1.02, 1] }
                 : { rotate: 0, scale: 1 }
             }
             transition={
@@ -132,7 +142,7 @@ export default function FeatureIconCard({
                 : { duration: 0.85, ease: "easeInOut" }
             }
           >
-            <Icon aria-hidden="true" focusable="false" size={34} />
+            <Icon aria-hidden="true" focusable="false" size={30} />
           </motion.div>
 
           {shouldAnimate
@@ -144,7 +154,7 @@ export default function FeatureIconCard({
                   animate={{
                     opacity: [0, 1, 0],
                     scale: [0, 1, 0],
-                    y: [-18, -64],
+                    y: [-16, -60],
                     x: [-4, 4],
                   }}
                   transition={{
@@ -157,13 +167,6 @@ export default function FeatureIconCard({
               ))
             : null}
         </motion.div>
-
-        <div>
-          <h3 className={`${styles["title"]} capitalize`}>{title}</h3>
-          {description ? (
-            <p className={styles["description"]}>{description}</p>
-          ) : null}
-        </div>
       </div>
 
       {items?.length ? (

@@ -3,16 +3,18 @@ import FeatureIconCardReact from "./FeatureIconCard.tsx";
 
 export interface Props {
 	title: string;
+	meta?: string;
 	items?: string[];
 	description?: string;
 	iconName?: "sparkles" | "shield" | "palette" | "scissors" | "droplet" | "waves";
 	iconColor?: string;
 }
 
-const { title, items, description, iconName, iconColor } = Astro.props as Props;
+const { title, meta, items, description, iconName, iconColor } = Astro.props as Props;
 
 const reactProps = {
 	title,
+	...(meta ? { meta } : {}),
 	...(iconName ? { iconName } : {}),
 	...(items ? { items } : {}),
 	...(description ? { description } : {}),
