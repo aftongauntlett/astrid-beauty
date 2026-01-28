@@ -118,151 +118,176 @@ const rootClass =
 	</div>
 </div>
 
-<script is:inline>
-	(() => {
-		try {
-			const roots = Array.from(document.querySelectorAll('[data-settings-root]'));
-			for (const root of roots) {
-				if (!(root instanceof HTMLElement)) continue;
-				if (root.dataset.settingsInit === 'true') continue;
-				root.dataset.settingsInit = 'true';
+<script>
+	import { setTheme } from "../../lib/theme";
 
-				const trigger = root.querySelector('[data-settings-trigger]');
-				const panel = root.querySelector('[data-settings-panel]');
-				if (!(trigger instanceof HTMLButtonElement) || !(panel instanceof HTMLElement)) continue;
+	const initSettingsMenus = () => {
+		globalThis.__astrid_settingsMenuController?.abort?.();
+		const controller = new AbortController();
+		globalThis.__astrid_settingsMenuController = controller;
+		const { signal } = controller;
 
-				const getItems = () =>
-					Array.from(panel.querySelectorAll('[role="menuitemradio"]')).filter(
-						(el) => el instanceof HTMLElement
-					);
+		document.addEventListener("astro:before-swap", () => controller.abort(), { once: true, signal });
 
-				const isOpen = () => trigger.getAttribute('aria-expanded') === 'true';
+		const roots = Array.from(document.querySelectorAll("[data-settings-root]"));
+		for (const root of roots) {
+			if (!(root instanceof HTMLElement)) continue;
 
-				const setSide = (side) => {
-					if (side !== 'left' && side !== 'right') return;
-					root.dataset.side = side;
-				};
+			const trigger = root.querySelector("[data-settings-trigger]");
+			const panel = root.querySelector("[data-settings-panel]");
+			if (!(trigger instanceof HTMLButtonElement) || !(panel instanceof HTMLElement)) continue;
 
-				const syncSideForViewport = () => {
-					// Default: open to the right (panel extends rightward from trigger).
-					// Flip to left if it would overflow the viewport.
-					const viewportWidth = document.documentElement.clientWidth || window.innerWidth;
-					const safeMargin = 8;
-					const rootRect = root.getBoundingClientRect();
-					const panelWidth = panel.getBoundingClientRect().width || panel.offsetWidth;
-					if (!panelWidth) {
-						setSide('right');
-						return;
+			const getItems = () =>
+				Array.from(panel.querySelectorAll('[role="menuitemradio"]')).filter(
+					(el) => el instanceof HTMLElement
+				);
+
+			const isOpen = () => trigger.getAttribute("aria-expanded") === "true";
+
+			const syncThemeChecked = () => {
+				const theme = document.documentElement.dataset["theme"] === "dark" ? "dark" : "light";
+				for (const el of getItems()) {
+					const t = el.getAttribute("data-theme");
+					if (t === "light" || t === "dark") {
+						el.setAttribute("aria-checked", t === theme ? "true" : "false");
 					}
+				}
+			};
 
-					const canOpenRight = rootRect.left + panelWidth <= viewportWidth - safeMargin;
-					const canOpenLeft = rootRect.right - panelWidth >= safeMargin;
+			const setSideLeft = () => {
+				root.dataset["side"] = "left";
+			};
+			const setSideRight = () => {
+				root.dataset["side"] = "right";
+			};
 
-					if (canOpenRight) {
-						setSide('right');
-						return;
-					}
-					if (canOpenLeft) {
-						setSide('left');
-						return;
-					}
+			const syncSideForViewport = () => {
+				// Default: open to the right (panel extends rightward from trigger).
+				// Flip to left if it would overflow the viewport.
+				const viewportWidth = document.documentElement.clientWidth || window.innerWidth;
+				const safeMargin = 8;
+				const rootRect = root.getBoundingClientRect();
+				const panelWidth = panel.getBoundingClientRect().width || panel.offsetWidth;
+				if (!panelWidth) {
+					setSideRight();
+					return;
+				}
 
-					// If neither fully fits, pick the side with more room.
-					const roomRight = viewportWidth - safeMargin - rootRect.left;
-					const roomLeft = rootRect.right - safeMargin;
-					setSide(roomRight >= roomLeft ? 'right' : 'left');
-				};
+				const canOpenRight = rootRect.left + panelWidth <= viewportWidth - safeMargin;
+				const canOpenLeft = rootRect.right - panelWidth >= safeMargin;
 
-				let closeTimer = 0;
-				const getMotionMs = () => {
-					try {
-						return window.matchMedia?.('(prefers-reduced-motion: reduce)').matches ? 0 : 140;
-					} catch {
-						return 140;
-					}
-				};
+				if (canOpenRight) {
+					setSideRight();
+					return;
+				}
+				if (canOpenLeft) {
+					setSideLeft();
+					return;
+				}
 
-				const openMenu = () => {
-					if (closeTimer) {
-						window.clearTimeout(closeTimer);
-						closeTimer = 0;
-					}
-					trigger.setAttribute('aria-expanded', 'true');
-					panel.hidden = false;
+				// If neither fully fits, pick the side with more room.
+				const roomRight = viewportWidth - safeMargin - rootRect.left;
+				const roomLeft = rootRect.right - safeMargin;
+				if (roomRight >= roomLeft) setSideRight();
+				else setSideLeft();
+			};
 
-					// Measure + decide alignment without flashing.
-					const prevVisibility = panel.style.visibility;
-					const prevPointerEvents = panel.style.pointerEvents;
-					panel.style.visibility = 'hidden';
-					panel.style.pointerEvents = 'none';
-					syncSideForViewport();
-					panel.style.visibility = prevVisibility;
-					panel.style.pointerEvents = prevPointerEvents;
+			let closeTimer = 0;
+			signal.addEventListener("abort", () => {
+				if (closeTimer) window.clearTimeout(closeTimer);
+				closeTimer = 0;
+			});
 
-					// Animate in.
-					requestAnimationFrame(() => {
-						root.dataset.open = 'true';
-					});
+			const getMotionMs = () => {
+				try {
+					return window.matchMedia?.("(prefers-reduced-motion: reduce)").matches ? 0 : 140;
+				} catch {
+					return 140;
+				}
+			};
 
-					// Sync theme checked state from the current DOM theme.
-					const theme = document.documentElement.dataset['theme'] === 'dark' ? 'dark' : 'light';
-					for (const el of getItems()) {
-						if (!(el instanceof HTMLElement)) continue;
-						const t = el.getAttribute('data-theme');
-						if (t === 'light' || t === 'dark') {
-							el.setAttribute('aria-checked', t === theme ? 'true' : 'false');
-						}
-					}
-				};
+			const openMenu = () => {
+				if (closeTimer) {
+					window.clearTimeout(closeTimer);
+					closeTimer = 0;
+				}
+				trigger.setAttribute("aria-expanded", "true");
+				panel.hidden = false;
 
-				const closeMenu = () => {
-					trigger.setAttribute('aria-expanded', 'false');
-					delete root.dataset.open;
-					const ms = getMotionMs();
-					if (ms === 0) {
-						panel.hidden = true;
-						return;
-					}
-					closeTimer = window.setTimeout(() => {
-						if (!isOpen()) panel.hidden = true;
-						closeTimer = 0;
-					}, ms);
-				};
+				// Measure + decide alignment without flashing.
+				const prevVisibility = panel.style.visibility;
+				const prevPointerEvents = panel.style.pointerEvents;
+				panel.style.visibility = "hidden";
+				panel.style.pointerEvents = "none";
+				syncSideForViewport();
+				panel.style.visibility = prevVisibility;
+				panel.style.pointerEvents = prevPointerEvents;
 
-				// Start closed.
-				closeMenu();
-				setSide('right');
+				// Animate in.
+				requestAnimationFrame(() => {
+					root.dataset["open"] = "true";
+				});
 
-				const focusFirst = () => {
-					const items = getItems();
-					const first = items[0];
-					if (first instanceof HTMLElement) first.focus();
-				};
+				syncThemeChecked();
+			};
 
-				trigger.addEventListener('click', () => {
-					// Toggle on click.
+			const closeMenu = () => {
+				trigger.setAttribute("aria-expanded", "false");
+				delete root.dataset["open"];
+				const ms = getMotionMs();
+				if (ms === 0) {
+					panel.hidden = true;
+					return;
+				}
+				closeTimer = window.setTimeout(() => {
+					if (!isOpen()) panel.hidden = true;
+					closeTimer = 0;
+				}, ms);
+			};
+
+			// Start closed.
+			closeMenu();
+			setSideRight();
+
+			const focusFirst = () => {
+				const items = getItems();
+				const first = items[0];
+				if (first instanceof HTMLElement) first.focus();
+			};
+
+			trigger.addEventListener(
+				"click",
+				() => {
 					if (isOpen()) closeMenu();
 					else openMenu();
-				});
+				},
+				{ signal }
+			);
 
-				trigger.addEventListener('keydown', (event) => {
-					if (event.key === 'ArrowDown') {
+			trigger.addEventListener(
+				"keydown",
+				(event) => {
+					if (event.key === "ArrowDown") {
 						event.preventDefault();
 						openMenu();
 						focusFirst();
 					}
-					if (event.key === 'Enter' || event.key === ' ') {
+					if (event.key === "Enter" || event.key === " ") {
 						event.preventDefault();
 						openMenu();
 						focusFirst();
 					}
-					if (event.key === 'Escape') {
+					if (event.key === "Escape") {
 						closeMenu();
 					}
-				});
+				},
+				{ signal }
+			);
 
-				root.addEventListener('keydown', (event) => {
-					if (event.key === 'Escape') {
+			root.addEventListener(
+				"keydown",
+				(event) => {
+					if (event.key === "Escape") {
 						closeMenu();
 						trigger.focus();
 						return;
@@ -270,14 +295,14 @@ const rootClass =
 
 					if (panel.hidden) return;
 
-					if (event.key === 'ArrowDown' || event.key === 'ArrowUp') {
+					if (event.key === "ArrowDown" || event.key === "ArrowUp") {
 						const items = getItems();
 						const active = document.activeElement;
 						const currentIndex = items.findIndex((el) => el === active);
 						if (items.length === 0) return;
 
 						event.preventDefault();
-						const delta = event.key === 'ArrowDown' ? 1 : -1;
+						const delta = event.key === "ArrowDown" ? 1 : -1;
 						const nextIndex =
 							currentIndex === -1
 								? 0
@@ -285,78 +310,65 @@ const rootClass =
 						const next = items[nextIndex];
 						if (next instanceof HTMLElement) next.focus();
 					}
-				});
+				},
+				{ signal }
+			);
 
-				document.addEventListener('pointerdown', (event) => {
+			document.addEventListener(
+				"pointerdown",
+				(event) => {
 					const target = event.target;
 					if (!(target instanceof Node)) return;
 					if (!root.contains(target)) closeMenu();
-				});
+				},
+				{ signal }
+			);
 
-				document.addEventListener('focusin', (event) => {
+			document.addEventListener(
+				"focusin",
+				(event) => {
 					const target = event.target;
 					if (!(target instanceof Node)) return;
 					if (!root.contains(target)) closeMenu();
-				});
+				},
+				{ signal }
+			);
 
-				window.addEventListener('resize', () => {
+			window.addEventListener(
+				"resize",
+				() => {
 					if (!panel.hidden) syncSideForViewport();
-				});
+				},
+				{ signal }
+			);
 
-				const setTheme = (nextTheme) => {
-					if (nextTheme !== 'light' && nextTheme !== 'dark') return;
-
-					try {
-						document.documentElement.classList.add('theme-changing');
-					} catch {
-						// ignore
-					}
-
-					try {
-						localStorage.setItem('theme', nextTheme);
-					} catch {
-						// ignore
-					}
-
-					document.documentElement.dataset['theme'] = nextTheme;
-
-					requestAnimationFrame(() => {
-						requestAnimationFrame(() => {
-							document.documentElement.classList.remove('theme-changing');
-						});
-					});
-				};
-
-				panel.addEventListener('click', (event) => {
+			panel.addEventListener(
+				"click",
+				(event) => {
 					const target = event.target;
 					if (!(target instanceof Element)) return;
 
-					const themeEl = target.closest('[data-theme]');
-					const theme = themeEl?.getAttribute('data-theme');
-					if (theme === 'light' || theme === 'dark') {
+					const themeEl = target.closest("[data-theme]");
+					const theme = themeEl?.getAttribute("data-theme");
+					if (theme === "light" || theme === "dark") {
 						setTheme(theme);
-						for (const el of getItems()) {
-							const t = el.getAttribute('data-theme');
-							if (t === 'light' || t === 'dark') {
-								el.setAttribute('aria-checked', t === theme ? 'true' : 'false');
-							}
-						}
+						syncThemeChecked();
 						closeMenu();
 						trigger.focus();
 						return;
 					}
 
-					const langEl = target.closest('[data-lang]');
+					const langEl = target.closest("[data-lang]");
 					if (langEl instanceof HTMLAnchorElement) {
-						const value = langEl.getAttribute('data-lang');
-						if (value === 'en' || value === 'es') {
+						const value = langEl.getAttribute("data-lang");
+						if (value === "en" || value === "es") {
 							try {
-								localStorage.setItem('preferredLang', value);
+								localStorage.setItem("preferredLang", value);
 							} catch {
 								// ignore
 							}
 
-							const currentLang = document.documentElement.lang === 'es' ? 'es' : 'en';
+							const currentLang = document.documentElement.lang === "es" ? "es" : "en";
 							if (currentLang === value) {
 								event.preventDefault();
 								closeMenu();
@@ -365,20 +377,30 @@ const rootClass =
 							}
 
 							// Preserve current hash when switching languages (useful for section anchors).
-							const href = langEl.getAttribute('href') || '';
-							if (window.location.hash && !href.includes('#')) {
+							const href = langEl.getAttribute("href") || "";
+							if (window.location.hash && !href.includes("#")) {
 								event.preventDefault();
 								window.location.assign(`${href}${window.location.search}${window.location.hash}`);
 							}
 							closeMenu();
 						}
 					}
-				});
-			}
-		} catch {
-			// ignore
+				},
+				{ signal }
+			);
+
+			window.addEventListener("themechange", syncThemeChecked, { signal });
+			window.addEventListener(
+				"storage",
+				(event) => {
+					if (event.key === "theme") syncThemeChecked();
+				},
+				{ passive: true, signal }
+			);
 		}
-	})();
+	};
+
+	initSettingsMenus();
 </script>
 
 <style>

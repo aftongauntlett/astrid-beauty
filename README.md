@@ -1,20 +1,27 @@
 # Astrid Beauty (Salon Website)
 
 ![Astro](https://img.shields.io/badge/Astro-FF5D01?style=flat&logo=astro&logoColor=white)
-![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-38BDF8?style=flat&logo=tailwindcss&logoColor=white)
 ![GitHub commit activity](https://img.shields.io/github/commit-activity/m/aftongauntlett/astrid-beauty)
 
 View live: https://byastridbeautysalon.com/
 
-Static salon website scaffold built with Astro and TypeScript. This repo focuses on a clean foundation: strict typing, linting, and tests — without committing to any visual design yet.
+Production salon website built with Astro + React islands, TypeScript, and CSS Modules.
+
+## Stack
+
+- **Astro** (routing, layouts, `.astro` components)
+- **React** islands for interactive UI (e.g. motion/CTA)
+- **CSS Modules** and global CSS (`src/styles/global.css`)
+- **i18n** content/messages in `src/i18n`
+- **Theme** toggle (light/dark) persisted in `localStorage`
 
 ## Tooling
 
 - **Astro** for static site routing, layouts, and components
-- **TypeScript** with strict compiler settings
-- **ESLint** configured for **Astro + TypeScript** and accessibility-focused linting
-- **Vitest** for unit tests
-- **Astro Check** (`astro check`) for type-checking across `.astro` and TS
+- **TypeScript**
+- **ESLint** (Astro + TS + a11y)
+- **Vitest** (unit tests)
+- **Astro Check** (`astro check`)
 
 ## Commands
 
@@ -26,10 +33,31 @@ Static salon website scaffold built with Astro and TypeScript. This repo focuses
 - Run tests: `npm run test`
 - Watch tests: `npm run test:watch`
 
+## i18n
+
+- **English** is served at `/`
+- **Spanish** is served at `/es`
+- The language toggle updates a persisted preference (`preferredLang`) and keeps hash/query when switching.
+- First-time visitors may be auto-directed based on browser language; once chosen, preference is respected.
+
+## Theme
+
+- Light/dark theme is controlled via `data-theme` on `<html>` and persisted to `localStorage` (`theme`).
+- Theme can be changed from the header theme toggle and the settings menu.
+
+## Assets
+
+- Gallery and site images live in `public/images`.
+
+## Deploy
+
+- Build: `npm run build` (outputs to `dist/`)
+- Preview locally: `npm run preview`
+- Deploy `dist/` to your static host (Netlify/Vercel/S3/Cloudflare Pages, etc.)
+
 ## Notes
 
-- Boilerplate is built with **semantic HTML** and basic accessibility primitives (skip link, landmarks, focus outlines).
-- Responsive defaults are provided via the viewport meta tag; visual styling intentionally remains minimal at this stage.
+- Semantic HTML + accessibility primitives are used throughout (skip link, landmarks, focus outlines).
 
 ## License
 

@@ -20,8 +20,8 @@ export const en: Messages = {
       "Take a peek at recent transformations, hear from happy clients, and book your next visit.",
   },
   misc: {
-    bookNow: "Book Your Visit",
-    scheduleAppointment: "Reserve Your Chair",
+    bookNow: "Book Now",
+    scheduleAppointment: "Schedule Appointment",
     viewServices: "Explore Services",
     backToTop: "Back to top",
     scheduleNow: "Book Now",
@@ -29,7 +29,7 @@ export const en: Messages = {
   home: {
     heroLede:
       "Beautiful color, fresh cuts, and luminous gloss treatments - right here in Herndon. Book your appointment anytime.",
-    brandSrOnly: "By Astrid Beauty",
+    brandSrOnly: "By Astrid Beauty Salon",
   },
   findUs: {
     lede: "We'd love to see you at our Herndon studio. Hours may vary, so give us a call to confirm.",
@@ -67,7 +67,7 @@ export const en: Messages = {
     },
   ],
   services: {
-    lede: "Thoughtfully crafted color, cuts, and care—designed around you.",
+    lede: "Thoughtfully crafted color, cuts, and care - designed around you.",
     cards: [
       {
         title: "Signature Color",
@@ -134,7 +134,7 @@ export const en: Messages = {
     placeholderPhone: "(703) 786-3707",
     placeholderHours:
       "Hours may vary—please call to confirm.\nSunday: Closed\nMonday: 9:00 AM – 5:00 PM\nTuesday: Closed\nWednesday: 9:00 AM – 6:30 PM\nThursday: Closed\nFriday: 9:00 AM – 6:30 PM\nSaturday: 9:30 AM – 4:30 PM",
-    copyright: "By Astrid Beauty",
+    copyright: "By Astrid Beauty Salon",
     builtByLabel: "Built by",
   },
 };

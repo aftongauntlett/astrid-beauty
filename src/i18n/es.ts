@@ -20,8 +20,8 @@ export const es: Messages = {
       "Descubre transformaciones recientes, conoce lo que dicen nuestras clientas y reserva tu próxima visita.",
   },
   misc: {
-    bookNow: "Reserva tu cita",
-    scheduleAppointment: "Reserva tu lugar",
+    bookNow: "Reservar",
+    scheduleAppointment: "Programar una cita",
     viewServices: "Explorar servicios",
     backToTop: "Volver arriba",
     scheduleNow: "Reservar ahora",
@@ -29,7 +29,7 @@ export const es: Messages = {
   home: {
     heroLede:
       "Color vibrante, cortes frescos y tratamientos de brillo luminoso - aquí en Herndon. Reserva tu cita cuando quieras.",
-    brandSrOnly: "By Astrid Beauty",
+    brandSrOnly: "Por Astrid Beauty Salon",
   },
   findUs: {
     lede: "Nos encantaría verte en nuestro estudio en Herndon. El horario puede variar, así que llámanos para confirmar.",
@@ -67,7 +67,7 @@ export const es: Messages = {
     },
   ],
   services: {
-    lede: "Color, cortes y cuidados pensados con cariño—diseñados para ti.",
+    lede: "Color, cortes y cuidados pensados con cariño - diseñados para ti.",
     cards: [
       {
         title: "Color Signature",
@@ -137,7 +137,7 @@ export const es: Messages = {
     placeholderPhone: "(703) 786-3707",
     placeholderHours:
       "El horario puede variar—por favor llámanos para confirmar.\nDomingo: Cerrado\nLunes: 9:00 AM – 5:00 PM\nMartes: Cerrado\nMiércoles: 9:00 AM – 6:30 PM\nJueves: Cerrado\nViernes: 9:00 AM – 6:30 PM\nSábado: 9:30 AM – 4:30 PM",
-    copyright: "By Astrid Beauty",
+    copyright: "Por Astrid Beauty Salon",
     builtByLabel: "Creado por",
   },
 };

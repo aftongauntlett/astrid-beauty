@@ -38,102 +38,83 @@ const { label = "Theme", mode = "icon" } = Astro.props;
 )}
 
 <script>
-	import { toggleTheme } from "../../lib/theme";
+	import { setTheme, toggleTheme } from "../../lib/theme";
 
-	const applyLightTheme = () => {
-		const nextTheme = "light";
-		try {
-			document.documentElement.classList.add("theme-changing");
-		} catch {
-			// ignore
-		}
-		try {
-			localStorage.setItem("theme", nextTheme);
-		} catch {
-			// ignore
-		}
-		document.documentElement.dataset["theme"] = nextTheme;
-		requestAnimationFrame(() => {
-			requestAnimationFrame(() => {
-				document.documentElement.classList.remove("theme-changing");
-			});
-		});
-	};
+	const initThemeToggles = () => {
+		globalThis.__astrid_themeToggleController?.abort?.();
+		const controller = new AbortController();
+		globalThis.__astrid_themeToggleController = controller;
+		const { signal } = controller;
 
-	const applyDarkTheme = () => {
-		const nextTheme = "dark";
-		try {
-			document.documentElement.classList.add("theme-changing");
-		} catch {
-			// ignore
-		}
-		try {
-			localStorage.setItem("theme", nextTheme);
-		} catch {
-			// ignore
-		}
-		document.documentElement.dataset["theme"] = nextTheme;
-		requestAnimationFrame(() => {
-			requestAnimationFrame(() => {
-				document.documentElement.classList.remove("theme-changing");
-			});
-		});
-	};
+		document.addEventListener("astro:before-swap", () => controller.abort(), { once: true, signal });
 
-	const roots = Array.from(document.querySelectorAll("[data-theme-toggle]"));
-	for (const root of roots) {
-		if (!(root instanceof HTMLElement)) continue;
-		if (root.dataset["themeToggleInit"] === "true") continue;
-		root.dataset["themeToggleInit"] = "true";
+		const roots = Array.from(document.querySelectorAll("[data-theme-toggle]"));
+		const themeFromDom = () =>
+			document.documentElement.dataset["theme"] === "dark" ? "dark" : "light";
 
-		const isSegmented = root.matches("nav");
-		const sync = () => {
-			const theme = document.documentElement.dataset["theme"] === "dark" ? "dark" : "light";
-			if (!isSegmented && root instanceof HTMLButtonElement) {
-				root.setAttribute("aria-pressed", theme === "dark" ? "true" : "false");
-				return;
-			}
-			for (const btn of Array.from(root.querySelectorAll("button[data-theme]"))) {
-				if (!(btn instanceof HTMLButtonElement)) continue;
-				const t = btn.getAttribute("data-theme");
-				btn.setAttribute("aria-pressed", t === theme ? "true" : "false");
+		const syncAll = () => {
+			const theme = themeFromDom();
+			for (const root of roots) {
+				if (!(root instanceof HTMLElement)) continue;
+				const isSegmented = root.matches("nav");
+				if (!isSegmented && root instanceof HTMLButtonElement) {
+					root.setAttribute("aria-pressed", theme === "dark" ? "true" : "false");
+					continue;
+				}
+				for (const btn of Array.from(root.querySelectorAll("button[data-theme]"))) {
+					if (!(btn instanceof HTMLButtonElement)) continue;
+					const t = btn.getAttribute("data-theme");
+					btn.setAttribute("aria-pressed", t === theme ? "true" : "false");
+				}
 			}
 		};
 
-		sync();
+		syncAll();
 
-		if (!isSegmented && root instanceof HTMLButtonElement) {
-			root.addEventListener("click", () => {
-				toggleTheme();
-				sync();
-			});
-		} else {
-			root.addEventListener("click", (event) => {
-				const target = event.target;
-				if (!(target instanceof Element)) return;
-				const btn = target.closest("button[data-theme]");
-				if (!(btn instanceof HTMLButtonElement)) return;
-				const next = btn.getAttribute("data-theme");
-				if (next === "light") {
-					applyLightTheme();
-					sync();
-					return;
-				}
-				if (next === "dark") {
-					applyDarkTheme();
-					sync();
-				}
-			});
+		for (const root of roots) {
+			if (!(root instanceof HTMLElement)) continue;
+			const isSegmented = root.matches("nav");
+
+			if (!isSegmented && root instanceof HTMLButtonElement) {
+				root.addEventListener(
+					"click",
+					() => {
+						toggleTheme();
+						syncAll();
+					},
+					{ signal }
+				);
+				continue;
+			}
+
+			root.addEventListener(
+				"click",
+				(event) => {
+					const target = event.target;
+					if (!(target instanceof Element)) return;
+					const btn = target.closest("button[data-theme]");
+					if (!(btn instanceof HTMLButtonElement)) return;
+					const next = btn.getAttribute("data-theme");
+					if (next === "light" || next === "dark") {
+						setTheme(next);
+						syncAll();
+					}
+				},
+				{ signal }
+			);
 		}
 
+		window.addEventListener("themechange", syncAll, { signal });
 		window.addEventListener(
 			"storage",
 			(event) => {
-				if (event.key === "theme") sync();
+				if (event.key === "theme") syncAll();
 			},
-			{ passive: true }
+			{ passive: true, signal }
 		);
-	}
+	};
+
+	initThemeToggles();
 </script>
 
 <style is:global>

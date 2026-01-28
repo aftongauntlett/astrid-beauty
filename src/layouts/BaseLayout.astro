@@ -85,20 +85,19 @@ const xDefaultHref = toHref(alternates.xDefault);
 				}
 			})();
 		</script>
-		<script is:inline>
-			(() => {
-				try {
-					const stored = localStorage.getItem('theme');
-					if (stored === 'light' || stored === 'dark') {
-						document.documentElement.dataset['theme'] = stored;
-						return;
-					}
-					const prefersDark = window.matchMedia?.('(prefers-color-scheme: dark)').matches;
-					document.documentElement.dataset['theme'] = prefersDark ? 'dark' : 'light';
-				} catch {
-					// ignore
-				}
-			})();
+		<script>
+			import { initTheme } from "../lib/theme";
+
+			globalThis.__astrid_themeInitController?.abort?.();
+			const controller = new AbortController();
+			globalThis.__astrid_themeInitController = controller;
+			const { signal } = controller;
+
+			document.addEventListener("astro:before-swap", () => controller.abort(), { once: true, signal });
+
+			const run = () => initTheme();
+			run();
+			document.addEventListener("astro:page-load", run, { signal });
 		</script>
 		<script is:inline>
 			(() => {

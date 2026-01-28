@@ -41,13 +41,23 @@ const homeHref = lang === "es" ? "/es" : "/";
 	const initHeaderAutoHide = () => {
 		const header = document.querySelector(".site-header");
 		if (!(header instanceof HTMLElement)) return;
-		if (header.dataset["autoHideInitialized"] === "true") return;
-		header.dataset["autoHideInitialized"] = "true";
+
+		globalThis.__astrid_headerAutoHideController?.abort?.();
+		const controller = new AbortController();
+		globalThis.__astrid_headerAutoHideController = controller;
+		const { signal } = controller;
+
+		document.addEventListener("astro:before-swap", () => controller.abort(), { once: true, signal });
 
 		const about = document.getElementById("about");
 		if (!(about instanceof HTMLElement)) return;
 
 		let raf = 0;
+		signal.addEventListener("abort", () => {
+			if (raf) cancelAnimationFrame(raf);
+			raf = 0;
+		});
+
 		const computeHidden = () => {
 			raf = 0;
 			const nav = header.querySelector("nav[data-primary-nav]");
@@ -69,24 +79,20 @@ const homeHref = lang === "es" ? "/es" : "/";
 		};
 
 		computeHidden();
-		window.addEventListener("scroll", schedule, { passive: true });
-		window.addEventListener("resize", schedule);
-
-		document.addEventListener("click", schedule);
-		document.addEventListener("keydown", schedule);
+		window.addEventListener("scroll", schedule, { passive: true, signal });
+		window.addEventListener("resize", schedule, { signal });
+		document.addEventListener("click", schedule, { signal });
+		document.addEventListener("keydown", schedule, { signal });
 	};
 
+	const run = () => initHeaderAutoHide();
 	if (document.readyState === "loading") {
-		document.addEventListener("DOMContentLoaded", initHeaderAutoHide, { once: true });
+		document.addEventListener("DOMContentLoaded", run, { once: true });
 	} else {
-		initHeaderAutoHide();
+		run();
 	}
 
-	document.addEventListener("astro:page-load", () => {
-		const header = document.querySelector(".site-header");
-		if (header instanceof HTMLElement) header.dataset["autoHideInitialized"] = "false";
-		initHeaderAutoHide();
-	});
+	document.addEventListener("astro:page-load", run);
 </script>
 
 <style>

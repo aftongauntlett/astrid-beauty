@@ -60,8 +60,13 @@ const vagaroServicesUrl = "https://www.vagaro.com/byastridbeautysalon";
 	const initPrimaryNav = () => {
 		const root = document.querySelector("nav[data-primary-nav]");
 		if (!(root instanceof HTMLElement)) return;
-		if (root.dataset["navInitialized"] === "true") return;
-		root.dataset["navInitialized"] = "true";
+
+		globalThis.__astrid_primaryNavController?.abort?.();
+		const controller = new AbortController();
+		globalThis.__astrid_primaryNavController = controller;
+		const { signal } = controller;
+
+		document.addEventListener("astro:before-swap", () => controller.abort(), { once: true, signal });
 
 		const toggle = root.querySelector("[data-nav-toggle]");
 		const menu = root.querySelector("[data-nav-menu]");
@@ -70,7 +75,7 @@ const vagaroServicesUrl = "https://www.vagaro.com/byastridbeautysalon";
 		const toggleButton = toggle;
 		const menuEl = menu;
 
-		const applyState = (open: boolean) => {
+		const applyState = (open = false) => {
 			root.dataset["open"] = open ? "true" : "false";
 			toggleButton.setAttribute("aria-expanded", open ? "true" : "false");
 			menuEl.toggleAttribute("hidden", !open);
@@ -78,155 +83,177 @@ const vagaroServicesUrl = "https://www.vagaro.com/byastridbeautysalon";
 
 		applyState(false);
 
-		toggleButton.addEventListener("click", () => {
-			const isOpen = toggleButton.getAttribute("aria-expanded") === "true";
-			applyState(!isOpen);
-		});
+		toggleButton.addEventListener(
+			"click",
+			() => {
+				const isOpen = toggleButton.getAttribute("aria-expanded") === "true";
+				applyState(!isOpen);
+			},
+			{ signal }
+		);
 
-		document.addEventListener("click", (event) => {
-			if (!(event.target instanceof Node)) return;
-			const isOpen = toggleButton.getAttribute("aria-expanded") === "true";
-			if (!isOpen) return;
-			if (root.contains(event.target)) return;
-			applyState(false);
-		});
-
-		root.addEventListener("keydown", (event) => {
-			if (event.key === "Escape") {
+		document.addEventListener(
+			"click",
+			(event) => {
+				if (!(event.target instanceof Node)) return;
+				const isOpen = toggleButton.getAttribute("aria-expanded") === "true";
+				if (!isOpen) return;
+				if (root.contains(event.target)) return;
 				applyState(false);
-				toggleButton.focus();
+			},
+			{ signal }
+		);
+
+		root.addEventListener(
+			"keydown",
+			(event) => {
+				if (event.key === "Escape") {
+					applyState(false);
+					toggleButton.focus();
+				}
+			},
+			{ signal }
+		);
+
+		menuEl.addEventListener(
+			"click",
+			(event) => {
+				const target = event.target;
+				if (target instanceof HTMLAnchorElement) {
+					applyState(false);
+				}
+			},
+			{ signal }
+		);
+
+		// Active section state (Home pages only)
+		if (window.location.pathname === "/" || window.location.pathname === "/es" || window.location.pathname === "/es/") {
+			const sectionLinks = Array.from(root.querySelectorAll("[data-section-link]"));
+
+			const linkById = new Map();
+			for (const el of sectionLinks) {
+				if (el instanceof HTMLAnchorElement) {
+					const id = el.getAttribute("data-section-link");
+					if (id) linkById.set(id, el);
+				}
 			}
-		});
 
-		menuEl.addEventListener("click", (event) => {
-			const target = event.target;
-			if (target instanceof HTMLAnchorElement) {
-				applyState(false);
-			}
-		});
+			const getHeaderOffsetPx = () => {
+				const header = document.querySelector(".site-header");
+				if (!(header instanceof HTMLElement)) return 0;
+				return Math.ceil(header.getBoundingClientRect().height);
+			};
 
-			// Active section state (Home pages only)
-			if (window.location.pathname === "/" || window.location.pathname === "/es" || window.location.pathname === "/es/") {
-				const sectionLinks = Array.from(root.querySelectorAll("[data-section-link]"));
+			const clearCurrent = () => {
+				for (const link of linkById.values()) link.removeAttribute("aria-current");
+			};
 
-				const linkById = new Map();
-				for (const el of sectionLinks) {
-					if (el instanceof HTMLAnchorElement) {
-						const id = el.getAttribute("data-section-link");
-						if (id) linkById.set(id, el);
+			const setCurrentSection = (id = "") => {
+				clearCurrent();
+				const link = linkById.get(id);
+				if (link) link.setAttribute("aria-current", "location");
+			};
+
+			let observer = new IntersectionObserver(() => {}, {
+				rootMargin: "0px",
+				threshold: [0],
+			});
+			const latest = new Map();
+			let activeId = "";
+
+			signal.addEventListener("abort", () => {
+				observer.disconnect();
+			});
+
+			const applyBestActive = () => {
+				let bestId = "";
+				let bestRatio = 0;
+				let bestTop = Number.POSITIVE_INFINITY;
+
+				for (const [id, entry] of latest.entries()) {
+					if (!entry.isIntersecting) continue;
+					const top = entry.boundingClientRect.top;
+					const ratio = entry.intersectionRatio;
+					if (ratio > bestRatio || (ratio === bestRatio && top < bestTop)) {
+						bestRatio = ratio;
+						bestTop = top;
+						bestId = id;
 					}
 				}
 
-				const getHeaderOffsetPx = () => {
-					const header = document.querySelector(".site-header");
-					if (!(header instanceof HTMLElement)) return 0;
-					return Math.ceil(header.getBoundingClientRect().height);
-				};
+				const nearTop = window.scrollY < 8;
+				if (!bestId && nearTop) {
+					if (activeId !== "__top__") {
+						activeId = "__top__";
+						clearCurrent();
+					}
+					return;
+				}
 
-				const clearCurrent = () => {
-					for (const link of linkById.values()) link.removeAttribute("aria-current");
-				};
+				if (!bestId) return;
+				if (bestId !== activeId) {
+					activeId = bestId;
+					setCurrentSection(bestId);
+				}
+			};
 
-				const setCurrentSection = (id = "") => {
-					clearCurrent();
-					const link = linkById.get(id);
-					if (link) link.setAttribute("aria-current", "location");
-				};
+			const setupObserver = () => {
+				observer.disconnect();
+				latest.clear();
+				activeId = "";
+				clearCurrent();
 
-				let observer = new IntersectionObserver(() => {}, {
-					rootMargin: "0px",
-					threshold: [0],
-				});
-				const latest = new Map();
-				let activeId = "";
-
-				const applyBestActive = () => {
-					let bestId = "";
-					let bestRatio = 0;
-					let bestTop = Number.POSITIVE_INFINITY;
-
-					for (const [id, entry] of latest.entries()) {
-						if (!entry.isIntersecting) continue;
-						const top = entry.boundingClientRect.top;
-						const ratio = entry.intersectionRatio;
-						if (ratio > bestRatio || (ratio === bestRatio && top < bestTop)) {
-							bestRatio = ratio;
-							bestTop = top;
-							bestId = id;
+				const headerOffset = getHeaderOffsetPx();
+				const topMargin = -(headerOffset + 8);
+				observer = new IntersectionObserver(
+					(entries) => {
+						for (const entry of entries) {
+							const el = entry.target;
+							if (!(el instanceof HTMLElement)) continue;
+							const id = el.id;
+							if (!id) continue;
+							latest.set(id, entry);
 						}
+						applyBestActive();
+					},
+					{
+						rootMargin: `${topMargin}px 0px -60% 0px`,
+						threshold: [0, 0.1, 0.25, 0.5, 0.75, 1],
 					}
+				);
 
-					const nearTop = window.scrollY < 8;
-					if (!bestId && nearTop) {
-						if (activeId !== "__top__") {
-							activeId = "__top__";
-							clearCurrent();
-						}
-						return;
-					}
+				for (const id of linkById.keys()) {
+					const section = document.getElementById(id);
+					if (section) observer.observe(section);
+				}
+			};
 
-					if (!bestId) return;
-					if (bestId !== activeId) {
-						activeId = bestId;
-						setCurrentSection(bestId);
-					}
-				};
-
-				const setupObserver = () => {
-					observer.disconnect();
-					latest.clear();
-					activeId = "";
-					clearCurrent();
-
-					const headerOffset = getHeaderOffsetPx();
-					const topMargin = -(headerOffset + 8);
-					observer = new IntersectionObserver(
-						(entries) => {
-							for (const entry of entries) {
-								const el = entry.target;
-								if (!(el instanceof HTMLElement)) continue;
-								const id = el.id;
-								if (!id) continue;
-								latest.set(id, entry);
-							}
-							applyBestActive();
-						},
-						{
-							rootMargin: `${topMargin}px 0px -60% 0px`,
-							threshold: [0, 0.1, 0.25, 0.5, 0.75, 1],
-						}
-					);
-
-					for (const id of linkById.keys()) {
-						const section = document.getElementById(id);
-						if (section) observer.observe(section);
-					}
-				};
-
-				setupObserver();
-				window.addEventListener("resize", () => {
-					// Recompute header offset + margins
+			setupObserver();
+			window.addEventListener(
+				"resize",
+				() => {
 					setupObserver();
-				});
-				window.addEventListener("scroll", () => {
-					// Handles the "top of page" home state
+				},
+				{ signal }
+			);
+			window.addEventListener(
+				"scroll",
+				() => {
 					applyBestActive();
-				}, { passive: true });
-			}
+				},
+				{ passive: true, signal }
+			);
+		}
 	};
 
+	const run = () => initPrimaryNav();
 	if (document.readyState === "loading") {
-		document.addEventListener("DOMContentLoaded", initPrimaryNav, { once: true });
+		document.addEventListener("DOMContentLoaded", run, { once: true });
 	} else {
-		initPrimaryNav();
+		run();
 	}
 
-	document.addEventListener("astro:page-load", () => {
-		// Re-init after Astro client-side navigation (if enabled)
-		const root = document.querySelector("nav[data-primary-nav]");
-		if (root instanceof HTMLElement) root.dataset["navInitialized"] = "false";
-		initPrimaryNav();
-	});
+	document.addEventListener("astro:page-load", run);
 </script>
 
 <style>
