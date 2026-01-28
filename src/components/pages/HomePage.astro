@@ -1,11 +1,10 @@
 ---
-import Button from "../ui/Button.astro";
 import SectionIntro from "../ui/SectionIntro.astro";
 import FeatureIconCard from "../FeatureIconCard.astro";
 import Gallery from "../Gallery.astro";
 import HeroBookNowCta from "../motion/HeroBookNowCta";
 
-import { ExternalLink, Star } from "@lucide/astro";
+import { Star } from "@lucide/astro";
 
 import { getMessages, type Lang } from "../../i18n";
 
@@ -22,6 +21,17 @@ const stripOuterQuotes = (text: string) => {
 	const trimmed = text.trim();
 	return trimmed.replace(/^["“'‘]+/, "").replace(/["”'’]+$/, "");
 };
+
+const splitStaffTitle = (title: string) => {
+	const match = title.match(/^(.*?)\s*(\([^)]*\))\s*$/);
+	if (!match) return { name: title, role: "" };
+	return {
+		name: match[1] || title,
+		role: match[2] || "",
+	};
+};
+
+const formatRoleBadge = (role: string) => role.replace(/^\((.*)\)$/, "$1");
 
 const balanceForTwoColumnGrid = <T,>(items: readonly T[], getText: (item: T) => string) => {
 	const sorted = [...items].sort((a, b) => getText(a).length - getText(b).length);
@@ -66,6 +76,14 @@ const serviceCardMeta = [
 	{ iconName: "droplet", iconColor: "var(--color-icon-gloss)" },
 	{ iconName: "waves", iconColor: "var(--color-icon-scalp)" },
 ] as const;
+
+const staffCards = [
+	{ id: "astrid", ...messages.about.staff.members.astrid },
+	{ id: "cindy", ...messages.about.staff.members.cindy },
+].map((member) => ({
+	...member,
+	...splitStaffTitle(member.title),
+}));
 ---
 
 <section class="section hero" aria-labelledby="page-title">
@@ -146,64 +164,30 @@ const serviceCardMeta = [
 		</div>
 
 
-		<div class="about__staff" data-accordion>
-			<h3 class="about__sectionTitle" id="staff-title" data-reveal data-reveal-delay="80">{messages.about.staff.title}</h3>
-			<div class="accordion" role="group" aria-labelledby="staff-title">
-				<div class="accordion__item" data-reveal data-reveal-delay="120">
-					<button
-						type="button"
-						class="accordion__trigger"
-						aria-expanded="false"
-						aria-controls="accordion-panel-staff-astrid"
-						id="accordion-trigger-staff-astrid"
+		<div class="about__staff">
+			<h3 class="about__sectionTitle about__subTitle" id="staff-title" data-reveal data-reveal-delay="80">{messages.about.staff.title}</h3>
+			<div class="staff-grid" role="list" aria-labelledby="staff-title">
+				{staffCards.map((member, index) => (
+					<article
+						class="staff-card"
+						role="listitem"
+						data-reveal
+						data-reveal-delay={String(120 + index * 50)}
+						aria-labelledby={`staff-${member.id}-name`}
 					>
-						<span class="accordion__triggerText capitalize">
-							{messages.about.staff.members.astrid.title}
-						</span>
-						<span class="accordion__chevron" aria-hidden="true"></span>
-					</button>
-					<div
-						class="accordion__panel"
-						id="accordion-panel-staff-astrid"
-						role="region"
-						aria-labelledby="accordion-trigger-staff-astrid"
-						hidden
-					>
-						<div class="accordion__panelInner">
-							{messages.about.staff.members.astrid.paragraphs.map((paragraph) => (
-								<p class="accordion__text">{paragraph}</p>
+						<header class="staff-card__header">
+							<h4 class="staff-card__name capitalize" id={`staff-${member.id}-name`}>
+								{member.name}
+							</h4>
+							{member.role ? <span class="staff-card__badge">{formatRoleBadge(member.role)}</span> : null}
+						</header>
+						<div class="staff-card__bio">
+							{member.paragraphs.map((paragraph) => (
+								<p class="staff-card__text">{paragraph}</p>
 							))}
 						</div>
-					</div>
-				</div>
-
-				<div class="accordion__item" data-reveal data-reveal-delay="170">
-					<button
-						type="button"
-						class="accordion__trigger"
-						aria-expanded="false"
-						aria-controls="accordion-panel-staff-cindy"
-						id="accordion-trigger-staff-cindy"
-					>
-						<span class="accordion__triggerText capitalize">
-							{messages.about.staff.members.cindy.title}
-						</span>
-						<span class="accordion__chevron" aria-hidden="true"></span>
-					</button>
-					<div
-						class="accordion__panel"
-						id="accordion-panel-staff-cindy"
-						role="region"
-						aria-labelledby="accordion-trigger-staff-cindy"
-						hidden
-					>
-						<div class="accordion__panelInner">
-							{messages.about.staff.members.cindy.paragraphs.map((paragraph) => (
-								<p class="accordion__text">{paragraph}</p>
-							))}
-						</div>
-					</div>
-				</div>
+					</article>
+				))}
 			</div>
 		</div>
 
@@ -399,18 +383,12 @@ const serviceCardMeta = [
 			<div class="booking-ctaCard__panel">
 				<p class="booking-ctaCard__lede">{messages.booking.lede}</p>
 				<div class="booking-ctaCard__actions" aria-label={messages.booking.scheduleHelper}>
-					<Button
+					<HeroBookNowCta
+						client:idle
 						href={vagaroServicesUrl}
-						variant="primary"
-						size="lg"
-						target="_blank"
-						rel="noopener noreferrer"
-						class="booking-ctaCard__button btn--external"
-					>
-						<span class="btn__externalSpacer" aria-hidden="true"></span>
-						<span class="btn__externalLabel">{messages.misc.bookNow}</span>
-						<ExternalLink class="btn__externalIcon" size={20} aria-hidden="true" focusable="false" />
-					</Button>
+						label={messages.misc.bookNow}
+						className="booking-ctaCard__button btn--external"
+					/>
 				</div>
 				<p class="booking-ctaCard__helper">{messages.booking.scheduleHelper}</p>
 			</div>
@@ -533,10 +511,192 @@ const serviceCardMeta = [
 	.about__staff {
 		display: grid;
 		gap: var(--space-md);
+		padding-top: var(--space-lg);
+		position: relative;
+	}
+
+	.about__staff::before {
+		content: "";
+		position: absolute;
+		left: 50%;
+		top: 0;
+		transform: translateX(-50%);
+		width: min(38rem, 92%);
+		height: 1px;
+		background: color-mix(in oklab, var(--color-border) 70%, transparent);
 	}
 
 	.about__staff > .about__sectionTitle {
 		margin-bottom: var(--space-sm);
+	}
+
+	.about__subTitle {
+		font-size: clamp(1.18rem, 0.55vw + 1.05rem, 1.55rem);
+		letter-spacing: -0.01em;
+		color: color-mix(in oklab, var(--color-text) 92%, var(--color-primary));
+	}
+
+	.staff-grid {
+		display: grid;
+		grid-template-columns: 1fr;
+		gap: var(--space-xl);
+		align-items: stretch;
+	}
+
+	@media (min-width: 48rem) {
+		.staff-grid {
+			grid-template-columns: repeat(2, minmax(0, 1fr));
+			gap: calc(var(--space-xl) + var(--space-sm));
+		}
+	}
+
+	.staff-card {
+		position: relative;
+		overflow: hidden;
+		isolation: isolate;
+		border-radius: var(--radius-lg);
+		padding: var(--space-xl);
+		background: linear-gradient(
+			180deg,
+			color-mix(in oklab, var(--color-primary) 3%, var(--color-surface)) 0%,
+			var(--color-surface) 78%
+		);
+		border: 1px solid color-mix(in oklab, var(--color-border) 65%, transparent);
+		box-shadow: var(--shadow-sm);
+		display: grid;
+		grid-template-rows: auto 1fr;
+		gap: var(--space-lg);
+		height: 100%;
+	}
+
+	.staff-card::after {
+		content: "";
+		position: absolute;
+		inset: -55%;
+		border-radius: 999px;
+		pointer-events: none;
+		background: radial-gradient(
+			circle at 28% 12%,
+			color-mix(in oklab, var(--color-primary) 18%, transparent) 0%,
+			transparent 62%
+		);
+		opacity: 0;
+		filter: blur(12px);
+		z-index: 0;
+	}
+
+	@media (hover: hover) and (prefers-reduced-motion: no-preference) {
+		.staff-card {
+			transition:
+				transform 170ms ease,
+				box-shadow 170ms ease,
+				border-color 170ms ease,
+				background 170ms ease;
+		}
+
+		.staff-card__name {
+			transition: color 170ms ease;
+		}
+
+		.staff-card::after {
+			transition: opacity 170ms ease;
+		}
+
+		.staff-card:is(:hover, :focus-within) {
+			transform: translateY(-2px);
+			border-color: color-mix(in oklab, var(--color-primary) 22%, var(--color-border));
+			background: linear-gradient(
+				180deg,
+				color-mix(in oklab, var(--color-primary) 4.25%, var(--color-surface)) 0%,
+				var(--color-surface) 76%
+			);
+			box-shadow:
+				0 0 0 1px color-mix(in oklab, var(--color-primary) 18%, transparent),
+				var(--shadow-md);
+		}
+
+		.staff-card:is(:hover, :focus-within)::before {
+			opacity: 1;
+		}
+
+		.staff-card:is(:hover, :focus-within)::after {
+			opacity: 0.85;
+		}
+
+		.staff-card:is(:hover, :focus-within) .staff-card__name {
+			color: var(--color-primary);
+		}
+	}
+
+	.staff-card::before {
+		content: "";
+		position: absolute;
+		top: 0;
+		left: 0;
+		right: 0;
+		height: 3px;
+		background: linear-gradient(
+			90deg,
+			color-mix(in oklab, var(--color-primary) 78%, transparent),
+			color-mix(in oklab, var(--color-secondary) 70%, transparent)
+		);
+		opacity: 0.9;
+		pointer-events: none;
+		z-index: 2;
+	}
+
+	.staff-card__header {
+		display: grid;
+		grid-template-columns: 1fr auto;
+		align-items: start;
+		column-gap: var(--space-md);
+		row-gap: var(--space-xs);
+		align-content: start;
+		padding-top: var(--space-xs);
+		position: relative;
+		z-index: 1;
+	}
+
+	.staff-card__name {
+		margin: 0;
+		font-size: var(--heading-3);
+		color: var(--color-text);
+		letter-spacing: -0.015em;
+	}
+
+	.staff-card__badge {
+		justify-self: end;
+		align-self: start;
+		display: inline-flex;
+		align-items: center;
+		gap: 0.4rem;
+		padding: 0.26rem 0.6rem;
+		border-radius: 999px;
+		border: 1px solid color-mix(in oklab, var(--color-primary) 18%, var(--color-border));
+		background: color-mix(in oklab, var(--color-primary) 5%, var(--color-surface));
+		color: color-mix(in oklab, var(--color-text-muted) 80%, var(--color-primary));
+		font-size: 0.78rem;
+		line-height: 1.2;
+		letter-spacing: 0.012em;
+		font-weight: 650;
+		white-space: nowrap;
+	}
+
+	.staff-card__bio {
+		display: grid;
+		gap: var(--space-md);
+		align-content: start;
+		position: relative;
+		z-index: 1;
+		max-width: 60ch;
+	}
+
+	.staff-card__text {
+		margin: 0;
+		color: var(--color-text-muted);
+		font-size: var(--text-sm);
+		line-height: 1.7;
+		text-wrap: pretty;
 	}
 
 	.about__policies {

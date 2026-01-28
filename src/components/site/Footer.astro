@@ -238,7 +238,7 @@ const year = new Date().getFullYear();
 			</div>
 			<Button
 				class="site-footer__toTop"
-				variant="primary"
+				variant="ghost"
 				size="sm"
 				href="#top"
 				aria-label={messages.misc.backToTop}
@@ -624,6 +624,103 @@ const year = new Date().getFullYear();
 		padding-top: var(--space-md);
 		box-shadow: inset 0 1px 0 var(--color-border);
 		font-size: 0.875rem;
+	}
+
+	.site-footer__toTop.btn {
+		width: 3.15rem;
+		height: 3.15rem;
+		min-height: 3.15rem;
+		padding: 0;
+		gap: 0;
+		border-radius: 999px;
+		position: relative;
+		isolation: isolate;
+		background: linear-gradient(
+			180deg,
+			color-mix(in oklab, var(--color-surface) 86%, rgba(255, 255, 255, 0.06)) 0%,
+			rgba(255, 255, 255, 0.03) 85%
+		);
+		border: 1px solid color-mix(in oklab, var(--color-border) 75%, transparent);
+		color: var(--color-text);
+		box-shadow:
+			inset 0 1px 0 rgba(255, 255, 255, 0.06),
+			var(--shadow-sm);
+		text-transform: none;
+		overflow: visible;
+	}
+
+	.site-footer__toTop.btn::before,
+	.site-footer__toTop.btn::after {
+		content: "";
+		position: absolute;
+		inset: -55%;
+		border-radius: 999px;
+		pointer-events: none;
+		opacity: 0;
+		background: radial-gradient(
+			circle,
+			color-mix(in oklab, var(--color-primary) 40%, transparent) 0%,
+			transparent 65%
+		);
+		transition: opacity 180ms ease;
+		z-index: 0;
+	}
+
+	.site-footer__toTop.btn::before {
+		filter: blur(10px);
+	}
+
+	.site-footer__toTop.btn::after {
+		background: radial-gradient(
+			circle,
+			color-mix(in oklab, var(--color-primary) 60%, transparent) 0%,
+			transparent 70%
+		);
+		filter: blur(18px);
+	}
+
+	.site-footer__toTop.btn svg {
+		position: relative;
+		z-index: 1;
+	}
+
+	@media (prefers-reduced-motion: no-preference) {
+		.site-footer__toTop.btn {
+			transition:
+				transform 160ms ease,
+				box-shadow 160ms ease,
+				border-color 160ms ease;
+		}
+
+		.site-footer__toTop.btn svg {
+			transition: transform 160ms ease;
+		}
+	}
+
+	.site-footer__toTop.btn:hover {
+		transform: translateY(-2px);
+		border-color: color-mix(in oklab, var(--color-primary) 22%, var(--color-border));
+		box-shadow:
+			inset 0 1px 0 rgba(255, 255, 255, 0.06),
+			var(--shadow-md);
+		/* Keep icon readable in dark mode by not flipping to a very light-on-light state */
+		color: var(--color-text);
+	}
+
+	@media (prefers-reduced-motion: no-preference) {
+		.site-footer__toTop.btn:hover::before {
+			opacity: 0.55;
+			animation: site-footer__glowRadial 1.4s ease-in-out infinite;
+		}
+
+		.site-footer__toTop.btn:hover::after {
+			opacity: 0.45;
+			animation: site-footer__glowBlur 1.8s ease-in-out infinite;
+		}
+
+		.site-footer__toTop.btn:hover svg {
+			animation: site-footer__iconWobble 0.85s ease-in-out 1;
+		}
 	}
 
 	@media (max-width: 47.999rem) {
