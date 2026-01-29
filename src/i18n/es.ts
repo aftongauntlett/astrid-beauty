@@ -40,6 +40,8 @@ export const es: Messages = {
       members: {
         astrid: {
           title: "Astrid (Propietaria/Estilista)",
+          name: "Astrid", // ← LOCKED: Never translate proper names
+          role: "Propietaria/Estilista", // ← Translated role
           paragraphs: [
             "Estoy inmersa en la industria de la belleza desde los 18 años. Mi camino comenzó después de graduarme de Chantilly High School Academy con una licencia de cosmetología.",
             "En 2016 comencé mi carrera en un salón, donde ascendí rápidamente a Salon Leader y más adelante me especialicé como Color Specialist.",
@@ -48,6 +50,8 @@ export const es: Messages = {
         },
         cindy: {
           title: "Cindy (Cosmetóloga)",
+          name: "Cindy", // ← LOCKED: Never translate proper names
+          role: "Cosmetóloga", // ← Translated role
           paragraphs: [
             "Hola, soy Cindy, cosmetóloga licenciada desde 2019. Comencé mi carrera en un salón, donde desarrollé una base sólida en cortes y color. Me apasiona mantenerme al día con las últimas tendencias y técnicas para asegurarme de que cada clienta se vaya sintiéndose segura y renovada.",
             "Mi objetivo es crear un espacio acogedor donde puedas relajarte, desconectarte y sentirte como en casa. Ya sea que busques un cambio de look o solo un retoque de mantenimiento, estoy aquí para ayudarte a verte y sentirte mejor.",
@@ -196,7 +200,8 @@ export const es: Messages = {
       {
         title: "Gloss y brillo",
         startingAt: "$50",
-        description: "Un refresh rápido para tono, suavidad y brillo espejo.",
+        description:
+          "Un refresh rápido para ajustar el tono, suavizar y dar brillo espejo.",
         items: [
           "Ajustes de tonos cálidos o fríos",
           "Brillo entre citas de color",
@@ -208,7 +213,7 @@ export const es: Messages = {
         title: "Salud capilar",
         startingAt: "$250",
         description:
-          "Cuidado enfocado - desde un reset del cuero cabelludo hasta servicios de alisado, según tu consulta.",
+          "Cuidado enfocado: del cuero cabelludo al alisado con keratina, según tu consulta.",
         items: [
           "Limpieza del cuero cabelludo + masaje",
           "Apoyo de hidratación y balance",
@@ -249,7 +254,7 @@ export const es: Messages = {
     placeholderPhone: "(703) 786-3707",
     placeholderHours:
       "El horario puede variar—por favor llámanos para confirmar.\nDomingo: Cerrado\nLunes: 9:00 AM – 5:00 PM\nMartes: Cerrado\nMiércoles: 9:00 AM – 6:30 PM\nJueves: Cerrado\nViernes: 9:00 AM – 6:30 PM\nSábado: 9:30 AM – 4:30 PM",
-    copyright: "Por Astrid Beauty Salon",
+    copyright: "By Astrid Beauty Salon",
     builtByLabel: "Creado por",
   },
 };

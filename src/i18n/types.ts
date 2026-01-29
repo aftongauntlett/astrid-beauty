@@ -36,10 +36,14 @@ export type Messages = {
       members: {
         astrid: {
           title: string;
+          name: string;
+          role: string;
           paragraphs: string[];
         };
         cindy: {
           title: string;
+          name: string;
+          role: string;
           paragraphs: string[];
         };
       };

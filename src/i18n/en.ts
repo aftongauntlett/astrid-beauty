@@ -40,6 +40,8 @@ export const en: Messages = {
       members: {
         astrid: {
           title: "Astrid (Owner/Hair Stylist)",
+          name: "Astrid",
+          role: "Owner/Hair Stylist",
           paragraphs: [
             "I’m immersed in the beauty industry since I was 18 years old. My journey began after graduating from Chantilly High School Academy with a Cosmetology license.",
             "In 2016, I started my career in a salon, where I quickly advanced to become a Salon Leader and later specialized as a Color Specialist.",
@@ -48,6 +50,8 @@ export const en: Messages = {
         },
         cindy: {
           title: "Cindy (Cosmetologist)",
+          name: "Cindy",
+          role: "Cosmetologist",
           paragraphs: [
             "Hi, I’m Cindy, a licensed cosmetologist since 2019. I started my career at a salon, where I built a strong foundation in haircuts and color. I’m passionate about keeping up with the latest trends and techniques to make sure every client leaves feeling confident and refreshed.",
             "My goal is to create a welcoming space where you can relax, unwind, and feel at home. Whether you’re looking for a fresh new look or just a little maintenance, I’m here to help you feel your best.",

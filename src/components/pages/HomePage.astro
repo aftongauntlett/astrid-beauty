@@ -22,17 +22,6 @@ const stripOuterQuotes = (text: string) => {
 	return trimmed.replace(/^["“'‘]+/, "").replace(/["”'’]+$/, "");
 };
 
-const splitStaffTitle = (title: string) => {
-	const match = title.match(/^(.*?)\s*(\([^)]*\))\s*$/);
-	if (!match) return { name: title, role: "" };
-	return {
-		name: match[1] || title,
-		role: match[2] || "",
-	};
-};
-
-const formatRoleBadge = (role: string) => role.replace(/^\((.*)\)$/, "$1");
-
 const balanceForTwoColumnGrid = <T,>(items: readonly T[], getText: (item: T) => string) => {
 	const sorted = [...items].sort((a, b) => getText(a).length - getText(b).length);
 	const longHalf = sorted.slice(Math.ceil(sorted.length / 2)).reverse();
@@ -80,10 +69,7 @@ const serviceCardMeta = [
 const staffCards = [
 	{ id: "astrid", ...messages.about.staff.members.astrid },
 	{ id: "cindy", ...messages.about.staff.members.cindy },
-].map((member) => ({
-	...member,
-	...splitStaffTitle(member.title),
-}));
+];
 ---
 
 <section class="section hero" aria-labelledby="page-title">
@@ -179,7 +165,7 @@ const staffCards = [
 							<h4 class="staff-card__name capitalize" id={`staff-${member.id}-name`}>
 								{member.name}
 							</h4>
-							{member.role ? <span class="staff-card__badge">{formatRoleBadge(member.role)}</span> : null}
+							{member.role ? <span class="staff-card__badge">{member.role}</span> : null}
 						</header>
 						<div class="staff-card__bio">
 							{member.paragraphs.map((paragraph) => (
