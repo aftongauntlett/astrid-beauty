@@ -1,4 +1,5 @@
 ---
+import Card from "./ui/Card.astro";
 import FeatureIconCardReact from "./FeatureIconCard.tsx";
 
 export interface Props {
@@ -22,7 +23,6 @@ const reactProps = {
 };
 ---
 
-<FeatureIconCardReact
-	client:visible
-	{...reactProps}
-/>
+<Card variant="elevated" padding="lg" hover={true}>
+	<FeatureIconCardReact client:visible {...reactProps} />
+</Card>

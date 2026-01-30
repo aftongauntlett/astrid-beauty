@@ -1,5 +1,6 @@
 ---
 import SectionIntro from "../ui/SectionIntro.astro";
+import Card from "../ui/Card.astro";
 import FeatureIconCard from "../FeatureIconCard.astro";
 import Gallery from "../Gallery.astro";
 import HeroBookNowCta from "../motion/HeroBookNowCta";
@@ -154,7 +155,11 @@ const staffCards = [
 			<h3 class="about__sectionTitle about__subTitle" id="staff-title" data-reveal data-reveal-delay="80">{messages.about.staff.title}</h3>
 			<div class="staff-grid" role="list" aria-labelledby="staff-title">
 				{staffCards.map((member, index) => (
-					<article
+					<Card
+						as="article"
+						variant="elevated"
+						padding="lg"
+						hover={true}
 						class="staff-card"
 						role="listitem"
 						data-reveal
@@ -172,7 +177,7 @@ const staffCards = [
 								<p class="staff-card__text">{paragraph}</p>
 							))}
 						</div>
-					</article>
+					</Card>
 				))}
 			</div>
 		</div>
@@ -193,7 +198,16 @@ const staffCards = [
 			</header>
 			<div class="reviews-grid" role="list" aria-label={messages.booking.reviewsTitle}>
 				{orderedReviews.map((review, index) => (
-					<figure class="review" role="listitem" data-reveal data-reveal-delay={String(index * 70)}>
+					<Card
+						as="figure"
+						variant="subtle"
+						padding="md"
+						hover={true}
+						class="review"
+						role="listitem"
+						data-reveal
+						data-reveal-delay={String(index * 70)}
+					>
 						<div class="review__rating" role="img" aria-label="5 out of 5 stars">
 							<Star class="review__star" size={16} aria-hidden="true" focusable="false" fill="currentColor" stroke="none" />
 							<Star class="review__star" size={16} aria-hidden="true" focusable="false" fill="currentColor" stroke="none" />
@@ -206,7 +220,7 @@ const staffCards = [
 							<span class="review__author">— {review.author}</span>
 							<time class="review__date" datetime={review.date}>{review.date}</time>
 						</figcaption>
-					</figure>
+					</Card>
 				))}
 			</div>
 		</section>
@@ -366,7 +380,7 @@ const staffCards = [
 		</div>
 
 		<div class="booking-ctaCard" aria-label={messages.misc.bookNow} data-reveal>
-			<div class="booking-ctaCard__panel">
+			<Card variant="glow" padding="xl" hover={false} class="booking-ctaCard__panel">
 				<p class="booking-ctaCard__lede">{messages.booking.lede}</p>
 				<div class="booking-ctaCard__actions" aria-label={messages.booking.scheduleHelper}>
 					<HeroBookNowCta
@@ -377,7 +391,7 @@ const staffCards = [
 					/>
 				</div>
 				<p class="booking-ctaCard__helper">{messages.booking.scheduleHelper}</p>
-			</div>
+			</Card>
 		</div>
 	</div>
 </section>
@@ -536,26 +550,17 @@ const staffCards = [
 		}
 	}
 
-	.staff-card {
+	:global(.staff-card) {
 		position: relative;
 		overflow: hidden;
 		isolation: isolate;
-		border-radius: var(--radius-lg);
-		padding: var(--space-xl);
-		background: linear-gradient(
-			180deg,
-			color-mix(in oklab, var(--color-primary) 3%, var(--color-surface)) 0%,
-			var(--color-surface) 78%
-		);
-		border: 1px solid color-mix(in oklab, var(--color-border) 65%, transparent);
-		box-shadow: var(--shadow-sm);
 		display: grid;
 		grid-template-rows: auto 1fr;
 		gap: var(--space-lg);
 		height: 100%;
 	}
 
-	.staff-card::after {
+	:global(.staff-card)::after {
 		content: "";
 		position: absolute;
 		inset: -55%;
@@ -572,49 +577,28 @@ const staffCards = [
 	}
 
 	@media (hover: hover) and (prefers-reduced-motion: no-preference) {
-		.staff-card {
-			transition:
-				transform 170ms ease,
-				box-shadow 170ms ease,
-				border-color 170ms ease,
-				background 170ms ease;
-		}
-
 		.staff-card__name {
-			transition: color 170ms ease;
+			transition: color var(--motion-duration-fast) var(--motion-ease-standard);
 		}
 
-		.staff-card::after {
-			transition: opacity 170ms ease;
+		:global(.staff-card)::after {
+			transition: opacity var(--motion-duration-fast) var(--motion-ease-standard);
 		}
 
-		.staff-card:is(:hover, :focus-within) {
-			transform: translateY(-2px);
-			border-color: color-mix(in oklab, var(--color-primary) 22%, var(--color-border));
-			background: linear-gradient(
-				180deg,
-				color-mix(in oklab, var(--color-primary) 4.25%, var(--color-surface)) 0%,
-				var(--color-surface) 76%
-			);
-			box-shadow:
-				0 0 0 1px color-mix(in oklab, var(--color-primary) 18%, transparent),
-				var(--shadow-md);
-		}
-
-		.staff-card:is(:hover, :focus-within)::before {
+		:global(.staff-card:is(:hover, :focus-within))::before {
 			opacity: 1;
 		}
 
-		.staff-card:is(:hover, :focus-within)::after {
+		:global(.staff-card:is(:hover, :focus-within))::after {
 			opacity: 0.85;
 		}
 
-		.staff-card:is(:hover, :focus-within) .staff-card__name {
+		:global(.staff-card:is(:hover, :focus-within)) .staff-card__name {
 			color: var(--color-primary);
 		}
 	}
 
-	.staff-card::before {
+	:global(.staff-card)::before {
 		content: "";
 		position: absolute;
 		top: 0;
@@ -751,13 +735,12 @@ const staffCards = [
 		text-align: center;
 		display: grid;
 		gap: var(--space-xs);
-		opacity: 0.75;
 	}
 
 	.services-disclaimer__text {
 		margin: 0;
-		font-size: 0.68rem;
-		color: color-mix(in oklab, var(--color-text-muted) 78%, transparent);
+		font-size: var(--text-xs);
+		color: color-mix(in oklab, var(--color-text-muted) 70%, var(--color-text) 30%);
 		line-height: 1.55;
 	}
 
@@ -820,12 +803,12 @@ const staffCards = [
 	@media (prefers-reduced-motion: no-preference) {
 		.accordion__trigger {
 			transition:
-				color 240ms ease,
-				background-color 240ms ease;
+				color var(--motion-duration-normal) var(--motion-ease-standard),
+				background-color var(--motion-duration-normal) var(--motion-ease-standard);
 		}
 
 		.accordion__trigger::before {
-			transition: opacity 240ms ease;
+			transition: opacity var(--motion-duration-normal) var(--motion-ease-standard);
 		}
 	}
 
@@ -882,8 +865,8 @@ const staffCards = [
 	@media (prefers-reduced-motion: no-preference) {
 		.accordion__chevron {
 			transition:
-				transform 240ms ease,
-				opacity 240ms ease;
+				transform var(--motion-duration-normal) var(--motion-ease-standard),
+				opacity var(--motion-duration-normal) var(--motion-ease-standard);
 		}
 	}
 
@@ -973,28 +956,24 @@ const staffCards = [
 		align-items: stretch;
 	}
 
-	.booking-ctaCard__panel {
+	:global(.booking-ctaCard__panel) {
 		position: relative;
 		overflow: hidden;
 		display: grid;
 		gap: var(--space-lg);
 		justify-items: center;
 		text-align: center;
-		padding: calc(var(--space-xl) + var(--space-sm));
-		border-radius: var(--radius-lg);
 		background:
 			linear-gradient(
 				180deg,
 				color-mix(in oklab, var(--color-surface) 90%, var(--color-surface-muted)) 0%,
 				color-mix(in oklab, var(--color-surface) 96%, var(--color-primary)) 100%
 			);
-		border: 1px solid color-mix(in oklab, var(--color-border) 72%, var(--color-primary));
-		box-shadow: none;
 		width: 100%;
 		max-width: 44rem;
 	}
 
-	.booking-ctaCard__panel::before {
+	:global(.booking-ctaCard__panel)::before {
 		content: "";
 		position: absolute;
 		inset: -40%;
@@ -1009,7 +988,7 @@ const staffCards = [
 	}
 
 	@media (prefers-reduced-motion: no-preference) {
-		.booking-ctaCard__panel::before {
+		:global(.booking-ctaCard__panel)::before {
 			animation: bookingGlow 5.5s ease-in-out infinite;
 		}
 	}
@@ -1027,21 +1006,21 @@ const staffCards = [
 	}
 
 	@media (prefers-reduced-motion: no-preference) {
-		.booking-ctaCard__panel {
+		:global(.booking-ctaCard__panel) {
 			transition:
-				border-color 160ms ease,
-				box-shadow 160ms ease,
-				transform 160ms ease,
-				background-color 160ms ease;
+				border-color var(--motion-duration-fast) var(--motion-ease-standard),
+				box-shadow var(--motion-duration-fast) var(--motion-ease-standard),
+				transform var(--motion-duration-fast) var(--motion-ease-standard),
+				background-color var(--motion-duration-fast) var(--motion-ease-standard);
 		}
 	}
 
-	.booking-ctaCard:focus-within .booking-ctaCard__panel {
+	.booking-ctaCard:focus-within :global(.booking-ctaCard__panel) {
 		border-color: color-mix(in oklab, var(--color-border) 55%, var(--color-text-muted));
 		box-shadow: var(--shadow-sm);
 	}
 
-	.booking-ctaCard:hover .booking-ctaCard__panel {
+	.booking-ctaCard:hover :global(.booking-ctaCard__panel) {
 		border-color: color-mix(in oklab, var(--color-primary) 42%, var(--color-border));
 		box-shadow:
 			0 10px 28px -18px color-mix(in oklab, var(--color-primary) 42%, transparent),
@@ -1133,38 +1112,12 @@ const staffCards = [
 		}
 	}
 
-	.review {
+	:global(.review) {
 		margin: 0;
 		position: relative;
-		padding: var(--space-lg);
-		border-radius: var(--radius-lg);
-		background: color-mix(in oklab, var(--color-surface-muted) 55%, var(--color-surface));
-		border: 1px solid var(--color-border);
-		box-shadow: none;
 		display: flex;
 		flex-direction: column;
 		gap: var(--space-sm);
-	}
-
-	.review:hover,
-	.review:focus-within {
-		border-color: color-mix(in oklab, var(--color-border) 55%, var(--color-text-muted));
-		box-shadow: var(--shadow-sm);
-	}
-
-	@media (prefers-reduced-motion: no-preference) {
-		.review {
-			transition:
-				background-color 180ms ease,
-				border-color 180ms ease,
-				box-shadow 180ms ease,
-				transform 180ms ease;
-		}
-
-		.review:hover,
-		.review:focus-within {
-			transform: translateY(-1px);
-		}
 	}
 
 	.review__rating {
@@ -1181,8 +1134,8 @@ const staffCards = [
 			transition: transform 180ms ease;
 		}
 
-		.review:hover .review__rating,
-		.review:focus-within .review__rating {
+		:global(.review:hover) .review__rating,
+		:global(.review:focus-within) .review__rating {
 			transform: translateY(-1px) scale(1.02);
 		}
 	}

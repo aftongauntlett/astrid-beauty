@@ -1,5 +1,7 @@
 /* Global tokens + sensible defaults (neutral, accessible) */
 
+@import "./button.css";
+
 :root {
   color-scheme: light dark;
 
@@ -67,6 +69,7 @@
   --measure: 65ch;
 
   /* Type scale: readable on mobile, elegant at large sizes */
+  --text-xs: clamp(0.85rem, 0.1vw + 0.83rem, 0.9rem);
   --text-sm: clamp(0.95rem, 0.15vw + 0.92rem, 1rem);
   --text-base: clamp(1.03rem, 0.2vw + 0.99rem, 1.125rem);
   --text-lg: clamp(1.125rem, 0.35vw + 1.05rem, 1.25rem);
@@ -75,6 +78,26 @@
   --heading-1: clamp(2.35rem, 3.1vw + 1.2rem, 3.7rem);
   --heading-2: clamp(1.75rem, 1.9vw + 1rem, 2.55rem);
   --heading-3: clamp(1.35rem, 0.9vw + 1.05rem, 1.75rem);
+
+  /* Motion System
+      - Fast (140ms): Quick feedback for buttons, icons, hover states
+      - Normal (240ms): Standard UI transitions, accordions, color changes
+      - Slow (360ms): Deliberate transforms, image effects
+      - Slower (560ms): Scroll reveals, page transitions
+      - Premium (900ms+): One-time reveal effects, sparkles
+
+      All motion respects prefers-reduced-motion via component-level media queries.
+    */
+  --motion-duration-instant: 0ms;
+  --motion-duration-fast: 140ms;
+  --motion-duration-normal: 240ms;
+  --motion-duration-slow: 360ms;
+  --motion-duration-slower: 560ms;
+  --motion-duration-premium: 900ms;
+
+  --motion-ease-standard: ease;
+  --motion-ease-emphasized: cubic-bezier(0.2, 0.9, 0.2, 1);
+  --motion-ease-smooth: ease-in-out;
 
   --shadow-color-sm: color-mix(in oklab, var(--color-shadow) 16%, transparent);
   --shadow-color-md: color-mix(in oklab, var(--color-shadow) 26%, transparent);
@@ -247,8 +270,8 @@ a:hover {
 @media (prefers-reduced-motion: no-preference) {
   .btn--external .btn__externalIcon {
     transition:
-      opacity 140ms ease,
-      transform 140ms ease;
+      opacity var(--motion-duration-fast) var(--motion-ease-standard),
+      transform var(--motion-duration-fast) var(--motion-ease-standard);
   }
 }
 
@@ -278,8 +301,8 @@ html.has-scroll-reveal [data-reveal] {
   opacity: 0;
   transform: translate3d(0, 12px, 0);
   transition:
-    opacity 560ms cubic-bezier(0.2, 0.9, 0.2, 1),
-    transform 560ms cubic-bezier(0.2, 0.9, 0.2, 1);
+    opacity var(--motion-duration-slower) var(--motion-ease-emphasized),
+    transform var(--motion-duration-slower) var(--motion-ease-emphasized);
   transition-delay: var(--reveal-delay, 0ms);
   will-change: opacity, transform;
 }
@@ -302,12 +325,12 @@ html.has-scroll-reveal [data-reveal].is-revealed {
   html.has-scroll-reveal [data-reveal-fx="cta-sparkle"].is-revealed::before {
     inset: -8px;
     filter: blur(8px);
-    animation: reveal-cta-glow 760ms ease-out 100ms 1 both;
+    animation: reveal-cta-glow 760ms ease-out 100ms 1 both; /* premium: ~0.85x --motion-duration-premium */
   }
 
   html.has-scroll-reveal [data-reveal-fx="cta-sparkle"].is-revealed::after {
     inset: -10px;
-    animation: reveal-cta-sparkle 900ms ease-out 120ms 1 both;
+    animation: reveal-cta-sparkle 900ms ease-out 120ms 1 both; /* premium: 1x --motion-duration-premium */
   }
 }
 
@@ -451,108 +474,6 @@ button {
 
 button:hover {
   background: var(--color-surface-muted);
-}
-
-/* Button component styles (global so React islands match Astro buttons) */
-
-.btn {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: var(--space-xs);
-  border-radius: var(--radius-md);
-  border: 1px solid transparent;
-  text-decoration: none;
-  text-transform: capitalize;
-  font-weight: 600;
-  cursor: pointer;
-  user-select: none;
-  white-space: nowrap;
-  min-height: var(--control-height);
-  padding: 0 var(--space-md);
-  box-shadow: var(--shadow-sm);
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  .btn {
-    transition:
-      background-color 140ms ease,
-      border-color 140ms ease,
-      color 140ms ease,
-      box-shadow 140ms ease,
-      transform 140ms ease;
-  }
-}
-
-.btn--sm {
-  padding: 0 var(--space-sm);
-  min-height: var(--control-height);
-}
-
-.btn--md {
-  padding: 0 var(--space-md);
-}
-
-.btn--lg {
-  padding: 0 var(--space-lg);
-  min-height: 3rem;
-}
-
-.btn--ghost {
-  background: transparent;
-  color: var(--color-text);
-  border-color: transparent;
-  box-shadow: none;
-}
-
-.btn--ghost:hover {
-  background: var(--color-surface-muted);
-}
-
-.btn:active {
-  transform: translateY(1px);
-  box-shadow: var(--shadow-sm);
-}
-
-.btn:focus-visible {
-  outline: 2px solid var(--color-focus);
-  outline-offset: 2px;
-}
-
-.btn[aria-disabled="true"],
-button.btn:disabled {
-  opacity: 0.6;
-  cursor: not-allowed;
-  pointer-events: none;
-  box-shadow: none;
-}
-
-/* Premium button mapping (token-only): mauve brand + gold CTA */
-.btn.btn--primary {
-  background: var(--color-primary);
-  color: var(--color-primary-contrast);
-  border-color: var(--color-primary);
-}
-
-.btn.btn--primary:hover {
-  background: var(--color-primary-hover);
-  border-color: var(--color-primary-hover);
-}
-
-.btn.btn--secondary {
-  background: var(--color-secondary);
-  color: var(--color-secondary-contrast);
-  border-color: var(--color-secondary);
-}
-
-.btn.btn--secondary:hover {
-  background: var(--color-secondary-hover);
-  border-color: var(--color-secondary-hover);
-}
-
-button:disabled {
-  opacity: 0.6;
-  cursor: not-allowed;
 }
 
 /* Utilities */

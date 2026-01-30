@@ -1,0 +1,137 @@
+---
+export type CardVariant = "default" | "elevated" | "subtle" | "glow";
+export type CardPadding = "none" | "sm" | "md" | "lg" | "xl";
+
+export interface Props {
+	variant?: CardVariant;
+	padding?: CardPadding;
+	hover?: boolean;
+	class?: string;
+	as?: "div" | "article" | "figure";
+	[key: string]: unknown;
+}
+
+const {
+	variant = "default",
+	padding = "md",
+	hover = true,
+	as = "div",
+	class: className,
+	...rest
+} = Astro.props as Props;
+
+const classes = [
+	"card",
+	`card--${variant}`,
+	`card--pad-${padding}`,
+	hover ? "card--hover" : null,
+	className,
+].filter(Boolean);
+---
+
+{as === "article" ? (
+	<article class={classes.join(" ")} {...rest}>
+		<slot />
+	</article>
+) : as === "figure" ? (
+	<figure class={classes.join(" ")} {...rest}>
+		<slot />
+	</figure>
+) : (
+	<div class={classes.join(" ")} {...rest}>
+		<slot />
+	</div>
+)}
+
+<style>
+	.card {
+		border-radius: var(--radius-lg);
+		position: relative;
+	}
+
+	.card--default {
+		background: var(--color-surface);
+		border: 1px solid color-mix(in oklab, var(--color-border) 65%, transparent);
+		box-shadow: var(--shadow-sm);
+	}
+
+	.card--elevated {
+		background: linear-gradient(
+			180deg,
+			color-mix(in oklab, var(--color-primary) 3%, var(--color-surface)) 0%,
+			var(--color-surface) 78%
+		);
+		border: 1px solid color-mix(in oklab, var(--color-border) 65%, transparent);
+		box-shadow: var(--shadow-sm);
+	}
+
+	.card--subtle {
+		background: color-mix(in oklab, var(--color-surface-muted) 55%, var(--color-surface));
+		border: 1px solid color-mix(in oklab, var(--color-border) 70%, transparent);
+		box-shadow: none;
+	}
+
+	.card--glow {
+		overflow: hidden;
+		isolation: isolate;
+		border: 1px solid color-mix(in oklab, var(--color-border) 72%, var(--color-primary));
+		box-shadow: none;
+	}
+
+	.card--glow::after {
+		content: "";
+		position: absolute;
+		inset: -55%;
+		border-radius: 999px;
+		pointer-events: none;
+		opacity: 0.22;
+		background: radial-gradient(
+			circle,
+			color-mix(in oklab, var(--color-primary) 18%, transparent) 0%,
+			transparent 65%
+		);
+		filter: blur(18px);
+		z-index: 0;
+	}
+
+	.card--glow > * {
+		position: relative;
+		z-index: 1;
+	}
+
+	.card--pad-none {
+		padding: 0;
+	}
+
+	.card--pad-sm {
+		padding: var(--space-md);
+	}
+
+	.card--pad-md {
+		padding: var(--space-lg);
+	}
+
+	.card--pad-lg {
+		padding: var(--space-xl);
+	}
+
+	.card--pad-xl {
+		padding: calc(var(--space-xl) + var(--space-sm));
+	}
+
+	@media (prefers-reduced-motion: no-preference) {
+		.card--hover {
+			transition:
+				box-shadow var(--motion-duration-fast) var(--motion-ease-standard),
+				border-color var(--motion-duration-fast) var(--motion-ease-standard),
+				transform var(--motion-duration-fast) var(--motion-ease-standard);
+		}
+
+		.card--hover:hover,
+		.card--hover:focus-within {
+			transform: translateY(-2px);
+			box-shadow: var(--shadow-md);
+			border-color: color-mix(in oklab, var(--color-primary) 22%, var(--color-border));
+		}
+	}
+</style>

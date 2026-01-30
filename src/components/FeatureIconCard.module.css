@@ -3,19 +3,9 @@
   --fic-icon-size: 4.1rem;
   --fic-header-gap: var(--space-lg);
 
-  background: linear-gradient(
-    180deg,
-    color-mix(in oklab, var(--fic-icon-color) 6%, var(--color-surface)) 0%,
-    var(--color-surface) 72%
-  );
-  border: 1px solid color-mix(in oklab, var(--color-border) 65%, transparent);
-  border-radius: var(--radius-lg);
-  box-shadow: var(--shadow-sm);
-  padding: var(--space-xl);
   display: grid;
   gap: var(--space-lg);
   position: relative;
-  overflow: hidden;
 }
 
 .card::before {
@@ -32,26 +22,8 @@
 }
 
 @media (prefers-reduced-motion: no-preference) {
-  .card {
-    transition:
-      box-shadow 160ms ease,
-      border-color 160ms ease,
-      background 160ms ease,
-      transform 160ms ease;
-  }
-
   .title {
-    transition: color 160ms ease;
-  }
-
-  .card:hover {
-    box-shadow: var(--shadow-md);
-    transform: translateY(-2px);
-    border-color: color-mix(
-      in oklab,
-      var(--fic-icon-color) 42%,
-      var(--color-border)
-    );
+    transition: color var(--motion-duration-fast) var(--motion-ease-standard);
   }
 
   .card:hover::before {
@@ -108,7 +80,7 @@
   opacity: 0.78;
   backdrop-filter: blur(12px) saturate(1.08);
   -webkit-backdrop-filter: blur(12px) saturate(1.08);
-  transition: opacity 160ms ease;
+  transition: opacity var(--motion-duration-fast) var(--motion-ease-standard);
 }
 
 @media (prefers-reduced-motion: no-preference) {

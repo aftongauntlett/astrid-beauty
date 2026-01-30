@@ -317,7 +317,7 @@ const vagaroServicesUrl = "https://www.vagaro.com/byastridbeautysalon";
 		position: relative;
 		flex: 0 0 auto;
 		white-space: nowrap;
-		transition: color 160ms ease;
+		transition: color var(--motion-duration-fast) var(--motion-ease-standard);
 	}
 
 	.nav__bookNow.btn {
@@ -356,9 +356,9 @@ const vagaroServicesUrl = "https://www.vagaro.com/byastridbeautysalon";
 		transform: scaleX(0.6);
 		transform-origin: center;
 		transition:
-			opacity 160ms ease,
-			transform 180ms ease,
-			background-color 160ms ease;
+			opacity var(--motion-duration-fast) var(--motion-ease-standard),
+			transform var(--motion-duration-fast) var(--motion-ease-standard),
+			background-color var(--motion-duration-fast) var(--motion-ease-standard);
 	}
 
 	.nav__link:hover,
@@ -399,8 +399,8 @@ const vagaroServicesUrl = "https://www.vagaro.com/byastridbeautysalon";
 	@media (prefers-reduced-motion: no-preference) {
 		.nav__externalIcon {
 			transition:
-				opacity 140ms ease,
-				transform 140ms ease;
+				opacity var(--motion-duration-fast) var(--motion-ease-standard),
+				transform var(--motion-duration-fast) var(--motion-ease-standard);
 		}
 	}
 

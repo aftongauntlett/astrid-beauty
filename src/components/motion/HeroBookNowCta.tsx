@@ -26,6 +26,11 @@ export default function HeroBookNowCta({
   target = "_blank",
   rel = "noopener noreferrer",
 }: HeroBookNowCtaProps): React.JSX.Element {
+  // Motion tokens reference (CSS)
+  // - duration 0.42s / 0.56s ≈ --motion-duration-slower (560ms) used for entrances
+  // - duration 0.55s is a CTA-specific icon wiggle (keep as-is)
+  // - duration 0.85s–1.15s ≈ --motion-duration-premium range (one-time burst effects)
+  // Framer Motion expects numeric seconds here, so we keep the values hardcoded.
   const reducedMotion = useReducedMotion();
   const ref = useRef<HTMLAnchorElement | null>(null);
   const [isSmallScreen, setIsSmallScreen] = useState(false);

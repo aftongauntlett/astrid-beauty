@@ -1,5 +1,6 @@
 ---
 import Button from './ui/Button.astro';
+import Card from './ui/Card.astro';
 import { ChevronDown } from '@lucide/astro';
 import * as fs from 'node:fs';
 
@@ -75,7 +76,7 @@ const dataId = 'gallery-data';
 				data-reveal
 				data-reveal-delay={String(Math.min(260, (idx % 3) * 70 + Math.floor(idx / 3) * 40))}
 			>
-				<div class="gallery__frame">
+				<Card variant="default" padding="sm" hover={true} class="gallery__frame">
 					<div class="gallery__media">
 						<img
 							class="gallery__img"
@@ -88,7 +89,7 @@ const dataId = 'gallery-data';
 						/>
 						<span class="gallery__captionHook" aria-hidden="true"></span>
 					</div>
-				</div>
+				</Card>
 			</li>
 		))}
 	</ul>
@@ -309,16 +310,28 @@ const dataId = 'gallery-data';
 
 	.gallery .gallery__frame {
 		display: block;
+		position: relative;
 		border-radius: var(--radius-lg);
-		padding: var(--space-sm);
+		padding: var(--space-md);
 		background: color-mix(in oklab, var(--color-primary) 6%, var(--color-surface));
-		border: 1px solid var(--color-border);
+		border: 1px solid color-mix(in oklab, var(--color-border) 65%, transparent);
 		box-shadow: var(--shadow-sm);
 	}
 
-	.gallery .gallery__frame:hover {
-		box-shadow: var(--shadow-md);
-		border-color: color-mix(in oklab, var(--color-primary) 35%, var(--color-border));
+	@media (prefers-reduced-motion: no-preference) {
+		.gallery .gallery__frame {
+			transition:
+				box-shadow var(--motion-duration-fast) var(--motion-ease-standard),
+				border-color var(--motion-duration-fast) var(--motion-ease-standard),
+				transform var(--motion-duration-fast) var(--motion-ease-standard);
+		}
+
+		.gallery .gallery__frame:hover,
+		.gallery .gallery__frame:focus-within {
+			transform: translateY(-2px);
+			box-shadow: var(--shadow-md);
+			border-color: color-mix(in oklab, var(--color-primary) 22%, var(--color-border));
+		}
 	}
 
 	.gallery .gallery__media {
@@ -366,7 +379,7 @@ const dataId = 'gallery-data';
 
 	@media (prefers-reduced-motion: no-preference) {
 		.gallery .gallery__toggleChevron {
-			transition: transform 160ms ease;
+			transition: transform var(--motion-duration-fast) var(--motion-ease-standard);
 		}
 	}
 
@@ -410,23 +423,17 @@ const dataId = 'gallery-data';
 	}
 
 	@media (prefers-reduced-motion: no-preference) {
-		.gallery .gallery__frame {
-			transition:
-				box-shadow 180ms ease,
-				border-color 180ms ease;
-		}
-
 		.gallery .gallery__img {
 			will-change: transform;
 			transition:
-				transform 300ms ease,
-				filter 240ms ease;
+				transform var(--motion-duration-slow) var(--motion-ease-standard),
+				filter var(--motion-duration-normal) var(--motion-ease-standard);
 		}
 
 		.gallery .gallery__media::after {
 			transition:
-				transform 520ms ease,
-				opacity 240ms ease;
+				transform 520ms var(--motion-ease-standard),
+				opacity var(--motion-duration-normal) var(--motion-ease-standard);
 		}
 
 		.gallery .gallery__frame:hover .gallery__media::after {

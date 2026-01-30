@@ -449,7 +449,7 @@ const year = new Date().getFullYear();
 			color-mix(in oklab, var(--color-primary) 40%, transparent) 0%,
 			transparent 65%
 		);
-		transition: opacity 180ms ease;
+		transition: opacity var(--motion-duration-fast) var(--motion-ease-standard);
 	}
 
 	.site-footer__iconLink::before {
@@ -468,13 +468,13 @@ const year = new Date().getFullYear();
 	@media (prefers-reduced-motion: no-preference) {
 		.site-footer__iconLink {
 			transition:
-				transform 160ms ease,
-				box-shadow 160ms ease,
-				color 160ms ease;
+				transform var(--motion-duration-fast) var(--motion-ease-standard),
+				box-shadow var(--motion-duration-fast) var(--motion-ease-standard),
+				color var(--motion-duration-fast) var(--motion-ease-standard);
 		}
 
 		.site-footer__iconSvg {
-			transition: transform 160ms ease;
+			transition: transform var(--motion-duration-fast) var(--motion-ease-standard);
 		}
 	}
 
@@ -662,7 +662,7 @@ const year = new Date().getFullYear();
 			color-mix(in oklab, var(--color-primary) 40%, transparent) 0%,
 			transparent 65%
 		);
-		transition: opacity 180ms ease;
+		transition: opacity var(--motion-duration-fast) var(--motion-ease-standard);
 		z-index: 0;
 	}
 
@@ -687,13 +687,13 @@ const year = new Date().getFullYear();
 	@media (prefers-reduced-motion: no-preference) {
 		.site-footer__toTop.btn {
 			transition:
-				transform 160ms ease,
-				box-shadow 160ms ease,
-				border-color 160ms ease;
+				transform var(--motion-duration-fast) var(--motion-ease-standard),
+				box-shadow var(--motion-duration-fast) var(--motion-ease-standard),
+				border-color var(--motion-duration-fast) var(--motion-ease-standard);
 		}
 
 		.site-footer__toTop.btn svg {
-			transition: transform 160ms ease;
+			transition: transform var(--motion-duration-fast) var(--motion-ease-standard);
 		}
 	}
 
@@ -784,8 +784,8 @@ const year = new Date().getFullYear();
 	}
 
 	.site-footer__metaText {
-		color: color-mix(in oklab, var(--color-text-muted) 70%, var(--color-text) 30%);
-		opacity: 0.78;
+		color: color-mix(in oklab, var(--color-text-muted) 45%, var(--color-text) 55%);
+		opacity: 1;
 	}
 
 	.site-footer__toTop {
