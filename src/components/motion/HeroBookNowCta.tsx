@@ -98,7 +98,9 @@ export default function HeroBookNowCta({
   );
 
   const baseClasses = "btn btn--primary btn--lg";
-  const classes = [baseClasses, className].filter(Boolean).join(" ");
+  const classes = [baseClasses, styles["btnExternal"], className]
+    .filter(Boolean)
+    .join(" ");
 
   if (reducedMotion) {
     return (
@@ -109,15 +111,15 @@ export default function HeroBookNowCta({
         rel={rel}
         data-hero-cta
       >
-        <span className="btn__externalSpacer" aria-hidden="true" />
-        <span className="btn__externalLabel">
+        <span className={styles["externalSpacer"]} aria-hidden="true" />
+        <span className={styles["externalLabel"]}>
           <span className={styles["labelDesktop"]}>{label}</span>
           {labelMobile ? (
             <span className={styles["labelMobile"]}>{labelMobile}</span>
           ) : null}
         </span>
         <ExternalLink
-          className="btn__externalIcon"
+          className={styles["externalIcon"]}
           size={20}
           aria-hidden="true"
           focusable="false"
@@ -212,12 +214,12 @@ export default function HeroBookNowCta({
       ) : null}
 
       <span
-        className="btn__externalSpacer"
+        className={styles["externalSpacer"]}
         aria-hidden="true"
         style={{ position: "relative", zIndex: 1 }}
       />
       <span
-        className="btn__externalLabel"
+        className={styles["externalLabel"]}
         style={{ position: "relative", zIndex: 1 }}
       >
         <span className={styles["labelDesktop"]}>{label}</span>
@@ -237,7 +239,7 @@ export default function HeroBookNowCta({
         animate={iconControls}
       >
         <ExternalLink
-          className="btn__externalIcon"
+          className={styles["externalIcon"]}
           size={20}
           aria-hidden="true"
           focusable="false"

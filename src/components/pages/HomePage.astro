@@ -103,7 +103,7 @@ const staffCards = [
 						href={vagaroServicesUrl}
 						label={messages.misc.scheduleAppointment}
 						labelMobile={messages.misc.bookNow}
-						className="hero__bookNow btn--external"
+						className="hero__bookNow"
 					/>
 					<p class="hero__ctaHelper">{messages.home.heroCtaHelper}</p>
 				</div>
@@ -387,7 +387,7 @@ const staffCards = [
 						client:idle
 						href={vagaroServicesUrl}
 						label={messages.misc.bookNow}
-						className="booking-ctaCard__button btn--external"
+						className="booking-ctaCard__button"
 					/>
 				</div>
 				<p class="booking-ctaCard__helper">{messages.booking.scheduleHelper}</p>
@@ -444,6 +444,163 @@ const staffCards = [
 </script>
 
 <style>
+	.hero {
+		padding-block: calc(var(--section-pad-y) * 1.1);
+
+		background:
+			radial-gradient(
+				1200px 600px at 20% 10%,
+				color-mix(in oklab, var(--color-surface) 70%, transparent),
+				transparent 60%
+			),
+			linear-gradient(
+				180deg,
+				color-mix(in oklab, var(--color-surface) 55%, var(--color-bg)),
+				var(--color-bg)
+			);
+	}
+
+	@media (max-width: 48rem) {
+		.hero {
+			background:
+				radial-gradient(
+					900px 420px at 20% 6%,
+					color-mix(in oklab, var(--color-surface) 55%, transparent),
+					transparent 68%
+				),
+				linear-gradient(
+					180deg,
+					color-mix(in oklab, var(--color-surface) 45%, var(--color-bg)),
+					var(--color-bg)
+				);
+		}
+	}
+
+	.hero__grid {
+		justify-items: center;
+	}
+
+	.hero__content {
+		justify-content: center;
+	}
+
+	.hero__brandmark {
+		justify-content: center;
+	}
+
+	.hero__brandmarkLogo {
+		width: min(100%, clamp(18rem, 34vw, 30rem));
+		filter: drop-shadow(
+			0 10px 18px color-mix(in oklab, var(--color-shadow) 12%, transparent)
+		);
+	}
+
+	.hero__actions {
+		align-items: center;
+	}
+
+	.hero__actionsCopy {
+		text-align: center;
+	}
+
+	.hero__actionsTitle {
+		font-size: var(--heading-2);
+		letter-spacing: -0.02em;
+	}
+
+	.hero__actionsLede {
+		font-size: var(--heading-2);
+	}
+
+	.hero__grid {
+		display: grid;
+		gap: var(--space-xl);
+		align-items: start;
+	}
+
+	.hero__content {
+		min-width: 0;
+		max-width: min(46rem, var(--measure));
+		display: flex;
+		align-items: center;
+	}
+
+	.hero__brandmark {
+		display: flex;
+		align-items: center;
+		margin: 0;
+	}
+
+	.hero__brandmarkLogo {
+		display: block;
+		width: min(100%, clamp(16rem, 28vw, 26rem));
+		height: auto;
+		filter: drop-shadow(
+			0 10px 18px color-mix(in oklab, var(--color-text) 12%, transparent)
+		);
+	}
+
+	.hero__actions {
+		width: 100%;
+		max-width: 34rem;
+		display: grid;
+		gap: var(--space-md);
+	}
+
+	.hero__actions .btn {
+		width: 100%;
+	}
+
+	.hero__actionsCopy {
+		display: grid;
+		gap: var(--space-sm);
+	}
+
+	.hero__actionsTitle {
+		margin: 0;
+		font-size: var(--heading-3);
+		letter-spacing: -0.01em;
+	}
+
+	.hero__actionsLede {
+		margin: 0;
+		color: var(--color-text-muted);
+	}
+
+	@media (min-width: 34rem) {
+		.hero__actionsRow {
+			grid-template-columns: repeat(auto-fit, minmax(14rem, 1fr));
+			align-items: stretch;
+		}
+	}
+
+	@media (min-width: 60rem) {
+		.hero__grid {
+			grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+			align-items: center;
+			justify-items: stretch;
+		}
+
+		.hero__actions {
+			justify-self: end;
+			align-items: stretch;
+		}
+
+		.hero__actionsCopy {
+			text-align: left;
+		}
+	}
+
+	/* Hero: visible H1 tuned to be slightly larger than section H2s */
+	.hero__actionsTitle {
+		font-size: calc(var(--heading-2) * 1.06);
+		line-height: 1.05;
+	}
+
+	.hero__actionsLede {
+		font-size: var(--text-base);
+	}
+
 	.services-grid {
 		display: grid;
 		gap: var(--space-xl);
@@ -471,6 +628,7 @@ const staffCards = [
 
 	.hero__actionsRow {
 		display: grid;
+		gap: var(--space-sm);
 		justify-items: start;
 	}
 
