@@ -5,23 +5,33 @@
 
 View live: https://byastridbeautysalon.com/
 
-Production salon website built with Astro + React islands, TypeScript, and CSS Modules.
+Production salon website built for Astrid (the salon owner) with Astro + React islands, TypeScript, and CSS Modules.
+
+## Highlights
+
+- Bilingual routing (English `/`, Spanish `/es`) with a persisted language preference
+- Light/dark theme toggle persisted in `localStorage`
+- Accessibility-first UI (skip link, focus styles, semantic landmarks) + automated a11y checks
+- Token-driven styling (colors/spacing/typography/motion) with `prefers-reduced-motion` support
 
 ## Stack
 
 - **Astro** (routing, layouts, `.astro` components)
-- **React** islands for interactive UI (e.g. motion/CTA)
-- **CSS Modules** and global CSS (`src/styles/global.css`)
-- **i18n** content/messages in `src/i18n`
-- **Theme** toggle (light/dark) persisted in `localStorage`
-
-## Tooling
-
-- **Astro** for static site routing, layouts, and components
+- **React** islands for interactive UI (motion / menu toggles)
 - **TypeScript**
-- **ESLint** (Astro + TS + a11y)
+- **CSS Modules** + global design tokens (`src/styles/global.css`)
 - **Vitest** (unit tests)
-- **Astro Check** (`astro check`)
+- **Playwright + Axe-core** (a11y tests)
+- **ESLint** (Astro + TS + a11y)
+
+## Structure
+
+- UI primitives: `src/components/ui/`
+- Site chrome (header/footer/nav/toggles): `src/components/site/`
+- Motion / interactive islands: `src/components/motion/`
+- i18n messages and routing helpers: `src/i18n/`
+- Layout wrapper: `src/layouts/BaseLayout.astro`
+- Shared utilities: `src/lib/`
 
 ## Commands
 
@@ -32,22 +42,14 @@ Production salon website built with Astro + React islands, TypeScript, and CSS M
 - Type-check: `npm run typecheck`
 - Run tests: `npm run test`
 - Watch tests: `npm run test:watch`
+- Accessibility tests: `npm run test:a11y`
+- Accessibility tests (UI): `npm run test:a11y:ui`
 
-## i18n
+## Notes
 
-- **English** is served at `/`
-- **Spanish** is served at `/es`
-- The language toggle updates a persisted preference (`preferredLang`) and keeps hash/query when switching.
-- First-time visitors may be auto-directed based on browser language; once chosen, preference is respected.
-
-## Theme
-
-- Light/dark theme is controlled via `data-theme` on `<html>` and persisted to `localStorage` (`theme`).
-- Theme can be changed from the header theme toggle and the settings menu.
-
-## Assets
-
-- Gallery and site images live in `public/images`.
+- Images live in `public/images/`.
+- i18n messages live in `src/i18n/`.
+- Theme and motion tokens live in `src/styles/global.css`.
 
 ## Deploy
 
@@ -55,19 +57,9 @@ Production salon website built with Astro + React islands, TypeScript, and CSS M
 - Preview locally: `npm run preview`
 - Deploy `dist/` to your static host (Netlify/Vercel/S3/Cloudflare Pages, etc.)
 
-## Notes
-
-- Semantic HTML + accessibility primitives are used throughout (skip link, landmarks, focus outlines).
-
 ## License
 
-MIT License
-
-Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+MIT (see `LICENSE`).
 
 ---
 
