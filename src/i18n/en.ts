@@ -5,7 +5,7 @@ export const en: Messages = {
     services: "Services",
     gallery: "About",
     findUs: "Visit Us",
-    booking: "Book",
+    booking: "Booking Info",
     menu: "Menu",
   },
   common: {
@@ -22,6 +22,7 @@ export const en: Messages = {
   misc: {
     bookNow: "Book Now",
     scheduleAppointment: "Schedule Appointment",
+    viewPrices: "View Prices",
     viewServices: "Explore Services",
     backToTop: "Back to top",
     scheduleNow: "Book Now",

@@ -8,26 +8,9 @@
   position: relative;
 }
 
-.card::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
-  background: linear-gradient(
-    180deg,
-    color-mix(in oklab, var(--color-surface) 75%, transparent),
-    transparent 55%
-  );
-  opacity: 0.65;
-}
-
 @media (prefers-reduced-motion: no-preference) {
   .title {
     transition: color var(--motion-duration-fast) var(--motion-ease-standard);
-  }
-
-  .card:hover::before {
-    opacity: 0.22;
   }
 
   .card:hover .title {

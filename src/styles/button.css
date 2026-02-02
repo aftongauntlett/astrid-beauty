@@ -78,7 +78,11 @@
 }
 
 .btn--ghost:hover {
-  background: var(--color-surface-muted);
+  background: color-mix(
+    in oklab,
+    var(--color-primary) 6%,
+    var(--color-surface-muted)
+  );
 }
 
 .btn:active {

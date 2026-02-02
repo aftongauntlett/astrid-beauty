@@ -52,6 +52,9 @@ const homeHref = lang === "es" ? "/es" : "/";
 		const about = document.getElementById("about");
 		if (!(about instanceof HTMLElement)) return;
 
+		let lastScrollY = window.scrollY;
+		let hidden = false;
+
 		let raf = 0;
 		signal.addEventListener("abort", () => {
 			if (raf) cancelAnimationFrame(raf);
@@ -64,13 +67,41 @@ const homeHref = lang === "es" ? "/es" : "/";
 			const navOpen = nav instanceof HTMLElement && nav.dataset["open"] === "true";
 			if (navOpen) {
 				header.dataset["hidden"] = "false";
+				hidden = false;
 				return;
 			}
 
+			const currentY = window.scrollY;
+			const delta = currentY - lastScrollY;
+			lastScrollY = currentY;
+
 			const headerHeight = header.getBoundingClientRect().height;
 			const aboutTop = about.getBoundingClientRect().top;
-			const hide = aboutTop <= headerHeight + 8;
-			header.dataset["hidden"] = hide ? "true" : "false";
+			const pastTrigger = aboutTop <= headerHeight + 8;
+
+			// Always show before hitting the trigger zone.
+			if (!pastTrigger) {
+				hidden = false;
+				header.dataset["hidden"] = "false";
+				return;
+			}
+
+			const isScrollingDown = delta > 2;
+			const isScrollingUp = delta < -2;
+
+			if (isScrollingUp) {
+				hidden = false;
+				header.dataset["hidden"] = "false";
+				return;
+			}
+
+			if (isScrollingDown || !hidden) {
+				hidden = true;
+				header.dataset["hidden"] = "true";
+				return;
+			}
+
+			header.dataset["hidden"] = "true";
 		};
 
 		const schedule = () => {
@@ -100,9 +131,16 @@ const homeHref = lang === "es" ? "/es" : "/";
 		position: sticky;
 		top: 0;
 		z-index: 50;
-		background: var(--color-surface);
-		border-bottom: 1px solid var(--color-border);
+		background: var(--color-surface-muted);
+		border-bottom: 1px solid var(--color-divider);
 		transform: translateY(0);
+	}
+
+	@supports (backdrop-filter: blur(1px)) {
+		.site-header {
+			backdrop-filter: blur(12px) saturate(1.06);
+			-webkit-backdrop-filter: blur(12px) saturate(1.06);
+		}
 	}
 
 	@media (prefers-reduced-motion: no-preference) {

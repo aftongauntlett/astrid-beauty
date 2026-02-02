@@ -13,22 +13,32 @@
     "Inter", system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial,
     sans-serif;
 
-  /* Chic salon palette (warm, premium) */
-  --color-bg: #fcf8f4; /* warm porcelain */
-  --color-surface: #fffaf7; /* softly tinted, low-glare */
-  --color-surface-muted: #f3ebe5;
-  --color-text: #2a2221; /* deep warm charcoal */
-  --color-text-muted: #625755; /* softer warm gray */
-  --color-border: #d8cbc380;
+  /* Theme system (keep the same token “shape” across light/dark)
+      - bg: page canvas
+      - surface: primary surfaces (cards, header)
+      - surface-muted: secondary surfaces (tinted sections, subtle hovers)
+      - surface-elevated: overlays (menus) + crisp elevated surfaces
+    */
+  --color-bg: #f8f5fa; /* warm, low-glare canvas */
+  --color-surface: #fcf9fd; /* primary surfaces (cards/header) */
+  --color-surface-muted: #f0edf3; /* clearer separation for nav/sections */
+  --color-surface-elevated: #fdf8ff; /* overlay / elevated */
+  --color-accent-soft: #efe0f3; /* soft lavender tint for warmth (less pink) */
+
+  --color-text: #302934; /* deep warm charcoal */
+  --color-text-muted: #5d515f; /* softer warm gray */
+
+  --color-border: #cdb8d380;
+  --color-divider: color-mix(in oklab, var(--color-border) 72%, transparent);
 
   /* Primary brand color = mauve (headings, nav links, accents) */
-  --color-primary: #7a5b98;
-  --color-primary-hover: #5f437f;
-  --color-primary-contrast: #fffaf6;
+  --color-primary: #6f4b8f;
+  --color-primary-hover: #583a79;
+  --color-primary-contrast: #fff7f1;
 
   /* Secondary accent = soft gold (CTAs, highlights) */
-  --color-secondary: #e7c77a; /* calmer champagne (less lemon) */
-  --color-secondary-hover: #d1ab63;
+  --color-secondary: #ffd240; /* champagne */
+  --color-secondary-hover: #fccb50;
   --color-secondary-contrast: #1b1512;
 
   /* Service icon accents (used by Services cards) */
@@ -41,7 +51,7 @@
   --color-focus: #a14b76;
 
   /* Shadow base (avoid "glow" in dark mode) */
-  --color-shadow: #241b1a;
+  --color-shadow: #2b1f1a;
 
   --radius-sm: 0.75rem;
   --radius-md: 9999px;
@@ -108,20 +118,35 @@
     0 2px 6px -4px var(--shadow-color-sm);
 }
 
+html {
+  scroll-behavior: smooth;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+}
+
 html[data-theme="dark"] {
-  --color-bg: #201816; /* lifted espresso */
-  --color-surface: #2b211f;
-  --color-surface-muted: #352a28;
-  --color-text: #f7f1ec; /* warm off-white */
-  --color-text-muted: #e0d4cc;
-  --color-border: #5a474280;
+  --color-bg: #19121a; /* deep purple (avoid pure-black) */
+  --color-surface: #211a22;
+  --color-surface-muted: #27202a; /* matches elevated for cohesive nav/sections */
+  --color-surface-elevated: #28202a;
+  --color-accent-soft: #2d2327; /* subtle plum tint */
 
-  --color-primary: #e0a9c4; /* brighter mauve for legibility */
-  --color-primary-hover: #c77aa6;
-  --color-primary-contrast: #1a1211;
+  --color-text: #faeffa; /* warm off-white */
+  --color-text-muted: #d0c2c2;
 
-  --color-secondary: #d7b06a; /* warm champagne on dark */
-  --color-secondary-hover: #e3bf7a;
+  --color-border: #6a564f66;
+  --color-divider: color-mix(in oklab, var(--color-border) 74%, transparent);
+
+  --color-primary: #d5a4be; /* brighter mauve for legibility */
+  --color-primary-hover: #cc7ca8;
+  --color-primary-contrast: #1a111a;
+
+  --color-secondary: #d79d6a; /* warm orange on dark */
+  --color-secondary-hover: #e3a67a;
   --color-secondary-contrast: #1a1310;
 
   /* Service icon accents (lifted for dark backgrounds) */
@@ -132,7 +157,7 @@ html[data-theme="dark"] {
 
   --color-focus: #e79bbb;
 
-  --color-shadow: #0b0504;
+  --color-shadow: #060202;
 }
 
 /* Reset / defaults */
@@ -149,7 +174,18 @@ body {
 
 body {
   margin: 0;
-  background: var(--color-bg);
+  background:
+    radial-gradient(
+      1200px 800px at 10% -10%,
+      color-mix(in oklab, var(--color-secondary) 6%, transparent),
+      transparent 62%
+    ),
+    radial-gradient(
+      900px 600px at 90% 0%,
+      color-mix(in oklab, var(--color-primary) 3%, transparent),
+      transparent 60%
+    ),
+    var(--color-bg);
   color: var(--color-text);
   font-family: var(--font-body);
   line-height: 1.6;
@@ -157,6 +193,21 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   font-size: var(--text-base);
+}
+
+html[data-theme="dark"] body {
+  background:
+    radial-gradient(
+      1100px 760px at 8% -12%,
+      color-mix(in oklab, var(--color-secondary) 6%, transparent),
+      transparent 64%
+    ),
+    radial-gradient(
+      900px 620px at 92% -4%,
+      color-mix(in oklab, var(--color-primary) 6%, transparent),
+      transparent 62%
+    ),
+    var(--color-bg);
 }
 
 html {
@@ -241,7 +292,7 @@ a:hover {
 
 hr {
   border: 0;
-  border-top: 1px solid var(--color-border);
+  border-top: 1px solid var(--color-divider);
   margin: var(--space-lg) 0;
 }
 
@@ -412,6 +463,30 @@ textarea {
   color: inherit;
 }
 
+input,
+select,
+textarea {
+  appearance: none;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  min-height: var(--control-height);
+  padding: 0 var(--space-md);
+}
+
+textarea {
+  min-height: calc(var(--control-height) * 2);
+  padding-block: var(--space-sm);
+  resize: vertical;
+}
+
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible {
+  outline: 2px solid var(--color-focus);
+  outline-offset: 2px;
+}
+
 button {
   appearance: none;
   display: inline-flex;
@@ -426,7 +501,11 @@ button {
 }
 
 button:hover {
-  background: var(--color-surface-muted);
+  background: color-mix(
+    in oklab,
+    var(--color-primary) 4%,
+    var(--color-surface-muted)
+  );
 }
 
 /* Utilities */
@@ -441,20 +520,40 @@ button:hover {
   padding-block: var(--section-pad-y);
 }
 
-.section + .section {
+/* Section rhythm: add subtle surface blocks (no layout changes) */
+main > .section {
   position: relative;
-  border-top: none;
 }
 
-.section + .section::before {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: 50%;
-  transform: translateX(-50%);
-  width: min(calc(100% - (2 * var(--container-pad))), var(--container-max));
-  height: 1px;
-  background: var(--color-border);
+/* Section backgrounds: keep the same rhythm in light + dark.
+   - Muted surfaces: nav / services / footer / booking details
+   - Page canvas: hero + content sections
+*/
+main > .section:nth-of-type(even) {
+  background: var(--color-surface-muted);
+}
+
+main > .section:nth-of-type(odd):not(.hero) {
+  background: var(--color-bg);
+}
+
+html[data-theme="dark"] main > .section:nth-of-type(even) {
+  background: var(--color-surface-muted);
+}
+
+html[data-theme="dark"] main > .section:nth-of-type(odd):not(.hero) {
+  background: var(--color-bg);
+}
+
+/* Explicit overrides for pages/sections that need stable backgrounds
+   regardless of DOM order.
+*/
+main > .section.section--muted {
+  background: var(--color-surface-muted);
+}
+
+main > .section.section--bg {
+  background: var(--color-bg);
 }
 
 .stack {
@@ -514,7 +613,7 @@ main :is(section)[id] {
   z-index: 1000;
   padding: var(--space-xs) var(--space-sm);
   border-radius: var(--radius-md);
-  background: var(--color-surface);
+  background: var(--color-surface-elevated);
   border: 1px solid var(--color-border);
   color: var(--color-text);
 

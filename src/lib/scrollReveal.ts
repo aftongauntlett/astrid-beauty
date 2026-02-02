@@ -8,8 +8,8 @@ type ScrollRevealOptions = {
 const DEFAULTS: Required<ScrollRevealOptions> = {
   selector: "[data-reveal]",
   revealedClass: "is-revealed",
-  rootMargin: "0px 0px -10% 0px",
-  threshold: 0.15,
+  rootMargin: "0px 0px 5% 0px",
+  threshold: 0.08,
 };
 
 const getDelayMs = (el: HTMLElement): number | null => {
@@ -30,9 +30,9 @@ export const initScrollReveal = (options?: ScrollRevealOptions): void => {
   const revealedClass = options?.revealedClass ?? DEFAULTS.revealedClass;
   const rootMargin =
     options?.rootMargin ??
-    (isSmallScreen ? "0px 0px -5% 0px" : DEFAULTS.rootMargin);
+    (isSmallScreen ? "0px 0px 10% 0px" : DEFAULTS.rootMargin);
   const threshold =
-    options?.threshold ?? (isSmallScreen ? 0.12 : DEFAULTS.threshold);
+    options?.threshold ?? (isSmallScreen ? 0.05 : DEFAULTS.threshold);
 
   const elements = Array.from(document.querySelectorAll<HTMLElement>(selector));
   if (elements.length === 0) return;

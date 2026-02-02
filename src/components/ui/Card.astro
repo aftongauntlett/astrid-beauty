@@ -55,10 +55,14 @@ const classes = [
 		box-shadow: var(--shadow-sm);
 	}
 
+	html[data-theme="dark"] .card--default {
+		background: color-mix(in oklab, var(--color-surface) 70%, var(--color-bg));
+	}
+
 	.card--elevated {
 		background: linear-gradient(
 			180deg,
-			color-mix(in oklab, var(--color-primary) 3%, var(--color-surface)) 0%,
+			color-mix(in oklab, var(--color-primary) 3%, var(--color-surface-elevated)) 0%,
 			var(--color-surface) 78%
 		);
 		border: 1px solid color-mix(in oklab, var(--color-border) 65%, transparent);

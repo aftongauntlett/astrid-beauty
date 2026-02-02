@@ -34,6 +34,7 @@ export default function HeroBookNowCta({
   const reducedMotion = useReducedMotion();
   const ref = useRef<HTMLAnchorElement | null>(null);
   const [isSmallScreen, setIsSmallScreen] = useState(false);
+  const [isDarkTheme, setIsDarkTheme] = useState(false);
   const inView = useInView(ref, {
     once: true,
     amount: 0.6,
@@ -64,6 +65,42 @@ export default function HeroBookNowCta({
       legacyMq.addListener(onChange);
       return () => legacyMq.removeListener?.(onChange);
     }
+  }, []);
+
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+
+    const compute = () => {
+      const explicitTheme = document.documentElement.dataset?.["theme"];
+      if (explicitTheme === "dark") {
+        setIsDarkTheme(true);
+        return;
+      }
+      if (explicitTheme === "light") {
+        setIsDarkTheme(false);
+        return;
+      }
+
+      setIsDarkTheme(
+        window.matchMedia?.("(prefers-color-scheme: dark)").matches ?? false,
+      );
+    };
+
+    compute();
+
+    const schemeMq = window.matchMedia?.("(prefers-color-scheme: dark)");
+    const onScheme = () => compute();
+    if (schemeMq && typeof schemeMq.addEventListener === "function") {
+      schemeMq.addEventListener("change", onScheme);
+    }
+
+    window.addEventListener("themechange", compute);
+    return () => {
+      window.removeEventListener("themechange", compute);
+      if (schemeMq && typeof schemeMq.removeEventListener === "function") {
+        schemeMq.removeEventListener("change", onScheme);
+      }
+    };
   }, []);
 
   const triggerHoverFx = () => {
@@ -160,11 +197,15 @@ export default function HeroBookNowCta({
               inset: isSmallScreen ? -10 : -12,
               borderRadius: 9999,
               pointerEvents: "none",
-              background: isSmallScreen
-                ? "radial-gradient(45% 55% at 30% 30%, rgba(231, 199, 122, 0.42), transparent 66%), radial-gradient(40% 50% at 70% 70%, rgba(122, 91, 152, 0.28), transparent 72%)"
-                : "radial-gradient(45% 55% at 30% 30%, rgba(231, 199, 122, 0.55), transparent 65%), radial-gradient(40% 50% at 70% 70%, rgba(122, 91, 152, 0.35), transparent 70%)",
+              background: isDarkTheme
+                ? isSmallScreen
+                  ? "radial-gradient(45% 55% at 30% 30%, rgba(231, 199, 122, 0.42), transparent 66%), radial-gradient(40% 50% at 70% 70%, rgba(122, 91, 152, 0.28), transparent 72%)"
+                  : "radial-gradient(45% 55% at 30% 30%, rgba(231, 199, 122, 0.55), transparent 65%), radial-gradient(40% 50% at 70% 70%, rgba(122, 91, 152, 0.35), transparent 70%)"
+                : isSmallScreen
+                  ? "radial-gradient(45% 55% at 30% 30%, rgba(231, 199, 122, 0.22), transparent 68%), radial-gradient(40% 50% at 70% 70%, rgba(122, 91, 152, 0.16), transparent 74%)"
+                  : "radial-gradient(45% 55% at 30% 30%, rgba(231, 199, 122, 0.28), transparent 68%), radial-gradient(40% 50% at 70% 70%, rgba(122, 91, 152, 0.18), transparent 74%)",
               filter: isSmallScreen ? "blur(9px)" : "blur(12px)",
-              mixBlendMode: "soft-light",
+              mixBlendMode: isDarkTheme ? "soft-light" : "multiply",
               zIndex: 0,
             }}
             initial={{ opacity: 0, scale: 0.985, y: isSmallScreen ? 6 : 8 }}

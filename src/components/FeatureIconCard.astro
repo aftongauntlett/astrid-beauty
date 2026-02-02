@@ -7,7 +7,7 @@ export interface Props {
 	meta?: string;
 	items?: string[];
 	description?: string;
-	iconName?: "sparkles" | "shield" | "palette" | "scissors" | "droplet" | "waves";
+	iconName?: "sparkles" | "consultation" | "palette" | "scissors" | "droplet" | "waves";
 	iconColor?: string;
 }
 
@@ -23,6 +23,6 @@ const reactProps = {
 };
 ---
 
-<Card variant="elevated" padding="lg" hover={true}>
+<Card variant="default" padding="lg" hover={true}>
 	<FeatureIconCardReact client:visible {...reactProps} />
 </Card>

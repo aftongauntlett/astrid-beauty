@@ -4,6 +4,7 @@ import Card from "../ui/Card.astro";
 import FeatureIconCard from "../FeatureIconCard.astro";
 import Gallery from "../Gallery.astro";
 import HeroBookNowCta from "../motion/HeroBookNowCta";
+import HeroBackdrop from "../motion/HeroBackdrop";
 
 import { Star } from "@lucide/astro";
 
@@ -17,6 +18,7 @@ const { lang } = Astro.props;
 const messages = getMessages(lang);
 
 const vagaroServicesUrl = "https://www.vagaro.com/byastridbeautysalon";
+const vagaroPricesUrl = "https://www.vagaro.com/byastridbeautysalon/services";
 
 const stripOuterQuotes = (text: string) => {
 	const trimmed = text.trim();
@@ -59,7 +61,7 @@ const orderedReviews = (() => {
 })();
 
 const serviceCardMeta = [
-	{ iconName: "shield", iconColor: "var(--color-icon-scalp)" },
+	{ iconName: "consultation", iconColor: "var(--color-icon-scalp)" },
 	{ iconName: "scissors", iconColor: "var(--color-icon-cut)" },
 	{ iconName: "palette", iconColor: "var(--color-icon-signature)" },
 	{ iconName: "sparkles", iconColor: "var(--color-icon-signature)" },
@@ -74,6 +76,7 @@ const staffCards = [
 ---
 
 <section class="section hero" aria-labelledby="page-title">
+	<HeroBackdrop client:idle />
 	<div class="container hero__grid">
 		<div class="hero__content">
 			<p class="sr-only">{messages.home.brandSrOnly}</p>
@@ -112,7 +115,7 @@ const staffCards = [
 	</div>
 </section>
 
-<section class="section" id="services" aria-labelledby="services-title">
+<section class="section section--muted" id="services" aria-labelledby="services-title">
 	<div class="container stack stack--lg">
 		<div data-reveal>
 			<SectionIntro
@@ -137,6 +140,18 @@ const staffCards = [
 			))}
 		</div>
 
+		<div class="section-divider" aria-hidden="true" data-reveal data-reveal-delay="50"></div>
+
+		<div class="services-actions" data-reveal data-reveal-delay="70">
+			<HeroBookNowCta
+				client:idle
+				href={vagaroPricesUrl}
+				label={messages.misc.viewPrices}
+				labelMobile={messages.misc.viewPrices}
+				className="services__viewPrices"
+			/>
+		</div>
+
 		<div class="services-disclaimer" data-reveal data-reveal-delay="80">
 			<p class="services-disclaimer__text">{messages.services.disclaimer.line1}</p>
 			<p class="services-disclaimer__text">{messages.services.disclaimer.line2}</p>
@@ -144,63 +159,29 @@ const staffCards = [
 	</div>
 </section>
 
-<section class="section" id="about" aria-labelledby="about-title">
+<section class="section section--bg" id="about" aria-labelledby="about-title">
 	<div class="container stack stack--lg about__stack">
 		<div data-reveal>
 			<SectionIntro id="about-title" title={messages.sections.galleryTitle} lede={messages.sections.aboutLede} />
 		</div>
 
-
-		<div class="about__staff">
-			<h3 class="about__sectionTitle about__subTitle" id="staff-title" data-reveal data-reveal-delay="80">{messages.about.staff.title}</h3>
-			<div class="staff-grid" role="list" aria-labelledby="staff-title">
-				{staffCards.map((member, index) => (
-					<Card
-						as="article"
-						variant="elevated"
-						padding="lg"
-						hover={true}
-						class="staff-card"
-						role="listitem"
-						data-reveal
-						data-reveal-delay={String(120 + index * 50)}
-						aria-labelledby={`staff-${member.id}-name`}
-					>
-						<header class="staff-card__header">
-							<h4 class="staff-card__name capitalize" id={`staff-${member.id}-name`}>
-								{member.name}
-							</h4>
-							{member.role ? <span class="staff-card__badge">{member.role}</span> : null}
-						</header>
-						<div class="staff-card__bio">
-							{member.paragraphs.map((paragraph) => (
-								<p class="staff-card__text">{paragraph}</p>
-							))}
-						</div>
-					</Card>
-				))}
-			</div>
-		</div>
-
-		<div class="about__divider" aria-hidden="true"></div>
-
-		<h3 class="about__sectionTitle" data-reveal data-reveal-delay="80">{messages.about.workTitle}</h3>
-
 		<div data-reveal data-reveal-delay="120">
 			<Gallery lang={lang} />
 		</div>
+	</div>
+</section>
 
-		<div class="about__divider" aria-hidden="true"></div>
-
-		<section class="booking-reviews" aria-label={messages.booking.reviewsTitle}>
+<section class="section section--muted" aria-labelledby="reviews-title">
+	<div class="container stack stack--lg">
+		<section class="booking-reviews" aria-labelledby="reviews-title">
 			<header class="booking-reviews__header">
-				<h3 class="about__sectionTitle booking-reviews__title">{messages.booking.reviewsTitle}</h3>
+				<h3 class="about__sectionTitle booking-reviews__title" id="reviews-title">{messages.booking.reviewsTitle}</h3>
 			</header>
 			<div class="reviews-grid" role="list" aria-label={messages.booking.reviewsTitle}>
 				{orderedReviews.map((review, index) => (
 					<Card
 						as="figure"
-						variant="subtle"
+						variant="default"
 						padding="md"
 						hover={true}
 						class="review"
@@ -225,11 +206,58 @@ const staffCards = [
 			</div>
 		</section>
 
-		<div class="about__divider" aria-hidden="true"></div>
+		<div class="about__staff">
+			<h3
+				class="about__sectionTitle booking-reviews__title"
+				id="staff-title"
+				data-reveal
+				data-reveal-delay="80"
+			>
+				{messages.about.staff.title}
+			</h3>
+			<div class="staff-grid" role="list" aria-labelledby="staff-title">
+				{staffCards.map((member, index) => (
+					<Card
+						as="article"
+						variant="default"
+						padding="lg"
+						hover={true}
+						class="staff-card"
+						role="listitem"
+						data-reveal
+						data-reveal-delay={String(120 + index * 50)}
+						aria-labelledby={`staff-${member.id}-name`}
+					>
+						<header class="staff-card__header">
+							<h4 class="staff-card__name capitalize" id={`staff-${member.id}-name`}>
+								{member.name}
+							</h4>
+							{member.role ? <span class="staff-card__badge">{member.role}</span> : null}
+						</header>
+						<div class="staff-card__bio">
+							{member.paragraphs.map((paragraph) => (
+								<p class="staff-card__text">{paragraph}</p>
+							))}
+						</div>
+					</Card>
+				))}
+			</div>
+		</div>
+	</div>
+</section>
 
-		<div class="about__policies" data-accordion>
-			<h3 class="about__sectionTitle" id="policies-title" data-reveal data-reveal-delay="80">{messages.about.policies.title}</h3>
-			<div class="accordion" role="group" aria-labelledby="policies-title">
+<section class="section section--bg" id="booking" aria-labelledby="booking-title">
+	<div class="container stack stack--lg">
+		<div data-reveal>
+			<SectionIntro
+				id="booking-title"
+				title={messages.about.policies.title}
+				lede={messages.booking.lede}
+			/>
+		</div>
+
+		<div class="booking__policies" data-accordion>
+			<div class="accordion" role="group" aria-labelledby="booking-title">
 				<div class="accordion__item" data-reveal data-reveal-delay="120">
 					<button
 						type="button"
@@ -250,12 +278,8 @@ const staffCards = [
 					>
 						<div class="accordion__panelInner">
 							<ul class="accordion__list" aria-label={messages.about.policies.items.rescheduling.title}>
-								<li>
-									{messages.about.policies.items.rescheduling.bullets.notice}
-								</li>
-								<li>
-									{messages.about.policies.items.rescheduling.bullets.fee}
-								</li>
+								<li>{messages.about.policies.items.rescheduling.bullets.notice}</li>
+								<li>{messages.about.policies.items.rescheduling.bullets.fee}</li>
 								<li>
 									{messages.about.policies.items.rescheduling.bullets.contactIntro}
 									<a class="accordion__link" href="tel:+17037863707">703-786-3707</a>
@@ -312,7 +336,10 @@ const staffCards = [
 						hidden
 					>
 						<div class="accordion__panelInner">
-							<ul class="accordion__list accordion__list--cols3" aria-label={messages.about.policies.items.paymentMethods.title}>
+							<ul
+								class="accordion__list accordion__list--cols3"
+								aria-label={messages.about.policies.items.paymentMethods.title}
+							>
 								{messages.about.policies.items.paymentMethods.items.map((item) => (
 									<li>{item}</li>
 								))}
@@ -379,18 +406,17 @@ const staffCards = [
 			</div>
 		</div>
 
-		<div class="booking-ctaCard" aria-label={messages.misc.bookNow} data-reveal>
-			<Card variant="glow" padding="xl" hover={false} class="booking-ctaCard__panel">
-				<p class="booking-ctaCard__lede">{messages.booking.lede}</p>
+		<div class="booking-ctaCard" data-reveal>
+			<Card variant="default" padding="xl" hover={true} class="booking-ctaCard__panel">
+				<p class="booking-ctaCard__lede">{messages.booking.scheduleHelper}</p>
 				<div class="booking-ctaCard__actions" aria-label={messages.booking.scheduleHelper}>
 					<HeroBookNowCta
 						client:idle
 						href={vagaroServicesUrl}
-						label={messages.misc.bookNow}
+						label={messages.misc.scheduleAppointment}
 						className="booking-ctaCard__button"
 					/>
 				</div>
-				<p class="booking-ctaCard__helper">{messages.booking.scheduleHelper}</p>
 			</Card>
 		</div>
 	</div>
@@ -398,25 +424,38 @@ const staffCards = [
 
 <script>
 	const initAccordions = () => {
-		const roots = Array.from(document.querySelectorAll<HTMLElement>("[data-accordion]"));
+		/** @type {HTMLElement[]} */
+		const roots = Array.from(document.querySelectorAll("[data-accordion]"));
 		for (const root of roots) {
-			const triggers = Array.from(root.querySelectorAll<HTMLButtonElement>(".accordion__trigger"));
-			for (const trigger of triggers) {
+			/** @type {Element[]} */
+			const triggers = Array.from(root.querySelectorAll(".accordion__trigger"));
+			for (const triggerEl of triggers) {
+				if (!(triggerEl instanceof HTMLButtonElement)) continue;
+				const trigger = triggerEl;
 				const panelId = trigger.getAttribute("aria-controls");
 				if (!panelId) continue;
-				const panel = root.querySelector<HTMLElement>(`#${CSS.escape(panelId)}`);
-				if (!panel) continue;
+				const panel = root.querySelector(`#${CSS.escape(panelId)}`);
+				if (!(panel instanceof HTMLElement)) continue;
 
-				const setExpanded = (nextExpanded: boolean) => {
-					trigger.setAttribute("aria-expanded", String(nextExpanded));
-					panel.hidden = !nextExpanded;
+				const collapse = () => {
+					trigger.setAttribute("aria-expanded", "false");
+					panel.hidden = true;
 				};
 
-				setExpanded(false);
+				const expand = () => {
+					trigger.setAttribute("aria-expanded", "true");
+					panel.hidden = false;
+				};
+
+				collapse();
 
 				trigger.addEventListener("click", () => {
 					const expanded = trigger.getAttribute("aria-expanded") === "true";
-					setExpanded(!expanded);
+					if (expanded) {
+						collapse();
+					} else {
+						expand();
+					}
 				});
 
 				trigger.addEventListener("keydown", (event) => {
@@ -424,7 +463,7 @@ const staffCards = [
 						const expanded = trigger.getAttribute("aria-expanded") === "true";
 						if (expanded) {
 							event.preventDefault();
-							setExpanded(false);
+							collapse();
 							trigger.focus();
 						}
 					}
@@ -446,38 +485,42 @@ const staffCards = [
 <style>
 	.hero {
 		padding-block: calc(var(--section-pad-y) * 1.1);
+		position: relative;
+		overflow: hidden;
+		isolation: isolate;
+		background: var(--color-bg);
+	}
 
+	html[data-theme="dark"] .hero {
 		background:
 			radial-gradient(
-				1200px 600px at 20% 10%,
-				color-mix(in oklab, var(--color-surface) 70%, transparent),
+				1000px 520px at 88% 12%,
+				color-mix(in oklab, var(--color-primary) 14%, transparent),
 				transparent 60%
 			),
-			linear-gradient(
-				180deg,
-				color-mix(in oklab, var(--color-surface) 55%, var(--color-bg)),
-				var(--color-bg)
-			);
+			var(--color-bg);
 	}
 
 	@media (max-width: 48rem) {
 		.hero {
+			background: var(--color-bg);
+		}
+
+		html[data-theme="dark"] .hero {
 			background:
 				radial-gradient(
-					900px 420px at 20% 6%,
-					color-mix(in oklab, var(--color-surface) 55%, transparent),
-					transparent 68%
+					900px 480px at 88% 12%,
+					color-mix(in oklab, var(--color-primary) 14%, transparent),
+					transparent 60%
 				),
-				linear-gradient(
-					180deg,
-					color-mix(in oklab, var(--color-surface) 45%, var(--color-bg)),
-					var(--color-bg)
-				);
+				var(--color-bg);
 		}
 	}
 
 	.hero__grid {
 		justify-items: center;
+		position: relative;
+		z-index: 1;
 	}
 
 	.hero__content {
@@ -529,6 +572,35 @@ const staffCards = [
 		display: flex;
 		align-items: center;
 		margin: 0;
+		position: relative;
+	}
+
+	/* Subtle glow behind logo for better readability in light mode */
+	.hero__brandmark::before {
+		content: "";
+		position: absolute;
+		top: 50%;
+		left: 50%;
+		transform: translate(-50%, -50%);
+		width: 140%;
+		height: 140%;
+		background: radial-gradient(
+			circle,
+			color-mix(in oklab, var(--color-surface-elevated) 92%, transparent) 0%,
+			transparent 65%
+		);
+		filter: blur(40px);
+		opacity: 0;
+		pointer-events: none;
+		z-index: -1;
+	}
+
+	html:not([data-theme="dark"]) .hero__brandmark::before {
+		opacity: 0;
+	}
+
+	html[data-theme="dark"] .hero__brandmark::before {
+		opacity: 0;
 	}
 
 	.hero__brandmarkLogo {
@@ -544,7 +616,7 @@ const staffCards = [
 		width: 100%;
 		max-width: 34rem;
 		display: grid;
-		gap: var(--space-md);
+		gap: var(--space-lg);
 	}
 
 	.hero__actions .btn {
@@ -553,7 +625,7 @@ const staffCards = [
 
 	.hero__actionsCopy {
 		display: grid;
-		gap: var(--space-sm);
+		gap: calc(var(--space-sm) + 0.25rem);
 	}
 
 	.hero__actionsTitle {
@@ -565,6 +637,10 @@ const staffCards = [
 	.hero__actionsLede {
 		margin: 0;
 		color: var(--color-text-muted);
+	}
+
+	.hero__actionsRow {
+		margin-top: var(--space-xs);
 	}
 
 	@media (min-width: 34rem) {
@@ -615,15 +691,21 @@ const staffCards = [
 		}
 	}
 
-	.hero__bookNow.btn {
+	:global(.hero__bookNow.btn) {
 		background: var(--color-primary);
 		border-color: var(--color-primary);
 		color: var(--color-primary-contrast);
 	}
 
-	.hero__bookNow.btn:hover {
+	:global(.hero__bookNow.btn:hover),
+	:global(.hero__bookNow.btn:focus-visible) {
 		background: var(--color-primary-hover);
 		border-color: var(--color-primary-hover);
+		color: var(--color-primary-contrast) !important;
+	}
+
+	:global(.hero__bookNow.btn:hover *) {
+		color: inherit;
 	}
 
 	.hero__actionsRow {
@@ -660,6 +742,14 @@ const staffCards = [
 		--stack-gap: var(--space-lg);
 	}
 
+	.section-divider {
+		width: min(38rem, 92%);
+		height: 1px;
+		margin: var(--space-md) auto;
+		background: color-mix(in oklab, var(--color-border) 70%, transparent);
+		opacity: 0.9;
+	}
+
 	.about__sectionTitle {
 		margin: 0;
 		font-size: var(--heading-3);
@@ -669,19 +759,7 @@ const staffCards = [
 	.about__staff {
 		display: grid;
 		gap: var(--space-md);
-		padding-top: var(--space-lg);
-		position: relative;
-	}
-
-	.about__staff::before {
-		content: "";
-		position: absolute;
-		left: 50%;
-		top: 0;
-		transform: translateX(-50%);
-		width: min(38rem, 92%);
-		height: 1px;
-		background: color-mix(in oklab, var(--color-border) 70%, transparent);
+		margin-top: var(--space-xl);
 	}
 
 	.about__staff > .about__sectionTitle {
@@ -748,7 +826,7 @@ const staffCards = [
 		}
 
 		:global(.staff-card:is(:hover, :focus-within))::after {
-			opacity: 0.85;
+			opacity: 0.35;
 		}
 
 		:global(.staff-card:is(:hover, :focus-within)) .staff-card__name {
@@ -895,11 +973,185 @@ const staffCards = [
 		gap: var(--space-xs);
 	}
 
+	.services-actions {
+		display: grid;
+		justify-items: center;
+		margin: 0;
+	}
+
+	:global(.services__viewPrices.btn:hover),
+	:global(.services__viewPrices.btn:focus-visible) {
+		background: var(--color-primary-hover);
+		border-color: var(--color-primary-hover);
+		color: var(--color-primary-contrast) !important;
+	}
+
+	:global(.services__viewPrices.btn:hover *) {
+		color: inherit;
+	}
+
 	.services-disclaimer__text {
 		margin: 0;
 		font-size: var(--text-xs);
 		color: color-mix(in oklab, var(--color-text-muted) 70%, var(--color-text) 30%);
 		line-height: 1.55;
+	}
+
+	.booking-reviews {
+		width: 100%;
+	}
+
+	.booking-reviews__header {
+		display: grid;
+		justify-items: center;
+		margin-bottom: var(--space-lg);
+	}
+
+	.booking-reviews__title {
+		margin: 0;
+		text-decoration: underline;
+		text-decoration-thickness: var(--stroke-1);
+		text-underline-offset: 0.22em;
+		text-decoration-color: color-mix(in oklab, var(--color-primary) 55%, transparent);
+	}
+
+	.reviews__more {
+		margin: var(--space-sm) 0 0;
+		color: var(--color-text-muted);
+		font-size: var(--text-xs);
+		letter-spacing: 0.01em;
+		text-align: right;
+	}
+
+	@media (max-width: 30rem) {
+		.reviews__more {
+			text-align: center;
+		}
+	}
+
+	.reviews-grid {
+		display: grid;
+		grid-template-columns: 1fr;
+		gap: var(--space-lg);
+	}
+
+	@media (min-width: 48rem) {
+		.reviews-grid {
+			grid-template-columns: repeat(2, minmax(0, 1fr));
+			gap: var(--space-xl);
+		}
+	}
+
+	:global(.review) {
+		margin: 0;
+		position: relative;
+		overflow: hidden;
+		isolation: isolate;
+		display: flex;
+		flex-direction: column;
+		gap: var(--space-sm);
+	}
+
+	:global(.review)::after {
+		content: "";
+		position: absolute;
+		inset: -55%;
+		border-radius: 999px;
+		pointer-events: none;
+		background: radial-gradient(
+			circle at 28% 12%,
+			color-mix(in oklab, var(--color-primary) 18%, transparent) 0%,
+			transparent 62%
+		);
+		opacity: 0;
+		filter: blur(12px);
+		z-index: 0;
+	}
+
+	.review__rating {
+		display: inline-flex;
+		align-items: center;
+		gap: 0.2rem;
+		color: color-mix(in oklab, var(--color-secondary) 72%, var(--color-primary));
+		position: relative;
+		z-index: 1;
+	}
+
+	@media (prefers-reduced-motion: no-preference) {
+		.review__rating {
+			transition: transform 180ms ease;
+		}
+
+		:global(.review:hover) .review__rating,
+		:global(.review:focus-within) .review__rating {
+			transform: translateY(-1px) scale(1.02);
+		}
+	}
+
+	@media (hover: hover) and (prefers-reduced-motion: no-preference) {
+		:global(.review)::after {
+			transition: opacity var(--motion-duration-fast) var(--motion-ease-standard);
+		}
+
+		:global(.review:is(:hover, :focus-within))::after {
+			opacity: 0.28;
+		}
+	}
+
+	:global(.booking-ctaCard__button.btn:hover),
+	:global(.booking-ctaCard__button.btn:focus-visible) {
+		background: var(--color-primary-hover);
+		border-color: var(--color-primary-hover);
+		color: var(--color-primary-contrast) !important;
+	}
+
+	:global(.booking-ctaCard__button.btn:hover *) {
+		color: inherit;
+	}
+
+	.review__star {
+		display: block;
+	}
+
+	.review__quote {
+		margin: 0;
+		padding-top: var(--space-sm);
+		color: var(--color-text);
+		line-height: 1.65;
+		font-size: var(--text-sm);
+		position: relative;
+		z-index: 1;
+	}
+
+	.review__meta {
+		margin-top: auto;
+		display: inline-flex;
+		flex-direction: column;
+		align-items: flex-end;
+		justify-content: flex-end;
+		gap: 0.1rem;
+		align-self: flex-end;
+		text-align: right;
+		position: relative;
+		z-index: 1;
+	}
+
+	.review__author {
+		color: color-mix(in oklab, var(--color-text) 72%, var(--color-text-muted));
+		font-size: var(--text-sm);
+		font-weight: 550;
+		font-style: italic;
+		letter-spacing: 0.01em;
+	}
+
+	.review__date {
+		color: color-mix(in oklab, var(--color-text-muted) 82%, var(--color-border));
+		font-size: 0.72rem;
+		letter-spacing: 0.01em;
+	}
+
+	.booking__sectionTitle {
+		text-align: center;
 	}
 
 	.accordion {
@@ -912,6 +1164,10 @@ const staffCards = [
 		border-radius: var(--radius-lg);
 		background: color-mix(in oklab, var(--color-surface) 92%, var(--color-surface-muted));
 		overflow: hidden;
+	}
+
+	html[data-theme="dark"] .accordion__item {
+		background: color-mix(in oklab, var(--color-surface) 70%, var(--color-bg));
 	}
 
 	.accordion__trigger {
@@ -938,11 +1194,7 @@ const staffCards = [
 		position: absolute;
 		inset: 0;
 		border-radius: var(--radius-lg);
-		background: color-mix(
-			in oklab,
-			var(--color-primary) 12%,
-			var(--color-surface)
-		);
+		background: color-mix(in oklab, var(--color-primary) 12%, var(--color-surface));
 		opacity: 0;
 		pointer-events: none;
 		z-index: 0;
@@ -1056,18 +1308,12 @@ const staffCards = [
 		line-height: 1.55;
 	}
 
-	.accordion__list--cols2 {
-		grid-template-columns: repeat(2, minmax(0, 1fr));
-		column-gap: var(--space-lg);
-	}
-
 	.accordion__list--cols3 {
 		grid-template-columns: repeat(3, minmax(0, 1fr));
 		column-gap: var(--space-lg);
 	}
 
 	@media (max-width: 47.999rem) {
-		.accordion__list--cols2,
 		.accordion__list--cols3 {
 			grid-template-columns: 1fr;
 		}
@@ -1084,13 +1330,6 @@ const staffCards = [
 		color: color-mix(in oklab, var(--color-text-muted) 82%, var(--color-text));
 		margin-top: 0.02em;
 		flex: 0 0 auto;
-	}
-
-	.accordion__text {
-		margin: 0;
-		color: var(--color-text-muted);
-		font-size: var(--text-sm);
-		line-height: 1.55;
 	}
 
 	.accordion__note {
@@ -1112,103 +1351,78 @@ const staffCards = [
 		display: flex;
 		justify-content: center;
 		align-items: stretch;
+		margin-top: var(--space-xl);
 	}
 
 	:global(.booking-ctaCard__panel) {
 		position: relative;
 		overflow: hidden;
+		isolation: isolate;
 		display: grid;
-		gap: var(--space-lg);
+		gap: var(--space-sm);
 		justify-items: center;
 		text-align: center;
-		background:
-			linear-gradient(
-				180deg,
-				color-mix(in oklab, var(--color-surface) 90%, var(--color-surface-muted)) 0%,
-				color-mix(in oklab, var(--color-surface) 96%, var(--color-primary)) 100%
-			);
 		width: 100%;
 		max-width: 44rem;
+		border-color: color-mix(in oklab, var(--color-border) 70%, transparent);
 	}
 
-	:global(.booking-ctaCard__panel)::before {
+	:global(.booking-ctaCard__panel)::after {
 		content: "";
 		position: absolute;
-		inset: -40%;
+		inset: -55%;
+		border-radius: 999px;
 		background: radial-gradient(
-			circle at 40% 20%,
-			color-mix(in oklab, var(--color-primary) 28%, transparent) 0%,
-			transparent 60%
+			circle at 28% 12%,
+			color-mix(in oklab, var(--color-primary) 18%, transparent) 0%,
+			transparent 62%
 		);
-		opacity: 0.45;
-		transform: translate3d(0, 0, 0) scale(1);
+		opacity: 0;
+		filter: blur(14px);
 		pointer-events: none;
+		z-index: 0;
 	}
 
-	@media (prefers-reduced-motion: no-preference) {
-		:global(.booking-ctaCard__panel)::before {
-			animation: bookingGlow 5.5s ease-in-out infinite;
+	:global(.booking-ctaCard__panel) > * {
+		position: relative;
+		z-index: 1;
+	}
+
+	@media (hover: hover) and (prefers-reduced-motion: no-preference) {
+		:global(.booking-ctaCard__panel)::after {
+			transition: opacity var(--motion-duration-fast) var(--motion-ease-standard);
 		}
-	}
 
-	@keyframes bookingGlow {
-		0%,
-		100% {
-			opacity: 0.35;
-			transform: scale(1);
+		:global(.booking-ctaCard__panel:hover),
+		:global(.booking-ctaCard__panel:focus-within) {
+			border-color: color-mix(in oklab, var(--color-text) 22%, var(--color-border));
+			box-shadow: var(--shadow-md);
+			transform: translateY(-2px);
 		}
-		50% {
-			opacity: 0.55;
-			transform: scale(1.04);
+
+		:global(.booking-ctaCard__panel:hover)::after,
+		:global(.booking-ctaCard__panel:focus-within)::after {
+			opacity: 0.28;
 		}
-	}
-
-	@media (prefers-reduced-motion: no-preference) {
-		:global(.booking-ctaCard__panel) {
-			transition:
-				border-color var(--motion-duration-fast) var(--motion-ease-standard),
-				box-shadow var(--motion-duration-fast) var(--motion-ease-standard),
-				transform var(--motion-duration-fast) var(--motion-ease-standard),
-				background-color var(--motion-duration-fast) var(--motion-ease-standard);
-		}
-	}
-
-	.booking-ctaCard:focus-within :global(.booking-ctaCard__panel) {
-		border-color: color-mix(in oklab, var(--color-border) 55%, var(--color-text-muted));
-		box-shadow: var(--shadow-sm);
-	}
-
-	.booking-ctaCard:hover :global(.booking-ctaCard__panel) {
-		border-color: color-mix(in oklab, var(--color-primary) 42%, var(--color-border));
-		box-shadow:
-			0 10px 28px -18px color-mix(in oklab, var(--color-primary) 42%, transparent),
-			var(--shadow-sm);
-	}
-
-	.about__divider {
-		width: 100%;
-		height: 1px;
-		background: color-mix(in oklab, var(--color-border) 78%, var(--color-text-muted));
-		opacity: 0.9;
-		margin-block: var(--space-md);
 	}
 
 	.booking-ctaCard__actions {
 		display: grid;
-		justify-items: stretch;
+		justify-items: center;
 		gap: var(--space-xs);
 		width: 100%;
 		max-width: 34rem;
+		margin-top: var(--space-md);
 	}
 
-	.booking-ctaCard__button.btn {
-		width: 100%;
+	:global(.booking-ctaCard__button.btn) {
+		width: auto;
 		letter-spacing: 0.01em;
 		min-height: 3.25rem;
 	}
 
 	@media (prefers-reduced-motion: no-preference) {
-		.booking-ctaCard__button.btn:hover {
+		:global(.booking-ctaCard__button.btn:hover) {
 			transform: translateY(-1px);
 		}
 	}
@@ -1224,118 +1438,11 @@ const staffCards = [
 	.booking-ctaCard__lede {
 		margin: 0;
 		color: var(--color-text-muted);
-		font-size: var(--text-sm);
-		line-height: 1.5;
-		max-width: 38rem;
-	}
-
-	.booking-reviews {
-		width: 100%;
-	}
-
-	.booking-reviews__header {
-		display: grid;
-		justify-items: center;
-		margin-bottom: var(--space-lg);
-	}
-
-	.booking-reviews__title {
-		margin: 0;
-	}
-
-	.reviews__more {
-		margin: var(--space-sm) 0 0;
-		color: var(--color-text-muted);
-		font-size: var(--text-xs);
-		letter-spacing: 0.01em;
-		text-align: right;
-	}
-
-	@media (max-width: 30rem) {
-		.reviews__more {
-			text-align: center;
-		}
-	}
-
-	.reviews-grid {
-		display: grid;
-		grid-template-columns: 1fr;
-		gap: var(--space-lg);
-	}
-
-	@media (min-width: 48rem) {
-		.reviews-grid {
-			grid-template-columns: repeat(2, minmax(0, 1fr));
-			gap: var(--space-xl);
-		}
-	}
-
-	:global(.review) {
-		margin: 0;
-		position: relative;
-		display: flex;
-		flex-direction: column;
-		gap: var(--space-sm);
-	}
-
-	.review__rating {
-		display: inline-flex;
-		align-items: center;
-		gap: 0.2rem;
-		color: color-mix(in oklab, var(--color-secondary) 72%, var(--color-primary));
-		position: relative;
-		z-index: 1;
-	}
-
-	@media (prefers-reduced-motion: no-preference) {
-		.review__rating {
-			transition: transform 180ms ease;
-		}
-
-		:global(.review:hover) .review__rating,
-		:global(.review:focus-within) .review__rating {
-			transform: translateY(-1px) scale(1.02);
-		}
-	}
-
-	.review__star {
-		display: block;
-	}
-
-	.review__quote {
-		margin: 0;
-		padding-top: var(--space-sm);
-		color: var(--color-text);
+		font-size: var(--text-md);
 		line-height: 1.65;
-		font-size: var(--text-sm);
-		position: relative;
-		z-index: 1;
 	}
 
-	.review__meta {
-		margin-top: auto;
-		display: inline-flex;
-		flex-direction: column;
-		align-items: flex-end;
-		justify-content: flex-end;
-		gap: 0.1rem;
-		align-self: flex-end;
-		text-align: right;
-		position: relative;
-		z-index: 1;
-	}
-
-	.review__author {
-		color: color-mix(in oklab, var(--color-text) 72%, var(--color-text-muted));
-		font-size: var(--text-sm);
-		font-weight: 550;
-		font-style: italic;
-		letter-spacing: 0.01em;
-	}
-
-	.review__date {
-		color: color-mix(in oklab, var(--color-text-muted) 82%, var(--color-border));
-		font-size: 0.72rem;
-		letter-spacing: 0.01em;
+	.booking-ctaCard__lede--second {
+		margin-top: 0;
 	}
 </style>

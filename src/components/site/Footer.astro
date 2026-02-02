@@ -120,7 +120,7 @@ const year = new Date().getFullYear();
 	<div class="container site-footer__inner">
 		<div class="site-footer__grid">
 			<section class="site-footer__block" aria-label={messages.footer.address}>
-				<h2 class="site-footer__title">{messages.nav.findUs}</h2>
+				<h2 class="sr-only">{messages.nav.findUs}</h2>
 				<div class="site-footer__blockBody">
 					<address class="site-footer__text" aria-label={messages.footer.address}>
 						{addressDisplayLines.map((line) => (
@@ -146,7 +146,7 @@ const year = new Date().getFullYear();
 
 			<section class="site-footer__block site-footer__block--contact" aria-label={messages.footer.contact}>
 				<div class="site-footer__mobileDivider" aria-hidden="true"></div>
-				<h2 class="site-footer__title">{messages.footer.contact}</h2>
+				<h2 class="sr-only">{messages.footer.contact}</h2>
 				<div class="site-footer__contact">
 					<div class="site-footer__blockBody">
 						<div class="site-footer__contactLinks">
@@ -212,7 +212,7 @@ const year = new Date().getFullYear();
 			<div class="site-footer__mobileDivider" aria-hidden="true"></div>
 
 			<section class="site-footer__block site-footer__block--hours" aria-label={messages.footer.hours}>
-				<h2 class="site-footer__title">{messages.footer.hours}</h2>
+				<h2 class="sr-only">{messages.footer.hours}</h2>
 				<table class="site-footer__hoursTable" aria-label={messages.footer.hours}>
 					<tbody>
 						{displayHours.map((item) => (
@@ -244,7 +244,7 @@ const year = new Date().getFullYear();
 				aria-label={messages.misc.backToTop}
 				title={messages.misc.backToTop}
 			>
-				<ArrowUp size={18} aria-hidden="true" focusable="false" />
+				<ArrowUp size={16} aria-hidden="true" focusable="false" />
 				<span class="sr-only">{messages.misc.backToTop}</span>
 			</Button>
 		</div>
@@ -252,6 +252,16 @@ const year = new Date().getFullYear();
 </footer>
 
 <script>
+	/** @type {typeof globalThis & { __astrid_footerController?: AbortController }} */
+	const g = globalThis;
+
+	g.__astrid_footerController?.abort?.();
+	const controller = new AbortController();
+	g.__astrid_footerController = controller;
+	const { signal } = controller;
+
+	document.addEventListener("astro:before-swap", () => controller.abort(), { once: true, signal });
+
 	// Prefer Apple Maps on Apple devices.
 	const link = document.querySelector("[data-apple-maps-href]");
 	if (link instanceof HTMLAnchorElement) {
@@ -265,23 +275,44 @@ const year = new Date().getFullYear();
 			// ignore
 		}
 	}
+
+	// Smooth-scroll back to top.
+	const toTop = document.querySelector(".site-footer__toTop");
+	if (toTop instanceof HTMLAnchorElement) {
+		toTop.addEventListener(
+			"click",
+			(event) => {
+			try {
+				event.preventDefault();
+				const reduce = window.matchMedia?.("(prefers-reduced-motion: reduce)")?.matches;
+				window.scrollTo({ top: 0, behavior: reduce ? "auto" : "smooth" });
+				const url = new URL(window.location.href);
+				url.hash = "#top";
+				history.pushState({}, "", url);
+			} catch {
+				// ignore
+			}
+			},
+			{ signal }
+		);
+	}
 </script>
 
 <style>
 	.site-footer {
 		background: var(--color-surface-muted);
-		padding-block: var(--space-lg);
+		padding-block: var(--space-md);
 		box-shadow: inset 0 1px 0 var(--color-border);
 	}
 
 	.site-footer__inner {
 		display: grid;
-		gap: var(--space-lg);
+		gap: var(--space-md);
 	}
 
 	.site-footer__grid {
 		display: grid;
-		gap: var(--space-lg);
+		gap: var(--space-md);
 	}
 
 	/* Mobile-first: stacked blocks centered for nicer rhythm */
@@ -290,7 +321,7 @@ const year = new Date().getFullYear();
 		display: flex;
 		flex-direction: column;
 		align-items: center;
-		gap: var(--space-sm);
+		gap: var(--space-xs);
 	}
 
 	.site-footer__blockBody {
@@ -299,7 +330,7 @@ const year = new Date().getFullYear();
 
 	.site-footer__blockBottom {
 		margin-top: auto;
-		padding-top: var(--space-md);
+		padding-top: var(--space-sm);
 		display: flex;
 		justify-content: center;
 		width: 100%;
@@ -398,7 +429,7 @@ const year = new Date().getFullYear();
 		width: 100%;
 		justify-self: stretch;
 		background: var(--color-border);
-		margin-block: var(--space-md);
+		margin-block: var(--space-sm);
 		opacity: 0.9;
 	}
 
@@ -621,15 +652,15 @@ const year = new Date().getFullYear();
 		align-items: center;
 		gap: var(--space-sm);
 		color: var(--color-text-muted);
-		padding-top: var(--space-md);
+		padding-top: var(--space-sm);
 		box-shadow: inset 0 1px 0 var(--color-border);
 		font-size: 0.875rem;
 	}
 
 	.site-footer__toTop.btn {
-		width: 3.15rem;
-		height: 3.15rem;
-		min-height: 3.15rem;
+		width: 2.4rem;
+		height: 2.4rem;
+		min-height: 2.4rem;
 		padding: 0;
 		gap: 0;
 		border-radius: 999px;

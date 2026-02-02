@@ -3,7 +3,7 @@ import Button from "../ui/Button.astro";
 import ThemeToggle from "./ThemeToggle.astro";
 import LanguageToggle from "./LanguageToggle.astro";
 import { getMessages, type Lang } from "../../i18n";
-import { ExternalLink, Menu, X } from "@lucide/astro";
+import { Menu, X } from "@lucide/astro";
 
 export interface Props {
 	lang: Lang;
@@ -15,8 +15,6 @@ const { lang } = Astro.props;
 const messages = getMessages(lang);
 
 const sectionHref = (id: string) => (lang === "es" ? `/es#${id}` : `/#${id}`);
-
-const vagaroServicesUrl = "https://www.vagaro.com/byastridbeautysalon";
 ---
 
 <nav class="nav" aria-label="Primary" data-primary-nav data-open="false">
@@ -37,17 +35,7 @@ const vagaroServicesUrl = "https://www.vagaro.com/byastridbeautysalon";
 	<div class="nav__menu" id={menuId} data-nav-menu>
 		<a class="nav__link" href={sectionHref("services")} data-section-link="services">{messages.nav.services}</a>
 		<a class="nav__link" href={sectionHref("about")} data-section-link="about">{messages.nav.gallery}</a>
-		<Button
-			class="nav__bookNow"
-			variant="ghost"
-			size="sm"
-			href={vagaroServicesUrl}
-			target="_blank"
-			rel="noopener noreferrer"
-		>
-			<span class="nav__linkText">{messages.misc.bookNow}</span>
-			<ExternalLink class="nav__externalIcon" size={18} aria-hidden="true" focusable="false" />
-		</Button>
+		<a class="nav__link" href={sectionHref("booking")} data-section-link="booking">{messages.nav.booking}</a>
 		<div class="nav__divider" aria-hidden="true"></div>
 		<div class="nav__settings" aria-label="Settings">
 			<ThemeToggle mode="segmented" label="Theme" />
@@ -126,8 +114,70 @@ const vagaroServicesUrl = "https://www.vagaro.com/byastridbeautysalon";
 			{ signal }
 		);
 
+		const isHomePage = () =>
+			window.location.pathname === "/" || window.location.pathname === "/es" || window.location.pathname === "/es/";
+
+		const prefersReducedMotion = () =>
+			window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+		const scrollToSection = (id: string) => {
+			const section = document.getElementById(id);
+			if (!section) return;
+
+			const header = document.querySelector(".site-header");
+			const headerOffset = header instanceof HTMLElement ? Math.ceil(header.getBoundingClientRect().height) : 0;
+			const top = window.scrollY + section.getBoundingClientRect().top - (headerOffset + 12);
+			const behavior = prefersReducedMotion() ? "auto" : "smooth";
+			window.scrollTo({ top, behavior });
+		};
+
+		root.addEventListener(
+			"click",
+			(event) => {
+				if (!isHomePage()) return;
+				if (!(event.target instanceof Element)) return;
+				const link = event.target.closest("a[data-section-link]");
+				if (!(link instanceof HTMLAnchorElement)) return;
+				const id = link.getAttribute("data-section-link");
+				if (!id) return;
+
+				event.preventDefault();
+				applyState(false);
+				for (const el of root.querySelectorAll("a[data-section-link]")) {
+					if (el instanceof HTMLAnchorElement) el.removeAttribute("aria-current");
+				}
+				link.setAttribute("aria-current", "location");
+				scrollToSection(id);
+
+				const url = new URL(window.location.href);
+				url.hash = `#${id}`;
+				history.pushState({}, "", url);
+			},
+			{ signal }
+		);
+
+		// If we land on the home page *with* a hash (e.g. navigating from /booking),
+		// re-apply scroll with header offset + smooth behavior.
+		if (isHomePage()) {
+			const scrollHash = () => {
+				const id = window.location.hash?.replace(/^#/, "");
+				if (!id) return;
+				// Let layout settle (fonts/header height) before computing offset.
+				requestAnimationFrame(() => scrollToSection(id));
+			};
+
+			scrollHash();
+			window.addEventListener(
+				"hashchange",
+				() => {
+					scrollHash();
+				},
+				{ signal }
+			);
+		}
+
 		// Active section state (Home pages only)
-		if (window.location.pathname === "/" || window.location.pathname === "/es" || window.location.pathname === "/es/") {
+		if (isHomePage()) {
 			const sectionLinks = Array.from(root.querySelectorAll("[data-section-link]"));
 
 			const linkById = new Map();
@@ -158,7 +208,7 @@ const vagaroServicesUrl = "https://www.vagaro.com/byastridbeautysalon";
 				rootMargin: "0px",
 				threshold: [0],
 			});
-			const latest = new Map();
+			const sectionById = new Map();
 			let activeId = "";
 
 			signal.addEventListener("abort", () => {
@@ -166,16 +216,14 @@ const vagaroServicesUrl = "https://www.vagaro.com/byastridbeautysalon";
 			});
 
 			const applyBestActive = () => {
+				const headerOffset = getHeaderOffsetPx();
+				const pad = headerOffset + 12;
 				let bestId = "";
-				let bestRatio = 0;
-				let bestTop = Number.POSITIVE_INFINITY;
+				let bestTop = Number.NEGATIVE_INFINITY;
 
-				for (const [id, entry] of latest.entries()) {
-					if (!entry.isIntersecting) continue;
-					const top = entry.boundingClientRect.top;
-					const ratio = entry.intersectionRatio;
-					if (ratio > bestRatio || (ratio === bestRatio && top < bestTop)) {
-						bestRatio = ratio;
+				for (const [id, section] of sectionById.entries()) {
+					const top = section.getBoundingClientRect().top - pad;
+					if (top <= 0 && top > bestTop) {
 						bestTop = top;
 						bestId = id;
 					}
@@ -199,21 +247,14 @@ const vagaroServicesUrl = "https://www.vagaro.com/byastridbeautysalon";
 
 			const setupObserver = () => {
 				observer.disconnect();
-				latest.clear();
+				sectionById.clear();
 				activeId = "";
 				clearCurrent();
 
 				const headerOffset = getHeaderOffsetPx();
 				const topMargin = -(headerOffset + 8);
 				observer = new IntersectionObserver(
-					(entries) => {
-						for (const entry of entries) {
-							const el = entry.target;
-							if (!(el instanceof HTMLElement)) continue;
-							const id = el.id;
-							if (!id) continue;
-							latest.set(id, entry);
-						}
+					() => {
 						applyBestActive();
 					},
 					{
@@ -224,7 +265,10 @@ const vagaroServicesUrl = "https://www.vagaro.com/byastridbeautysalon";
 
 				for (const id of linkById.keys()) {
 					const section = document.getElementById(id);
-					if (section) observer.observe(section);
+					if (section) {
+						sectionById.set(id, section);
+						observer.observe(section);
+					}
 				}
 			};
 
@@ -317,29 +361,8 @@ const vagaroServicesUrl = "https://www.vagaro.com/byastridbeautysalon";
 		position: relative;
 		flex: 0 0 auto;
 		white-space: nowrap;
+		font-size: 0.95rem;
 		transition: color var(--motion-duration-fast) var(--motion-ease-standard);
-	}
-
-	.nav__bookNow.btn {
-		background: transparent;
-		border: 1px solid var(--color-border);
-		box-shadow: none;
-		white-space: nowrap;
-		border-radius: var(--radius-sm);
-		padding: 0 var(--space-md);
-		font-weight: 400;
-		gap: 0.6rem;
-	}
-
-	.nav__bookNow.btn:hover {
-		background: var(--color-surface-muted);
-		color: var(--color-primary);
-	}
-
-	.nav__bookNow .nav__externalIcon {
-		opacity: 1;
-		transform: none;
-		pointer-events: none;
 	}
 
 	/* Refined underline: animates in smoothly on hover + focus-visible */
@@ -376,6 +399,7 @@ const vagaroServicesUrl = "https://www.vagaro.com/byastridbeautysalon";
 	.nav__link[aria-current="location"],
 	.nav__link[aria-current="page"] {
 		color: var(--color-primary);
+		font-weight: 700;
 	}
 
 	.nav__link[aria-current="location"]::after,
@@ -384,39 +408,9 @@ const vagaroServicesUrl = "https://www.vagaro.com/byastridbeautysalon";
 		transform: scaleX(1);
 	}
 
-	/* External-link affordance */
-	.nav__link--external {
-		gap: 0.75rem;
-	}
-
-	.nav__externalIcon {
-		opacity: 0;
-		transform: translateY(1px);
-		pointer-events: none;
-		flex: 0 0 auto;
-	}
-
-	@media (prefers-reduced-motion: no-preference) {
-		.nav__externalIcon {
-			transition:
-				opacity var(--motion-duration-fast) var(--motion-ease-standard),
-				transform var(--motion-duration-fast) var(--motion-ease-standard);
-		}
-	}
-
-	.nav__link--external:hover .nav__externalIcon,
-	.nav__link--external:focus-visible .nav__externalIcon {
-		opacity: 1;
-		transform: translateY(0);
-	}
-
 	@media (prefers-reduced-motion: reduce) {
 		.nav__link::after {
 			transition: none;
-		}
-		.nav__externalIcon {
-			transition: none;
-			transform: none;
 		}
 	}
 
@@ -448,7 +442,7 @@ const vagaroServicesUrl = "https://www.vagaro.com/byastridbeautysalon";
 			width: max-content;
 			max-width: calc(100vw - (var(--container-pad) * 2));
 			padding: var(--space-sm);
-			background: var(--color-surface);
+			background: var(--color-surface-muted);
 			border: 1px solid var(--color-border);
 			border-radius: var(--radius-lg);
 			box-shadow: var(--shadow-md);
@@ -462,12 +456,6 @@ const vagaroServicesUrl = "https://www.vagaro.com/byastridbeautysalon";
 		/* No animated underline inside the dropdown panel */
 		.nav__link::after {
 			display: none;
-		}
-
-		/* Always show external-link icon on mobile (no hover) */
-		.nav__externalIcon {
-			opacity: 1;
-			transform: none;
 		}
 
 		/* Let toggles size naturally (so panel sizes to longest item) */

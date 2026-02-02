@@ -3,9 +3,9 @@ import { motion, useReducedMotion } from "framer-motion";
 import type { MotionStyle } from "framer-motion";
 import {
   Droplet,
+  MessageCircleQuestion,
   Palette,
   Scissors,
-  Shield,
   Sparkles,
   Waves,
 } from "lucide-react";
@@ -20,7 +20,7 @@ export interface FeatureIconCardProps {
   description?: string;
   iconName?:
     | "sparkles"
-    | "shield"
+    | "consultation"
     | "palette"
     | "scissors"
     | "droplet"
@@ -47,7 +47,7 @@ export default function FeatureIconCard({
     LucideIcon
   > = {
     sparkles: Sparkles,
-    shield: Shield,
+    consultation: MessageCircleQuestion,
     palette: Palette,
     scissors: Scissors,
     droplet: Droplet,

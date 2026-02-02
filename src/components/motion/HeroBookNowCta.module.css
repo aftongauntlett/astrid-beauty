@@ -5,8 +5,8 @@
 
 .btnExternal {
   display: grid;
-  grid-template-columns: 20px 1fr 20px;
-  column-gap: 0.35rem;
+  grid-template-columns: 20px auto 20px;
+  column-gap: 0.75rem;
   align-items: center;
   justify-items: center;
 }
@@ -19,6 +19,8 @@
 .externalLabel {
   display: inline-flex;
   align-items: center;
+  color: inherit;
+  mix-blend-mode: normal;
 }
 
 .externalIcon {

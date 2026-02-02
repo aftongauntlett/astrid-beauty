@@ -166,7 +166,17 @@ const xDefaultHref = toHref(alternates.xDefault);
 			import { initScrollReveal } from "../lib/scrollReveal";
 			const schedule = () => {
 				if (typeof window === "undefined") return;
-				const requestIdleCallback = /** @type {any} */ (window).requestIdleCallback;
+				type IdleDeadline = {
+					didTimeout: boolean;
+					timeRemaining: () => number;
+				};
+				type RequestIdleCallback = (
+					callback: (deadline: IdleDeadline) => void,
+					options?: { timeout?: number },
+				) => number;
+				const requestIdleCallback = (window as Window & {
+					requestIdleCallback?: RequestIdleCallback;
+				}).requestIdleCallback;
 				if (typeof requestIdleCallback === "function") {
 					requestIdleCallback(() => initScrollReveal());
 					return;

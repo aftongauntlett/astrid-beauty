@@ -11,6 +11,8 @@ declare global {
   var __astrid_settingsMenuController: AbortController | undefined;
   var __astrid_primaryNavController: AbortController | undefined;
   var __astrid_headerAutoHideController: AbortController | undefined;
+  var __astrid_footerController: AbortController | undefined;
+  var __astrid_bookingAccordionsController: AbortController | undefined;
 }
 
 export {};
