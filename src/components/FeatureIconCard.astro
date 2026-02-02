@@ -54,8 +54,10 @@ const cls = (name: string) => (styles as Record<string, string>)[name] ?? "";
 >
 	<div class={cls("header")}>
 		<div class={cls("content")}>
-			<h3 class={`${cls("title")} capitalize`}>{title}</h3>
-			{meta ? <p class={cls("meta")}>{meta}</p> : null}
+			<div class={cls("titleRow")}>
+				<h3 class={`${cls("title")} capitalize`}>{title}</h3>
+				{meta ? <p class={cls("meta")}>{meta}</p> : null}
+			</div>
 			{description ? <p class={cls("description")}>{description}</p> : null}
 		</div>
 

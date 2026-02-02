@@ -107,8 +107,11 @@ export default function HeroBackdrop(): React.JSX.Element {
       paletteRef.current = getThemePalette();
 
       const palette = paletteRef.current;
-      // Keep the same density/feel between themes.
-      const count = 18;
+      // Keep the same density/feel between themes, but reduce clutter on mobile.
+      // (Desktop should remain visually unchanged.)
+      const isVerySmall = w < 30 * 16; // < 480px
+      const isMobile = w < 48 * 16; // < 768px
+      const count = isVerySmall ? 6 : isMobile ? 9 : 18;
 
       const kinds: readonly ShapeKind[] = [
         "circle",

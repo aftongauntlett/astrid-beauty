@@ -1,18 +1,24 @@
 .card {
   --fic-icon-color: var(--color-primary);
-  --fic-icon-size: 4.1rem;
-  --fic-header-gap: var(--space-lg);
+  /* Mobile-first: icon becomes a watermark, so it can be larger */
+  --fic-icon-size: clamp(10rem, 52vw, 13.5rem);
+  --fic-header-gap: var(--space-md);
 
   display: grid;
   gap: var(--space-lg);
   position: relative;
+  overflow: hidden;
+  isolation: isolate;
 }
 
 @media (prefers-reduced-motion: no-preference) {
   .title {
     transition: color var(--motion-duration-fast) var(--motion-ease-standard);
   }
+}
 
+/* Hover-only affordances (avoid running on touch) */
+@media (prefers-reduced-motion: no-preference) and (hover: hover) and (pointer: fine) {
   .card:hover .title {
     color: var(--fic-icon-color);
   }
@@ -24,60 +30,54 @@
 
 .header {
   display: grid;
-  grid-template-columns: 1fr auto;
-  grid-template-areas: "content icon";
+  grid-template-columns: 1fr;
+  grid-template-areas: "content";
   align-items: start;
-  column-gap: var(--fic-header-gap);
   row-gap: var(--space-md);
 }
 
 .content {
   grid-area: content;
   display: grid;
-  gap: var(--space-md);
+  gap: var(--space-sm);
   align-content: start;
+  position: relative;
+  z-index: 1;
+}
+
+.titleRow {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--space-md);
+  flex-wrap: wrap;
+}
+
+.titleRow .meta {
+  margin-left: auto;
+  flex: 0 0 auto;
 }
 
 .iconWrap {
-  grid-area: icon;
-  justify-self: end;
-  align-self: start;
-  position: relative;
+  /* Mobile: take icon out of layout flow and render as a subtle watermark */
+  position: absolute;
+  top: 50%;
+  left: 50%;
   width: var(--fic-icon-size);
   height: var(--fic-icon-size);
   display: grid;
   place-items: center;
-  border-radius: 9999px;
-  background: linear-gradient(
-    180deg,
-    color-mix(in oklab, var(--color-surface) 68%, transparent) 0%,
-    color-mix(in oklab, var(--color-surface-muted) 72%, transparent) 80%
-  );
-  border: 1px solid
-    color-mix(in oklab, var(--fic-icon-color) 22%, var(--color-border));
-  box-shadow:
-    inset 0 1px 0 color-mix(in oklab, var(--color-surface) 70%, transparent),
-    inset 0 0 0 1px color-mix(in oklab, var(--color-secondary) 18%, transparent);
   color: var(--fic-icon-color);
-  overflow: visible;
-  opacity: 0.78;
-  backdrop-filter: blur(12px) saturate(1.08);
-  -webkit-backdrop-filter: blur(12px) saturate(1.08);
-  transition: opacity var(--motion-duration-fast) var(--motion-ease-standard);
+  pointer-events: none;
+  z-index: 0;
+  opacity: 0.12;
+  transform: translate(-50%, -50%) rotate(-10deg);
 }
 
+/* Keep focus affordances for keyboard users without relying on hover */
 @media (prefers-reduced-motion: no-preference) {
-  .card:hover .iconWrap,
-  .card:focus-within .iconWrap {
-    opacity: 0.92;
-    animation: ficTilt 0.9s ease-in-out;
-  }
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  .card:hover .icon,
-  .card:focus-within .icon {
-    animation: ficIconWiggle 0.85s ease-in-out;
+  .card:focus-within .title {
+    color: var(--fic-icon-color);
   }
 }
 
@@ -90,18 +90,11 @@
   opacity: 0;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .card:hover .glowRadial,
-  .card:focus-within .glowRadial {
-    opacity: 0.12;
-    animation: ficGlowRadial 1.6s ease-in-out infinite;
-  }
-
-  .card:hover .glowBlur,
-  .card:focus-within .glowBlur {
-    opacity: 0.08;
-    animation: ficGlowBlur 1.9s ease-in-out infinite;
-  }
+/* Mobile watermark: remove decorative glow/particles entirely */
+.glowRadial,
+.glowBlur,
+.particle {
+  display: none;
 }
 
 .glowRadial {
@@ -150,6 +143,8 @@ html[data-theme="light"] .glowBlur {
 .icon svg {
   display: block;
   transform: translateY(0.5px);
+  width: clamp(80px, 26vw, 128px);
+  height: clamp(80px, 26vw, 128px);
 }
 
 .title {
@@ -204,48 +199,154 @@ html[data-theme="light"] .glowBlur {
   list-style: none;
 }
 
-/* Mobile (services grid is 1 column): stack icon + center content */
-@media (max-width: 47.999rem) {
+/* Tablet + desktop: restore existing icon-in-header layout (unchanged visuals) */
+@media (min-width: 48rem) {
   .card {
-    --fic-icon-size: 5rem;
-    --fic-header-gap: var(--space-md);
+    --fic-icon-size: 4.1rem;
+    --fic-header-gap: var(--space-lg);
+    overflow: visible;
+    isolation: auto;
   }
 
   .header {
-    grid-template-columns: 1fr;
-    grid-template-areas:
-      "icon"
-      "content";
-    justify-items: center;
-    text-align: center;
+    grid-template-columns: 1fr auto;
+    grid-template-areas: "content icon";
+    column-gap: var(--fic-header-gap);
   }
 
   .content {
-    justify-items: center;
+    gap: var(--space-md);
+  }
+
+  .titleRow {
+    display: grid;
+    gap: var(--space-md);
+    align-content: start;
+  }
+
+  .titleRow .meta {
+    margin-left: 0;
+  }
+
+  .iconWrap {
+    grid-area: icon;
+    justify-self: end;
+    align-self: start;
+    position: relative;
+    top: auto;
+    right: auto;
+    left: auto;
+    border-radius: 9999px;
+    background: linear-gradient(
+      180deg,
+      color-mix(in oklab, var(--color-surface) 68%, transparent) 0%,
+      color-mix(in oklab, var(--color-surface-muted) 72%, transparent) 80%
+    );
+    border: 1px solid
+      color-mix(in oklab, var(--fic-icon-color) 22%, var(--color-border));
+    box-shadow:
+      inset 0 1px 0 color-mix(in oklab, var(--color-surface) 70%, transparent),
+      inset 0 0 0 1px
+        color-mix(in oklab, var(--color-secondary) 18%, transparent);
+    overflow: visible;
+    opacity: 0.78;
+    transform: none;
+    backdrop-filter: blur(12px) saturate(1.08);
+    -webkit-backdrop-filter: blur(12px) saturate(1.08);
+    transition: opacity var(--motion-duration-fast) var(--motion-ease-standard);
+    pointer-events: auto;
+    z-index: auto;
+  }
+
+  .glowRadial,
+  .glowBlur,
+  .particle {
+    display: block;
   }
 
   .icon svg {
-    width: 38px;
-    height: 38px;
+    width: auto;
+    height: auto;
+  }
+}
+
+/* Hover-only motion at md+ (do not run on touch) */
+@media (min-width: 48rem) and (prefers-reduced-motion: no-preference) and (hover: hover) and (pointer: fine) {
+  .card:hover .iconWrap {
+    opacity: 0.92;
+    animation: ficTilt 0.9s ease-in-out;
   }
 
-  .meta,
-  .title,
-  .description {
-    text-align: center;
+  .card:hover .icon {
+    animation: ficIconWiggle 0.85s ease-in-out;
   }
 
-  .list {
-    margin-left: 0;
-    width: 100%;
-    max-width: 22rem;
-    margin-inline: auto;
-    justify-items: start;
-    text-align: left;
+  .card:hover .glowRadial {
+    opacity: 0.12;
+    animation: ficGlowRadial 1.6s ease-in-out infinite;
   }
 
-  .list li {
-    justify-content: flex-start;
+  .card:hover .glowBlur {
+    opacity: 0.08;
+    animation: ficGlowBlur 1.9s ease-in-out infinite;
+  }
+
+  .card:hover .particle {
+    opacity: 1;
+  }
+
+  .card:hover .particle1 {
+    animation: ficParticle 1.6s ease-in-out infinite;
+  }
+
+  .card:hover .particle2 {
+    animation: ficParticle 1.6s ease-in-out infinite;
+    animation-delay: 0.45s;
+  }
+
+  .card:hover .particle3 {
+    animation: ficParticle 1.6s ease-in-out infinite;
+    animation-delay: 0.9s;
+  }
+}
+
+/* Keyboard focus motion should still work at md+ */
+@media (min-width: 48rem) and (prefers-reduced-motion: no-preference) {
+  .card:focus-within .iconWrap {
+    opacity: 0.92;
+    animation: ficTilt 0.9s ease-in-out;
+  }
+
+  .card:focus-within .icon {
+    animation: ficIconWiggle 0.85s ease-in-out;
+  }
+
+  .card:focus-within .glowRadial {
+    opacity: 0.12;
+    animation: ficGlowRadial 1.6s ease-in-out infinite;
+  }
+
+  .card:focus-within .glowBlur {
+    opacity: 0.08;
+    animation: ficGlowBlur 1.9s ease-in-out infinite;
+  }
+
+  .card:focus-within .particle {
+    opacity: 1;
+  }
+
+  .card:focus-within .particle1 {
+    animation: ficParticle 1.6s ease-in-out infinite;
+  }
+
+  .card:focus-within .particle2 {
+    animation: ficParticle 1.6s ease-in-out infinite;
+    animation-delay: 0.45s;
+  }
+
+  .card:focus-within .particle3 {
+    animation: ficParticle 1.6s ease-in-out infinite;
+    animation-delay: 0.9s;
   }
 }
 
@@ -295,30 +396,6 @@ html[data-theme="light"] .glowBlur {
 .particle3 {
   left: 78%;
   top: 64%;
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  .card:hover .particle,
-  .card:focus-within .particle {
-    opacity: 1;
-  }
-
-  .card:hover .particle1,
-  .card:focus-within .particle1 {
-    animation: ficParticle 1.6s ease-in-out infinite;
-  }
-
-  .card:hover .particle2,
-  .card:focus-within .particle2 {
-    animation: ficParticle 1.6s ease-in-out infinite;
-    animation-delay: 0.45s;
-  }
-
-  .card:hover .particle3,
-  .card:focus-within .particle3 {
-    animation: ficParticle 1.6s ease-in-out infinite;
-    animation-delay: 0.9s;
-  }
 }
 
 @keyframes ficTilt {

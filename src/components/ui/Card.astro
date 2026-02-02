@@ -161,15 +161,25 @@ const classes = [
 				transform var(--motion-duration-fast) var(--motion-ease-standard);
 		}
 
-		.card--hover:hover,
 		.card--hover:focus-within {
 			transform: translateY(-2px);
 			box-shadow: var(--shadow-md);
 			border-color: color-mix(in oklab, var(--color-primary) 22%, var(--color-border));
 		}
 
-		html:not([data-theme="dark"]) .card--hover:hover.card--default::before,
 		html:not([data-theme="dark"]) .card--hover:focus-within.card--default::before {
+			opacity: 0.72;
+		}
+	}
+
+	@media (prefers-reduced-motion: no-preference) and (hover: hover) and (pointer: fine) {
+		.card--hover:hover {
+			transform: translateY(-2px);
+			box-shadow: var(--shadow-md);
+			border-color: color-mix(in oklab, var(--color-primary) 22%, var(--color-border));
+		}
+
+		html:not([data-theme="dark"]) .card--hover:hover.card--default::before {
 			opacity: 0.72;
 		}
 	}
