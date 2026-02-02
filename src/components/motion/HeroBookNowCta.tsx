@@ -151,9 +151,7 @@ export default function HeroBookNowCta({
         <span className={styles["externalSpacer"]} aria-hidden="true" />
         <span className={styles["externalLabel"]}>
           <span className={styles["labelDesktop"]}>{label}</span>
-          {labelMobile ? (
-            <span className={styles["labelMobile"]}>{labelMobile}</span>
-          ) : null}
+          <span className={styles["labelMobile"]}>{labelMobile ?? label}</span>
         </span>
         <ExternalLink
           className={styles["externalIcon"]}
@@ -264,9 +262,7 @@ export default function HeroBookNowCta({
         style={{ position: "relative", zIndex: 1 }}
       >
         <span className={styles["labelDesktop"]}>{label}</span>
-        {labelMobile ? (
-          <span className={styles["labelMobile"]}>{labelMobile}</span>
-        ) : null}
+        <span className={styles["labelMobile"]}>{labelMobile ?? label}</span>
       </span>
       <motion.span
         style={{

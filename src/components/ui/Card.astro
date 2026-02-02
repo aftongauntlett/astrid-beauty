@@ -55,8 +55,38 @@ const classes = [
 		box-shadow: var(--shadow-sm);
 	}
 
+	html:not([data-theme="dark"]) .card--default {
+		background: var(--surface-glass);
+		border-color: color-mix(in oklab, var(--color-border) 82%, transparent);
+		box-shadow:
+			var(--shadow-sm),
+			0 18px 40px -34px var(--shadow-color-md),
+			inset 0 1px 0 var(--glass-highlight),
+			inset 0 0 0 1px var(--glass-rim);
+	}
+
+	html:not([data-theme="dark"]) .card--default::before {
+		content: "";
+		position: absolute;
+		inset: 0;
+		border-radius: inherit;
+		pointer-events: none;
+		background: linear-gradient(
+			180deg,
+			color-mix(in oklab, white 72%, transparent) 0%,
+			transparent 48%
+		);
+		opacity: 0.55;
+		z-index: 0;
+	}
+
 	html[data-theme="dark"] .card--default {
 		background: color-mix(in oklab, var(--color-surface) 70%, var(--color-bg));
+	}
+
+	.card--default > * {
+		position: relative;
+		z-index: 1;
 	}
 
 	.card--elevated {
@@ -136,6 +166,11 @@ const classes = [
 			transform: translateY(-2px);
 			box-shadow: var(--shadow-md);
 			border-color: color-mix(in oklab, var(--color-primary) 22%, var(--color-border));
+		}
+
+		html:not([data-theme="dark"]) .card--hover:hover.card--default::before,
+		html:not([data-theme="dark"]) .card--hover:focus-within.card--default::before {
+			opacity: 0.72;
 		}
 	}
 </style>

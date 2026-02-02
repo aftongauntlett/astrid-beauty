@@ -25,6 +25,34 @@
   --color-surface-elevated: #fdf8ff; /* overlay / elevated */
   --color-accent-soft: #efe0f3; /* soft lavender tint for warmth (less pink) */
 
+  /* Light mode “glass” surfaces (shiny without neon glows) */
+  --surface-glass: linear-gradient(
+    180deg,
+    color-mix(in oklab, white 88%, var(--color-primary) 3%) 0%,
+    var(--color-surface) 56%,
+    color-mix(in oklab, var(--color-surface) 84%, var(--color-primary) 6%) 100%
+  );
+  --surface-glass-muted: linear-gradient(
+    180deg,
+    color-mix(in oklab, white 86%, var(--color-primary) 2%) 0%,
+    color-mix(in oklab, var(--color-surface-muted) 92%, white) 62%,
+    color-mix(in oklab, var(--color-surface-muted) 88%, var(--color-primary) 3%)
+      100%
+  );
+  --surface-glass-elevated: linear-gradient(
+    180deg,
+    color-mix(in oklab, white 90%, var(--color-primary) 4%) 0%,
+    var(--color-surface-elevated) 62%,
+    color-mix(
+        in oklab,
+        var(--color-surface-elevated) 88%,
+        var(--color-secondary) 4%
+      )
+      100%
+  );
+  --glass-highlight: color-mix(in oklab, white 72%, transparent);
+  --glass-rim: color-mix(in oklab, var(--color-primary) 12%, transparent);
+
   --color-text: #302934; /* deep warm charcoal */
   --color-text-muted: #5d515f; /* softer warm gray */
 
@@ -51,7 +79,7 @@
   --color-focus: #a14b76;
 
   /* Shadow base (avoid "glow" in dark mode) */
-  --color-shadow: #2b1f1a;
+  --color-shadow: #241a2c;
 
   --radius-sm: 0.75rem;
   --radius-md: 9999px;
@@ -175,6 +203,11 @@ body {
 body {
   margin: 0;
   background:
+    radial-gradient(
+      1100px 740px at 50% -20%,
+      color-mix(in oklab, white 48%, transparent),
+      transparent 62%
+    ),
     radial-gradient(
       1200px 800px at 10% -10%,
       color-mix(in oklab, var(--color-secondary) 6%, transparent),
@@ -533,6 +566,11 @@ main > .section:nth-of-type(even) {
   background: var(--color-surface-muted);
 }
 
+/* Light mode: make sections feel more “shiny” and dimensional */
+html:not([data-theme="dark"]) main > .section:nth-of-type(even) {
+  background: var(--surface-glass-muted);
+}
+
 main > .section:nth-of-type(odd):not(.hero) {
   background: var(--color-bg);
 }
@@ -550,6 +588,10 @@ html[data-theme="dark"] main > .section:nth-of-type(odd):not(.hero) {
 */
 main > .section.section--muted {
   background: var(--color-surface-muted);
+}
+
+html:not([data-theme="dark"]) main > .section.section--muted {
+  background: var(--surface-glass-muted);
 }
 
 main > .section.section--bg {

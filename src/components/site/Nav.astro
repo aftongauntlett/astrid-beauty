@@ -362,7 +362,10 @@ const sectionHref = (id: string) => (lang === "es" ? `/es#${id}` : `/#${id}`);
 		flex: 0 0 auto;
 		white-space: nowrap;
 		font-size: 0.95rem;
-		transition: color var(--motion-duration-fast) var(--motion-ease-standard);
+		transition:
+			color var(--motion-duration-fast) var(--motion-ease-standard),
+			background-color var(--motion-duration-fast) var(--motion-ease-standard),
+			box-shadow var(--motion-duration-fast) var(--motion-ease-standard);
 	}
 
 	/* Refined underline: animates in smoothly on hover + focus-visible */
@@ -389,6 +392,13 @@ const sectionHref = (id: string) => (lang === "es" ? `/es#${id}` : `/#${id}`);
 		color: var(--color-primary);
 	}
 
+	/* Light mode: give links a faint glass pill on hover/current */
+	html:not([data-theme="dark"]) .nav__link:hover,
+	html:not([data-theme="dark"]) .nav__link:focus-visible {
+		background: transparent;
+		box-shadow: none;
+	}
+
 	.nav__link:hover::after,
 	.nav__link:focus-visible::after {
 		opacity: 1;
@@ -400,6 +410,12 @@ const sectionHref = (id: string) => (lang === "es" ? `/es#${id}` : `/#${id}`);
 	.nav__link[aria-current="page"] {
 		color: var(--color-primary);
 		font-weight: 700;
+	}
+
+	html:not([data-theme="dark"]) .nav__link[aria-current="location"],
+	html:not([data-theme="dark"]) .nav__link[aria-current="page"] {
+		background: transparent;
+		box-shadow: none;
 	}
 
 	.nav__link[aria-current="location"]::after,
@@ -446,6 +462,15 @@ const sectionHref = (id: string) => (lang === "es" ? `/es#${id}` : `/#${id}`);
 			border: 1px solid var(--color-border);
 			border-radius: var(--radius-lg);
 			box-shadow: var(--shadow-md);
+		}
+
+		html:not([data-theme="dark"]) .nav__menu {
+			background: var(--surface-glass-elevated);
+			border-color: color-mix(in oklab, var(--color-border) 88%, transparent);
+			box-shadow:
+				var(--shadow-md),
+				inset 0 1px 0 var(--glass-highlight),
+				inset 0 0 0 1px var(--glass-rim);
 		}
 
 		.nav__link {

@@ -21,7 +21,7 @@ export const es: Messages = {
   },
   misc: {
     bookNow: "Reservar",
-    scheduleAppointment: "Programar una cita",
+    scheduleAppointment: "Reservar",
     viewPrices: "Ver precios",
     viewServices: "Explorar servicios",
     backToTop: "Volver arriba",

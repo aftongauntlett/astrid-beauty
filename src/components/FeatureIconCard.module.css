@@ -207,7 +207,7 @@ html[data-theme="light"] .glowBlur {
 /* Mobile (services grid is 1 column): stack icon + center content */
 @media (max-width: 47.999rem) {
   .card {
-    --fic-icon-size: 4.25rem;
+    --fic-icon-size: 5rem;
     --fic-header-gap: var(--space-md);
   }
 
@@ -224,6 +224,11 @@ html[data-theme="light"] .glowBlur {
     justify-items: center;
   }
 
+  .icon svg {
+    width: 38px;
+    height: 38px;
+  }
+
   .meta,
   .title,
   .description {
@@ -232,11 +237,15 @@ html[data-theme="light"] .glowBlur {
 
   .list {
     margin-left: 0;
-    justify-items: center;
+    width: 100%;
+    max-width: 22rem;
+    margin-inline: auto;
+    justify-items: start;
+    text-align: left;
   }
 
   .list li {
-    justify-content: center;
+    justify-content: flex-start;
   }
 }
 

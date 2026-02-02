@@ -176,7 +176,7 @@ const staffCards = [
 	<div class="container stack stack--lg">
 		<section class="booking-reviews" aria-labelledby="reviews-title">
 			<header class="booking-reviews__header">
-				<h3 class="about__sectionTitle booking-reviews__title" id="reviews-title">{messages.booking.reviewsTitle}</h3>
+				<h3 class="about__sectionTitle booking-reviews__title title-plaque" id="reviews-title">{messages.booking.reviewsTitle}</h3>
 			</header>
 			<div class="reviews-grid" role="list" aria-label={messages.booking.reviewsTitle}>
 				{orderedReviews.map((review, index) => (
@@ -209,7 +209,7 @@ const staffCards = [
 
 		<div class="about__staff">
 			<h3
-				class="about__sectionTitle booking-reviews__title"
+				class="about__sectionTitle booking-reviews__title title-plaque"
 				id="staff-title"
 				data-reveal
 				data-reveal-delay="80"
@@ -287,6 +287,24 @@ const staffCards = [
 		overflow: hidden;
 		isolation: isolate;
 		background: var(--color-bg);
+	}
+
+	/* Light mode: add a gentle separator into the next section */
+	html:not([data-theme="dark"]) .hero::after {
+		content: "";
+		position: absolute;
+		left: 0;
+		right: 0;
+		bottom: 0;
+		height: 44px;
+		pointer-events: none;
+		background: linear-gradient(
+			180deg,
+			transparent 0%,
+			color-mix(in oklab, var(--color-primary) 4%, var(--color-surface-muted)) 70%,
+			color-mix(in oklab, var(--color-primary) 3%, var(--color-surface-muted)) 100%
+		);
+		opacity: 0.32;
 	}
 
 	html[data-theme="dark"] .hero {
@@ -509,13 +527,13 @@ const staffCards = [
 	.hero__actionsRow {
 		display: grid;
 		gap: var(--space-sm);
-		justify-items: start;
+		justify-items: center;
 	}
 
 	.hero__ctaStack {
 		display: grid;
 		gap: var(--space-xs);
-		justify-items: start;
+		justify-items: center;
 	}
 
 	@media (min-width: 48rem) {
@@ -533,7 +551,13 @@ const staffCards = [
 		font-size: 0.68rem;
 		color: color-mix(in oklab, var(--color-text-muted) 80%, transparent);
 		letter-spacing: 0.012em;
-		text-align: right;
+		text-align: center;
+	}
+
+	@media (min-width: 48rem) {
+		.hero__ctaHelper {
+			text-align: right;
+		}
 	}
 
 	.about__stack {
@@ -811,6 +835,24 @@ const staffCards = [
 		text-decoration-thickness: var(--stroke-1);
 		text-underline-offset: 0.22em;
 		text-decoration-color: color-mix(in oklab, var(--color-primary) 55%, transparent);
+	}
+
+	/* Title plaque: used for reviews + staff headings */
+	.title-plaque {
+		display: inline-block;
+		padding: 0;
+		border: 0;
+		border-radius: 0;
+		background: transparent;
+		box-shadow: none;
+	}
+
+	.title-plaque::before {
+		content: none;
+	}
+
+	.title-plaque {
+		text-decoration: none;
 	}
 
 	.reviews__more {

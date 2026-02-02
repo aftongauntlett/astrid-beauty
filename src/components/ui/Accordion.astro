@@ -299,6 +299,14 @@ const panelId = (suffix: string) => `${idPrefix}-panel-${suffix}`;
 		box-shadow: var(--shadow-sm);
 	}
 
+	html:not([data-theme="dark"]) .accordion__sectionTitle {
+		background: var(--surface-glass-elevated);
+		box-shadow:
+			var(--shadow-sm),
+			inset 0 1px 0 var(--glass-highlight),
+			inset 0 0 0 1px var(--glass-rim);
+	}
+
 	html[data-theme="dark"] .accordion__sectionTitle {
 		background: linear-gradient(
 			180deg,
@@ -323,6 +331,14 @@ const panelId = (suffix: string) => `${idPrefix}-panel-${suffix}`;
 		overflow: hidden;
 	}
 
+	html:not([data-theme="dark"]) .accordion__item {
+		background: var(--surface-glass-muted);
+		box-shadow:
+			var(--shadow-sm),
+			inset 0 1px 0 var(--glass-highlight),
+			inset 0 0 0 1px var(--glass-rim);
+	}
+
 	html[data-theme="dark"] .accordion__item {
 		background: color-mix(in oklab, var(--color-surface) 70%, var(--color-bg));
 	}
@@ -345,6 +361,10 @@ const panelId = (suffix: string) => `${idPrefix}-panel-${suffix}`;
 		position: relative;
 		isolation: isolate;
 		border-radius: var(--radius-lg);
+	}
+
+	html:not([data-theme="dark"]) .accordion__trigger {
+		background: var(--surface-glass-elevated);
 	}
 
 	html[data-theme="dark"] .accordion__trigger {
