@@ -21,7 +21,7 @@
     */
   --color-bg: #f8f5fa; /* warm, low-glare canvas */
   --color-surface: #fcf9fd; /* primary surfaces (cards/header) */
-  --color-surface-muted: #f0edf3; /* clearer separation for nav/sections */
+  --color-surface-muted: #ebe8f0; /* clearer separation for nav/sections */
   --color-surface-elevated: #fdf8ff; /* overlay / elevated */
   --color-accent-soft: #efe0f3; /* soft lavender tint for warmth (less pink) */
 

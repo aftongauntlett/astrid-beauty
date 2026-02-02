@@ -37,12 +37,31 @@ const canonicalHref = toHref(canonicalPathFinal);
 const enHref = toHref(alternates.en);
 const esHref = toHref(alternates.es);
 const xDefaultHref = toHref(alternates.xDefault);
+
+const ogImageHref = toHref("/by-astrid-beauty-logo.png");
 ---
 
 <!doctype html>
-<html lang={lang} data-theme="light">
+<html lang={lang}>
 	<head>
 		<meta charset="utf-8" />
+		<script is:inline>
+			(() => {
+				try {
+					const stored = localStorage.theme;
+					const theme =
+						stored === "light" || stored === "dark"
+							? stored
+							: window.matchMedia?.("(prefers-color-scheme: dark)").matches
+								? "dark"
+								: "light";
+					document.documentElement.dataset.theme = theme;
+					document.documentElement.style.colorScheme = theme;
+				} catch {
+					// ignore
+				}
+			})();
+		</script>
 		<script
 			is:inline
 			define:vars={{
@@ -144,6 +163,13 @@ const xDefaultHref = toHref(alternates.xDefault);
 		<meta name="viewport" content="width=device-width, initial-scale=1" />
 		<meta name="generator" content={Astro.generator} />
 		{description ? <meta name="description" content={description} /> : null}
+		<meta property="og:type" content="website" />
+		<meta property="og:title" content={title} />
+		{description ? <meta property="og:description" content={description} /> : null}
+		<meta property="og:url" content={canonicalHref} />
+		<meta property="og:image" content={ogImageHref} />
+		<meta name="twitter:card" content="summary_large_image" />
+		<meta name="twitter:image" content={ogImageHref} />
 		<link rel="canonical" href={canonicalHref} />
 		<link rel="alternate" hreflang="en" href={enHref} />
 		<link rel="alternate" hreflang="es" href={esHref} />

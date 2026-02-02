@@ -1,6 +1,16 @@
 ---
 import Card from "./ui/Card.astro";
-import FeatureIconCardReact from "./FeatureIconCard.tsx";
+
+import {
+	Droplet,
+	MessageCircleQuestion,
+	Palette,
+	Scissors,
+	Sparkles,
+	Waves,
+} from "@lucide/astro";
+
+import styles from "./FeatureIconCard.module.css";
 
 export interface Props {
 	title: string;
@@ -11,18 +21,63 @@ export interface Props {
 	iconColor?: string;
 }
 
-const { title, meta, items, description, iconName, iconColor } = Astro.props as Props;
-
-const reactProps = {
+const {
 	title,
-	...(meta ? { meta } : {}),
-	...(iconName ? { iconName } : {}),
-	...(items ? { items } : {}),
-	...(description ? { description } : {}),
-	...(iconColor ? { iconColor } : {}),
-};
+	meta,
+	items,
+	description,
+	iconName = "sparkles",
+	iconColor = "var(--color-primary)",
+} = Astro.props as Props;
+
+const iconByName = {
+	sparkles: Sparkles,
+	consultation: MessageCircleQuestion,
+	palette: Palette,
+	scissors: Scissors,
+	droplet: Droplet,
+	waves: Waves,
+} as const;
+
+const Icon = iconByName[iconName];
+
+const cls = (name: string) => (styles as Record<string, string>)[name] ?? "";
 ---
 
-<Card variant="default" padding="lg" hover={true}>
-	<FeatureIconCardReact client:visible {...reactProps} />
+<Card
+	as="article"
+	variant="default"
+	padding="lg"
+	hover={true}
+	class={cls("card")}
+	style={`--fic-icon-color: ${iconColor};`}
+>
+	<div class={cls("header")}>
+		<div class={cls("content")}>
+			<h3 class={`${cls("title")} capitalize`}>{title}</h3>
+			{meta ? <p class={cls("meta")}>{meta}</p> : null}
+			{description ? <p class={cls("description")}>{description}</p> : null}
+		</div>
+
+		<div class={cls("iconWrap")} style="transform-style: preserve-3d;">
+			<div class={cls("glowRadial")} aria-hidden="true"></div>
+			<div class={cls("glowBlur")} aria-hidden="true"></div>
+
+			<div class={cls("icon")}>
+				<Icon aria-hidden="true" focusable="false" size={30} />
+			</div>
+
+			<span class={`${cls("particle")} ${cls("particle1")}`} aria-hidden="true"></span>
+			<span class={`${cls("particle")} ${cls("particle2")}`} aria-hidden="true"></span>
+			<span class={`${cls("particle")} ${cls("particle3")}`} aria-hidden="true"></span>
+		</div>
+	</div>
+
+	{items?.length ? (
+		<ul class={cls("list")}>
+			{items.map((item) => (
+				<li>{item}</li>
+			))}
+		</ul>
+	) : null}
 </Card>

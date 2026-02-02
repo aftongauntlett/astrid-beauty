@@ -1,0 +1,481 @@
+---
+export interface PoliciesContent {
+	title: string;
+	items: {
+		rescheduling: {
+			title: string;
+			bullets: {
+				notice: string;
+				fee: string;
+				contactIntro: string;
+				contactOutro: string;
+			};
+			why: string;
+		};
+		policies: {
+			title: string;
+			body: string;
+		};
+		paymentMethods: {
+			title: string;
+			items: string[];
+		};
+		parking: {
+			title: string;
+			items: string[];
+		};
+		spokenLanguages: {
+			title: string;
+			items: string[];
+		};
+	};
+}
+
+export interface Props {
+	policies: PoliciesContent;
+	idPrefix: string;
+	ariaLabelledBy: string;
+	rootClass?: string;
+	renderTitle?: boolean;
+	titleId?: string;
+	titleRevealDelay?: string;
+}
+
+const {
+	policies,
+	idPrefix,
+	ariaLabelledBy,
+	rootClass,
+	renderTitle = false,
+	titleId = "accordion-title",
+	titleRevealDelay = "80",
+} = Astro.props as Props;
+
+const triggerId = (suffix: string) => `${idPrefix}-trigger-${suffix}`;
+const panelId = (suffix: string) => `${idPrefix}-panel-${suffix}`;
+---
+
+<div class={rootClass} data-accordion>
+	{renderTitle ? (
+		<h2 class="accordion__sectionTitle" id={titleId} data-reveal data-reveal-delay={titleRevealDelay}>
+			{policies.title}
+		</h2>
+	) : null}
+
+	<div class="accordion" role="group" aria-labelledby={ariaLabelledBy}>
+		<div class="accordion__item" data-reveal data-reveal-delay="120">
+			<button
+				type="button"
+				class="accordion__trigger"
+				aria-expanded="false"
+				aria-controls={panelId("rescheduling")}
+				id={triggerId("rescheduling")}
+			>
+				<span class="accordion__triggerText capitalize">{policies.items.rescheduling.title}</span>
+				<span class="accordion__chevron" aria-hidden="true"></span>
+			</button>
+			<div
+				class="accordion__panel"
+				id={panelId("rescheduling")}
+				role="region"
+				aria-labelledby={triggerId("rescheduling")}
+				hidden
+			>
+				<div class="accordion__panelInner">
+					<ul class="accordion__list" aria-label={policies.items.rescheduling.title}>
+						<li>{policies.items.rescheduling.bullets.notice}</li>
+						<li>{policies.items.rescheduling.bullets.fee}</li>
+						<li>
+							{policies.items.rescheduling.bullets.contactIntro}
+							<a class="accordion__link" href="tel:+17037863707">703-786-3707</a>
+							{policies.items.rescheduling.bullets.contactOutro}
+						</li>
+					</ul>
+					<p class="accordion__note">{policies.items.rescheduling.why}</p>
+				</div>
+			</div>
+		</div>
+
+		<div class="accordion__item" data-reveal data-reveal-delay="170">
+			<button
+				type="button"
+				class="accordion__trigger"
+				aria-expanded="false"
+				aria-controls={panelId("children")}
+				id={triggerId("children")}
+			>
+				<span class="accordion__triggerText capitalize">{policies.items.policies.title}</span>
+				<span class="accordion__chevron" aria-hidden="true"></span>
+			</button>
+			<div
+				class="accordion__panel"
+				id={panelId("children")}
+				role="region"
+				aria-labelledby={triggerId("children")}
+				hidden
+			>
+				<div class="accordion__panelInner">
+					<ul class="accordion__list" aria-label={policies.items.policies.title}>
+						<li>{policies.items.policies.body}</li>
+					</ul>
+				</div>
+			</div>
+		</div>
+
+		<div class="accordion__item" data-reveal data-reveal-delay="220">
+			<button
+				type="button"
+				class="accordion__trigger"
+				aria-expanded="false"
+				aria-controls={panelId("payment")}
+				id={triggerId("payment")}
+			>
+				<span class="accordion__triggerText capitalize">{policies.items.paymentMethods.title}</span>
+				<span class="accordion__chevron" aria-hidden="true"></span>
+			</button>
+			<div
+				class="accordion__panel"
+				id={panelId("payment")}
+				role="region"
+				aria-labelledby={triggerId("payment")}
+				hidden
+			>
+				<div class="accordion__panelInner">
+					<ul class="accordion__list accordion__list--cols3" aria-label={policies.items.paymentMethods.title}>
+						{policies.items.paymentMethods.items.map((item) => (
+							<li>{item}</li>
+						))}
+					</ul>
+				</div>
+			</div>
+		</div>
+
+		<div class="accordion__item" data-reveal data-reveal-delay="270">
+			<button
+				type="button"
+				class="accordion__trigger"
+				aria-expanded="false"
+				aria-controls={panelId("parking")}
+				id={triggerId("parking")}
+			>
+				<span class="accordion__triggerText capitalize">{policies.items.parking.title}</span>
+				<span class="accordion__chevron" aria-hidden="true"></span>
+			</button>
+			<div
+				class="accordion__panel"
+				id={panelId("parking")}
+				role="region"
+				aria-labelledby={triggerId("parking")}
+				hidden
+			>
+				<div class="accordion__panelInner">
+					<ul class="accordion__list" aria-label={policies.items.parking.title}>
+						{policies.items.parking.items.map((item) => (
+							<li>{item}</li>
+						))}
+					</ul>
+				</div>
+			</div>
+		</div>
+
+		<div class="accordion__item" data-reveal data-reveal-delay="320">
+			<button
+				type="button"
+				class="accordion__trigger"
+				aria-expanded="false"
+				aria-controls={panelId("languages")}
+				id={triggerId("languages")}
+			>
+				<span class="accordion__triggerText capitalize">{policies.items.spokenLanguages.title}</span>
+				<span class="accordion__chevron" aria-hidden="true"></span>
+			</button>
+			<div
+				class="accordion__panel"
+				id={panelId("languages")}
+				role="region"
+				aria-labelledby={triggerId("languages")}
+				hidden
+			>
+				<div class="accordion__panelInner">
+					<ul class="accordion__list" aria-label={policies.items.spokenLanguages.title}>
+						{policies.items.spokenLanguages.items.map((item) => (
+							<li>{item}</li>
+						))}
+					</ul>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<script>
+	const controller = new AbortController();
+	const { signal } = controller;
+
+	document.addEventListener("astro:before-swap", () => controller.abort(), { once: true, signal });
+
+	const initAccordions = () => {
+		/** @type {HTMLElement[]} */
+		const roots = Array.from(document.querySelectorAll("[data-accordion]"));
+		for (const root of roots) {
+			/** @type {Element[]} */
+			const triggers = Array.from(root.querySelectorAll(".accordion__trigger"));
+			for (const triggerEl of triggers) {
+				if (!(triggerEl instanceof HTMLButtonElement)) continue;
+				const trigger = triggerEl;
+
+				const nextPanelId = trigger.getAttribute("aria-controls");
+				if (!nextPanelId) continue;
+				const panel = root.querySelector(`#${CSS.escape(nextPanelId)}`);
+				if (!(panel instanceof HTMLElement)) continue;
+
+				const collapse = () => {
+					trigger.setAttribute("aria-expanded", "false");
+					panel.hidden = true;
+				};
+
+				const expand = () => {
+					trigger.setAttribute("aria-expanded", "true");
+					panel.hidden = false;
+				};
+
+				collapse();
+
+				trigger.addEventListener(
+					"click",
+					() => {
+						const expanded = trigger.getAttribute("aria-expanded") === "true";
+						if (expanded) collapse();
+						else expand();
+					},
+					{ signal }
+				);
+
+				trigger.addEventListener(
+					"keydown",
+					(event) => {
+						if (event.key === "Escape") {
+							const expanded = trigger.getAttribute("aria-expanded") === "true";
+							if (expanded) {
+								event.preventDefault();
+								collapse();
+								trigger.focus();
+							}
+						}
+					},
+					{ signal }
+				);
+			}
+		}
+	};
+
+	const run = () => initAccordions();
+	if (document.readyState === "loading") {
+		document.addEventListener("DOMContentLoaded", run, { once: true });
+	} else {
+		run();
+	}
+
+	document.addEventListener("astro:page-load", run, { signal });
+</script>
+
+<style>
+	.accordion__sectionTitle {
+		margin: 0;
+		font-size: var(--heading-3);
+		text-align: center;
+	}
+
+	.accordion {
+		display: grid;
+		gap: var(--space-sm);
+	}
+
+	.accordion__item {
+		border: 1px solid color-mix(in oklab, var(--color-border) 70%, transparent);
+		border-radius: var(--radius-lg);
+		background: color-mix(in oklab, var(--color-surface) 92%, var(--color-surface-muted));
+		overflow: hidden;
+	}
+
+	html[data-theme="dark"] .accordion__item {
+		background: color-mix(in oklab, var(--color-surface) 70%, var(--color-bg));
+	}
+
+	.accordion__trigger {
+		appearance: none;
+		width: 100%;
+		text-align: left;
+		border: 0;
+		background: transparent;
+		color: var(--color-text);
+		padding: var(--space-md) var(--space-lg);
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		gap: var(--space-md);
+		font: inherit;
+		font-weight: 650;
+		cursor: pointer;
+		position: relative;
+		isolation: isolate;
+	}
+
+	.accordion__trigger::before {
+		content: "";
+		position: absolute;
+		inset: 0;
+		border-radius: var(--radius-lg);
+		background: color-mix(in oklab, var(--color-primary) 12%, var(--color-surface));
+		opacity: 0;
+		pointer-events: none;
+		z-index: 0;
+	}
+
+	.accordion__trigger[aria-expanded="true"]::before {
+		border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+	}
+
+	.accordion__triggerText,
+	.accordion__chevron {
+		position: relative;
+		z-index: 1;
+	}
+
+	@media (prefers-reduced-motion: no-preference) {
+		.accordion__trigger {
+			transition:
+				color var(--motion-duration-normal) var(--motion-ease-standard),
+				background-color var(--motion-duration-normal) var(--motion-ease-standard);
+		}
+
+		.accordion__trigger::before {
+			transition: opacity var(--motion-duration-normal) var(--motion-ease-standard);
+		}
+	}
+
+	.accordion__trigger:hover,
+	.accordion__trigger:focus-visible {
+		color: var(--color-primary);
+		background-color: transparent;
+	}
+
+	.accordion__trigger:hover::before,
+	.accordion__trigger:focus-visible::before {
+		opacity: 0.42;
+	}
+
+	.accordion__trigger:active {
+		background-color: transparent;
+	}
+
+	.accordion__trigger:active::before {
+		opacity: 0.55;
+	}
+
+	.accordion__trigger[aria-expanded="true"] {
+		color: var(--color-primary);
+		background-color: transparent;
+	}
+
+	.accordion__trigger[aria-expanded="true"]::before {
+		opacity: 0.62;
+	}
+
+	.accordion__trigger:focus-visible {
+		outline: 2px solid var(--color-focus);
+		outline-offset: 2px;
+	}
+
+	.accordion__chevron {
+		width: 10px;
+		height: 10px;
+		color: currentColor;
+		border-right: 2px solid currentColor;
+		border-bottom: 2px solid currentColor;
+		transform: rotate(45deg);
+		flex: 0 0 auto;
+		opacity: 0.78;
+	}
+
+	.accordion__trigger:hover .accordion__chevron,
+	.accordion__trigger:focus-visible .accordion__chevron,
+	.accordion__trigger[aria-expanded="true"] .accordion__chevron {
+		opacity: 0.98;
+	}
+
+	@media (prefers-reduced-motion: no-preference) {
+		.accordion__chevron {
+			transition:
+				transform var(--motion-duration-normal) var(--motion-ease-standard),
+				opacity var(--motion-duration-normal) var(--motion-ease-standard);
+		}
+	}
+
+	@media (prefers-reduced-motion: reduce) {
+		.accordion__trigger,
+		.accordion__chevron {
+			transition: none;
+		}
+	}
+
+	.accordion__trigger[aria-expanded="true"] .accordion__chevron {
+		transform: rotate(-135deg);
+	}
+
+	.accordion__panelInner {
+		padding: var(--space-md) var(--space-lg) var(--space-lg);
+		display: grid;
+		gap: var(--space-xs);
+	}
+
+	.accordion__list {
+		margin: 0;
+		padding: 0;
+		list-style: none;
+		display: grid;
+		gap: var(--space-xs);
+		color: var(--color-text-muted);
+		font-size: var(--text-sm);
+		line-height: 1.55;
+	}
+
+	.accordion__list--cols3 {
+		grid-template-columns: repeat(3, minmax(0, 1fr));
+		column-gap: var(--space-lg);
+	}
+
+	@media (max-width: 47.999rem) {
+		.accordion__list--cols3 {
+			grid-template-columns: 1fr;
+		}
+	}
+
+	.accordion__list li {
+		display: flex;
+		align-items: flex-start;
+		gap: var(--space-sm);
+	}
+
+	.accordion__list li::before {
+		content: "-";
+		color: color-mix(in oklab, var(--color-text-muted) 82%, var(--color-text));
+		margin-top: 0.02em;
+		flex: 0 0 auto;
+	}
+
+	.accordion__note {
+		margin: 0;
+		margin-top: var(--space-sm);
+		color: var(--color-text-muted);
+		font-size: var(--text-sm);
+		line-height: 1.55;
+	}
+
+	.accordion__link {
+		color: inherit;
+		text-decoration: underline;
+		text-underline-offset: 0.16em;
+		font-weight: 650;
+	}
+</style>
