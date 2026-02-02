@@ -39,6 +39,7 @@ const vagaroServicesUrl = "https://www.vagaro.com/byastridbeautysalon";
 		<div class="booking-ctaCard" data-reveal>
 			<Card variant="glow" padding="xl" hover={false} class="booking-ctaCard__panel">
 				<p class="booking-ctaCard__lede">{messages.booking.lede}</p>
+				<p class="booking-ctaCard__lede booking-ctaCard__lede--second">{messages.booking.scheduleHelper}</p>
 				<div class="booking-ctaCard__actions" aria-label={messages.booking.scheduleHelper}>
 					<HeroBookNowCta
 						client:idle
@@ -47,7 +48,6 @@ const vagaroServicesUrl = "https://www.vagaro.com/byastridbeautysalon";
 						className="booking-ctaCard__button"
 					/>
 				</div>
-				<p class="booking-ctaCard__helper">{messages.booking.scheduleHelper}</p>
 			</Card>
 		</div>
 	</div>
@@ -70,11 +70,31 @@ const vagaroServicesUrl = "https://www.vagaro.com/byastridbeautysalon";
 		background:
 			linear-gradient(
 				180deg,
-				color-mix(in oklab, var(--color-surface) 90%, var(--color-surface-muted)) 0%,
-				color-mix(in oklab, var(--color-surface) 96%, var(--color-primary)) 100%
+				color-mix(in oklab, var(--color-surface-muted) 88%, var(--color-bg)) 0%,
+				color-mix(in oklab, var(--color-surface) 90%, var(--color-primary) 8%) 100%
 			);
 		width: 100%;
 		max-width: 44rem;
+	}
+
+	html:not([data-theme="dark"]) :global(.booking-ctaCard__panel) {
+		border-color: color-mix(in oklab, var(--color-border) 90%, transparent);
+		background:
+			linear-gradient(
+				180deg,
+				color-mix(in oklab, var(--color-surface-elevated) 86%, var(--color-primary) 6%) 0%,
+				color-mix(in oklab, var(--color-surface-muted) 72%, var(--color-primary) 10%) 100%
+			);
+		box-shadow: var(--shadow-md);
+	}
+
+	html[data-theme="dark"] :global(.booking-ctaCard__panel) {
+		background:
+			linear-gradient(
+				180deg,
+				color-mix(in oklab, var(--color-surface) 76%, var(--color-bg)) 0%,
+				color-mix(in oklab, var(--color-surface) 70%, var(--color-bg)) 100%
+			);
 	}
 
 	:global(.booking-ctaCard__panel)::before {
@@ -115,7 +135,7 @@ const vagaroServicesUrl = "https://www.vagaro.com/byastridbeautysalon";
 		gap: var(--space-xs);
 		width: 100%;
 		max-width: 34rem;
-		margin-top: var(--space-lg);
+		margin-top: 0;
 	}
 
 	.booking-ctaCard__button.btn {
@@ -133,9 +153,10 @@ const vagaroServicesUrl = "https://www.vagaro.com/byastridbeautysalon";
 	.booking-ctaCard__helper {
 		margin: 0;
 		color: var(--color-text-muted);
-		font-size: 0.72rem;
+		font-size: 0.82rem;
 		line-height: 1.4;
-		margin-top: auto;
+		margin-top: var(--space-sm);
+		max-width: 40rem;
 	}
 
 	.booking-ctaCard__lede {

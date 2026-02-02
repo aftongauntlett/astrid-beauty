@@ -284,6 +284,27 @@ const panelId = (suffix: string) => `${idPrefix}-panel-${suffix}`;
 		margin: 0;
 		font-size: var(--heading-3);
 		text-align: center;
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		margin-inline: auto;
+		padding: calc(var(--space-sm) + 0.1rem) calc(var(--space-lg) + 0.2rem);
+		border-radius: var(--radius-md);
+		background: linear-gradient(
+			180deg,
+			color-mix(in oklab, var(--color-surface-muted) 88%, var(--color-bg)) 0%,
+			color-mix(in oklab, var(--color-surface-muted) 72%, var(--color-surface)) 100%
+		);
+		border: 1px solid color-mix(in oklab, var(--color-border) 72%, transparent);
+		box-shadow: var(--shadow-sm);
+	}
+
+	html[data-theme="dark"] .accordion__sectionTitle {
+		background: linear-gradient(
+			180deg,
+			color-mix(in oklab, var(--color-surface) 78%, var(--color-bg)) 0%,
+			color-mix(in oklab, var(--color-surface) 70%, var(--color-bg)) 100%
+		);
 	}
 
 	.accordion {
@@ -292,9 +313,13 @@ const panelId = (suffix: string) => `${idPrefix}-panel-${suffix}`;
 	}
 
 	.accordion__item {
-		border: 1px solid color-mix(in oklab, var(--color-border) 70%, transparent);
+		border: 1px solid color-mix(in oklab, var(--color-border) 76%, transparent);
 		border-radius: var(--radius-lg);
-		background: color-mix(in oklab, var(--color-surface) 92%, var(--color-surface-muted));
+		background: linear-gradient(
+			180deg,
+			color-mix(in oklab, var(--color-surface-muted) 86%, var(--color-bg)) 0%,
+			color-mix(in oklab, var(--color-surface-muted) 74%, var(--color-surface)) 100%
+		);
 		overflow: hidden;
 	}
 
@@ -307,7 +332,7 @@ const panelId = (suffix: string) => `${idPrefix}-panel-${suffix}`;
 		width: 100%;
 		text-align: left;
 		border: 0;
-		background: transparent;
+		background: color-mix(in oklab, var(--color-surface-muted) 88%, var(--color-surface));
 		color: var(--color-text);
 		padding: var(--space-md) var(--space-lg);
 		display: flex;
@@ -319,6 +344,11 @@ const panelId = (suffix: string) => `${idPrefix}-panel-${suffix}`;
 		cursor: pointer;
 		position: relative;
 		isolation: isolate;
+		border-radius: var(--radius-lg);
+	}
+
+	html[data-theme="dark"] .accordion__trigger {
+		background: color-mix(in oklab, var(--color-surface) 76%, var(--color-bg));
 	}
 
 	.accordion__trigger::before {
@@ -326,13 +356,17 @@ const panelId = (suffix: string) => `${idPrefix}-panel-${suffix}`;
 		position: absolute;
 		inset: 0;
 		border-radius: var(--radius-lg);
-		background: color-mix(in oklab, var(--color-primary) 12%, var(--color-surface));
+		background: color-mix(in oklab, var(--color-primary) 14%, var(--color-surface));
 		opacity: 0;
 		pointer-events: none;
 		z-index: 0;
 	}
 
 	.accordion__trigger[aria-expanded="true"]::before {
+		border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+	}
+
+	.accordion__trigger[aria-expanded="true"] {
 		border-radius: var(--radius-lg) var(--radius-lg) 0 0;
 	}
 
@@ -375,11 +409,23 @@ const panelId = (suffix: string) => `${idPrefix}-panel-${suffix}`;
 
 	.accordion__trigger[aria-expanded="true"] {
 		color: var(--color-primary);
-		background-color: transparent;
 	}
 
 	.accordion__trigger[aria-expanded="true"]::before {
 		opacity: 0.62;
+	}
+
+	/* Light mode: keep the header surface darker when expanded so it
+	   doesn't blend into the panel/content background. */
+	html:not([data-theme="dark"]) .accordion__trigger[aria-expanded="true"] {
+		background: color-mix(in oklab, var(--color-surface-muted) 94%, var(--color-surface));
+	}
+
+	/* Light mode: make the opened panel content a slightly different surface
+	   than the header so the two areas read as distinct. */
+	html:not([data-theme="dark"]) .accordion__panel {
+		background: color-mix(in oklab, var(--color-surface) 88%, var(--color-bg));
+		border-top: 1px solid color-mix(in oklab, var(--color-border) 78%, transparent);
 	}
 
 	.accordion__trigger:focus-visible {

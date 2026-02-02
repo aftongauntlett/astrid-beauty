@@ -306,10 +306,11 @@ export default function HeroBackdrop(): React.JSX.Element {
     resize();
     initShapes();
 
-    if (reducedMotion.current) {
-      // Render one static frame
-      renderFrame(0);
-    } else {
+    // Always paint at least one frame so the backdrop never stays blank
+    // if observers pause animation before the first rAF runs (common on refresh).
+    renderFrame(reducedMotion.current ? 0 : performance.now(), true);
+
+    if (!reducedMotion.current) {
       startAnimation();
     }
 
@@ -320,6 +321,10 @@ export default function HeroBackdrop(): React.JSX.Element {
       resizeRaf = requestAnimationFrame(() => {
         resize();
         initShapes();
+
+        // If the canvas was 0x0 during initial hydration (common on refresh),
+        // ensure we paint as soon as layout becomes available.
+        renderFrame(performance.now(), true);
       });
     };
 
@@ -330,8 +335,10 @@ export default function HeroBackdrop(): React.JSX.Element {
     // Handle visibility (pause when tab hidden)
     const handleVisibilityChange = () => {
       isVisibleRef.current = !document.hidden;
-      if (shouldAnimate()) startAnimation();
-      else stopAnimation();
+      if (shouldAnimate()) {
+        renderFrame(performance.now(), true);
+        startAnimation();
+      } else stopAnimation();
     };
     document.addEventListener("visibilitychange", handleVisibilityChange);
 
@@ -343,8 +350,10 @@ export default function HeroBackdrop(): React.JSX.Element {
             (entries) => {
               const entry = entries[0];
               isInViewRef.current = Boolean(entry?.isIntersecting);
-              if (shouldAnimate()) startAnimation();
-              else stopAnimation();
+              if (shouldAnimate()) {
+                renderFrame(performance.now(), true);
+                startAnimation();
+              } else stopAnimation();
             },
             { root: null, threshold: 0.01 },
           )

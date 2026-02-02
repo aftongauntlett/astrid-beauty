@@ -111,7 +111,8 @@ export const en: Messages = {
   booking: {
     title: "Reserve Your Appointment",
     lede: "For current services, pricing, and availability, please book through Vagaro. This helps you find the perfect service for your hair and your vision.",
-    scheduleHelper: "Easy online booking through Vagaro.",
+    scheduleHelper:
+      "Booking FAQs, policies, and resources — then book through Vagaro when you're ready.",
     reviewsTitle: "What Our Clients Say",
   },
   reviews: [
