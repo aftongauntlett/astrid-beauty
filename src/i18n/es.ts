@@ -25,7 +25,7 @@ export const es: Messages = {
     viewPrices: "Ver precios",
     viewServices: "Explorar servicios",
     backToTop: "Volver arriba",
-    scheduleNow: "Reservar ahora",
+    scheduleNow: "Reservar",
   },
   home: {
     heroLede:
@@ -156,7 +156,7 @@ export const es: Messages = {
         title: "Consultas",
         startingAt: "$25",
         description:
-          "Un buen punto de partida para clientas nuevas o cambios grandes.",
+          "Un punto de partida claro para clientas nuevas, cambios o dudas.",
         items: [
           "Consulta en persona",
           "Mecha de prueba (si hace falta)",
@@ -167,7 +167,8 @@ export const es: Messages = {
       {
         title: "Corte y estilo",
         startingAt: "$55",
-        description: "Una forma moderna con un acabado pulido - sin exagerar.",
+        description:
+          "Una forma moderna con un acabado pulido que se ve natural, sin exceso.",
         items: [
           "Corte según densidad y estilo de vida",
           "Blowdry final",
@@ -179,7 +180,7 @@ export const es: Messages = {
         title: "Color Signature",
         startingAt: "$80",
         description:
-          "Color de un solo proceso y tonificación para un resultado rico y dimensional.",
+          "Color de un solo proceso con tonificación para un resultado rico y dimensional.",
         items: [
           "Retoque de raíz y color completo",
           "Difuminado de canas y refresh",
@@ -191,7 +192,7 @@ export const es: Messages = {
         title: "Aclarado y dimensión",
         startingAt: "$170",
         description:
-          "Mechas y balayage personalizados para iluminar y crecer bonito.",
+          "Mechas y balayage personalizados para iluminar y crecer bonito con suavidad.",
         items: [
           "Mechas, balayage y color lived-in",
           "Luz en el contorno del rostro",
@@ -203,7 +204,7 @@ export const es: Messages = {
         title: "Gloss y brillo",
         startingAt: "$50",
         description:
-          "Un refresh rápido para ajustar el tono, suavizar y dar brillo espejo.",
+          "Un refresh de tono que suaviza y deja brillo tipo espejo entre citas.",
         items: [
           "Ajustes de tonos cálidos o fríos",
           "Brillo entre citas de color",
@@ -215,7 +216,7 @@ export const es: Messages = {
         title: "Salud capilar",
         startingAt: "$250",
         description:
-          "Cuidado enfocado: del cuero cabelludo al alisado con keratina, según tu consulta.",
+          "Cuidado enfocado del cuero cabelludo y opciones de alisado, según tu consulta.",
         items: [
           "Limpieza del cuero cabelludo + masaje",
           "Apoyo de hidratación y balance",

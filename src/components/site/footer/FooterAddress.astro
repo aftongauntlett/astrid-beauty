@@ -1,0 +1,42 @@
+---
+import Button from "../../ui/Button.astro";
+import { MapPin } from "@lucide/astro";
+
+import "./FooterAddress.module.css";
+
+import type { Messages } from "../../../i18n/types";
+
+export type Props = {
+	messages: Messages;
+	addressDisplayLines: string[];
+	googleMapsHref: string;
+	appleMapsHref: string;
+};
+
+const { messages, addressDisplayLines, googleMapsHref, appleMapsHref } = Astro.props;
+---
+
+<section class="site-footer__block" aria-label={messages.footer.address}>
+	<h2 class="sr-only">{messages.nav.findUs}</h2>
+	<div class="site-footer__blockBody">
+		<address class="site-footer__text" aria-label={messages.footer.address}>
+			{addressDisplayLines.map((line) => (
+				<span class="site-footer__line">{line}</span>
+			))}
+		</address>
+	</div>
+	<div class="site-footer__blockBottom">
+		<Button
+			class="site-footer__mapButton"
+			variant="ghost"
+			size="sm"
+			href={googleMapsHref}
+			data-apple-maps-href={appleMapsHref}
+			target="_blank"
+			rel="noopener noreferrer"
+		>
+			<MapPin class="site-footer__mapIcon" size={18} aria-hidden="true" focusable="false" />
+			<span>{messages.footer.findUsCta}</span>
+		</Button>
+	</div>
+</section>

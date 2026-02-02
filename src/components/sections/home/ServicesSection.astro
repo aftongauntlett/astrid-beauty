@@ -1,0 +1,123 @@
+---
+import SectionIntro from "../../ui/SectionIntro.astro";
+import FeatureIconCard from "../../FeatureIconCard.astro";
+import HeroBookNowCta from "../../motion/HeroBookNowCta";
+
+import type { Messages } from "../../../i18n/types";
+
+export type Props = {
+	messages: Messages;
+	vagaroPricesUrl: string;
+};
+
+const { messages, vagaroPricesUrl } = Astro.props;
+
+const serviceCardMeta = [
+	{ iconName: "consultation", iconColor: "var(--color-icon-scalp)" },
+	{ iconName: "scissors", iconColor: "var(--color-icon-cut)" },
+	{ iconName: "palette", iconColor: "var(--color-icon-signature)" },
+	{ iconName: "sparkles", iconColor: "var(--color-icon-signature)" },
+	{ iconName: "droplet", iconColor: "var(--color-icon-gloss)" },
+	{ iconName: "waves", iconColor: "var(--color-icon-scalp)" },
+] as const;
+---
+
+<section class="section section--muted" id="services" aria-labelledby="services-title">
+	<div class="container stack stack--lg">
+		<div data-reveal>
+			<SectionIntro
+				id="services-title"
+				title={messages.sections.servicesTitle}
+				lede={messages.services.lede}
+			/>
+		</div>
+
+		<div class="services-grid" aria-label="Service highlights">
+			{messages.services.cards.map((card, index) => (
+				<div data-reveal data-reveal-delay={String(index * 70)}>
+					<FeatureIconCard
+						title={card.title}
+						meta={`${messages.services.startingAtLabel} ${card.startingAt}`}
+						description={card.description}
+						items={card.items}
+						iconName={serviceCardMeta[index]?.iconName ?? "palette"}
+						iconColor={serviceCardMeta[index]?.iconColor ?? "var(--color-primary)"}
+					/>
+				</div>
+			))}
+		</div>
+
+		<div class="section-divider" aria-hidden="true" data-reveal data-reveal-delay="50"></div>
+
+		<div class="services-actions" data-reveal data-reveal-delay="70">
+			<HeroBookNowCta
+				client:idle
+				href={vagaroPricesUrl}
+				label={messages.misc.viewPrices}
+				labelMobile={messages.misc.viewPrices}
+				className="services__viewPrices"
+			/>
+		</div>
+
+		<div class="services-disclaimer" data-reveal data-reveal-delay="80">
+			<p class="services-disclaimer__text">{messages.services.disclaimer.line1}</p>
+			<p class="services-disclaimer__text">{messages.services.disclaimer.line2}</p>
+		</div>
+	</div>
+</section>
+
+<style>
+	.services-grid {
+		display: grid;
+		gap: var(--space-xl);
+		grid-template-columns: 1fr;
+		align-items: stretch;
+	}
+
+	@media (min-width: 48rem) {
+		.services-grid {
+			grid-template-columns: repeat(2, minmax(0, 1fr));
+			gap: calc(var(--space-xl) + var(--space-sm));
+		}
+	}
+
+	.section-divider {
+		width: min(38rem, 92%);
+		height: 1px;
+		margin: var(--space-md) auto;
+		background: color-mix(in oklab, var(--color-border) 70%, transparent);
+		opacity: 0.9;
+	}
+
+	.services-actions {
+		display: grid;
+		justify-items: center;
+		margin: 0;
+	}
+
+	:global(.services__viewPrices.btn:hover),
+	:global(.services__viewPrices.btn:focus-visible) {
+		background: var(--color-primary-hover);
+		border-color: var(--color-primary-hover);
+		color: var(--color-primary-contrast) !important;
+	}
+
+	:global(.services__viewPrices.btn:hover *) {
+		color: inherit;
+	}
+
+	.services-disclaimer {
+		max-width: 52rem;
+		margin: 0 auto;
+		text-align: center;
+		display: grid;
+		gap: var(--space-xs);
+	}
+
+	.services-disclaimer__text {
+		margin: 0;
+		font-size: var(--text-xs);
+		color: color-mix(in oklab, var(--color-text-muted) 70%, var(--color-text) 30%);
+		line-height: 1.55;
+	}
+</style>

@@ -6,6 +6,7 @@
 
   display: grid;
   gap: var(--space-lg);
+  height: 100%;
   position: relative;
   overflow: hidden;
   isolation: isolate;

@@ -1,0 +1,145 @@
+/* Scroll reveal (lightweight, runs once; progressive enhancement)
+	 - Elements remain visible without JS.
+	 - JS adds `html.has-scroll-reveal` early (unless reduced motion).
+*/
+
+html.has-scroll-reveal [data-reveal] {
+  opacity: 0;
+  transform: translate3d(0, 12px, 0);
+  transition:
+    opacity var(--motion-duration-slower) var(--motion-ease-emphasized),
+    transform var(--motion-duration-slower) var(--motion-ease-emphasized);
+  transition-delay: var(--reveal-delay, 0ms);
+  will-change: opacity, transform;
+}
+
+html.has-scroll-reveal [data-reveal].is-revealed {
+  opacity: 1;
+  transform: translate3d(0, 0, 0);
+}
+
+/* Mobile tuning: tighter, less floaty motion */
+
+@media (max-width: 48rem) {
+  html.has-scroll-reveal [data-reveal] {
+    transform: translate3d(0, 8px, 0);
+    transition-duration: 420ms;
+    transition-delay: var(--reveal-delay, 0ms);
+    transition-delay: min(var(--reveal-delay, 0ms), 120ms);
+  }
+
+  html.has-scroll-reveal [data-reveal-fx="cta-sparkle"].is-revealed::before {
+    inset: -8px;
+    filter: blur(8px);
+    animation: reveal-cta-glow 760ms ease-out 100ms 1 both; /* premium: ~0.85x --motion-duration-premium */
+  }
+
+  html.has-scroll-reveal [data-reveal-fx="cta-sparkle"].is-revealed::after {
+    inset: -10px;
+    animation: reveal-cta-sparkle 900ms ease-out 120ms 1 both; /* premium: 1x --motion-duration-premium */
+  }
+}
+
+/* Optional one-time reveal FX (e.g., hero CTA) */
+
+html.has-scroll-reveal [data-reveal-fx="cta-sparkle"] {
+  position: relative;
+  isolation: isolate;
+}
+
+html.has-scroll-reveal [data-reveal-fx="cta-sparkle"].is-revealed::before {
+  content: "";
+  position: absolute;
+  inset: -10px;
+  border-radius: 9999px;
+  pointer-events: none;
+  opacity: 0;
+  background:
+    radial-gradient(
+      45% 55% at 30% 30%,
+      color-mix(in oklab, var(--color-secondary) 45%, transparent),
+      transparent 65%
+    ),
+    radial-gradient(
+      40% 50% at 70% 70%,
+      color-mix(in oklab, var(--color-primary) 30%, transparent),
+      transparent 70%
+    );
+  filter: blur(10px);
+  transform: translate3d(0, 6px, 0) scale(0.98);
+  animation: reveal-cta-glow 900ms ease-out 120ms 1 both;
+}
+
+html.has-scroll-reveal [data-reveal-fx="cta-sparkle"].is-revealed::after {
+  content: "";
+  position: absolute;
+  inset: -12px;
+  border-radius: 9999px;
+  pointer-events: none;
+  opacity: 0;
+  background:
+    radial-gradient(
+      circle at 20% 55%,
+      rgba(255, 255, 255, 0.65) 0 1px,
+      transparent 2px
+    ),
+    radial-gradient(
+      circle at 40% 25%,
+      rgba(255, 255, 255, 0.55) 0 1px,
+      transparent 2px
+    ),
+    radial-gradient(
+      circle at 62% 72%,
+      rgba(255, 255, 255, 0.5) 0 1px,
+      transparent 2px
+    ),
+    radial-gradient(
+      circle at 78% 38%,
+      rgba(255, 255, 255, 0.6) 0 1px,
+      transparent 2px
+    );
+  transform: translate3d(0, 10px, 0) scale(0.98);
+  animation: reveal-cta-sparkle 1100ms ease-out 140ms 1 both;
+}
+
+@keyframes reveal-cta-glow {
+  0% {
+    opacity: 0;
+    transform: translate3d(0, 10px, 0) scale(0.97);
+  }
+  35% {
+    opacity: 0.85;
+  }
+  100% {
+    opacity: 0;
+    transform: translate3d(0, 0, 0) scale(1.03);
+  }
+}
+
+@keyframes reveal-cta-sparkle {
+  0% {
+    opacity: 0;
+    transform: translate3d(0, 12px, 0) scale(0.97);
+  }
+  25% {
+    opacity: 0.7;
+  }
+  100% {
+    opacity: 0;
+    transform: translate3d(0, 0, 0) scale(1.02);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html.has-scroll-reveal [data-reveal] {
+    opacity: 1;
+    transform: none;
+    transition: none;
+    will-change: auto;
+  }
+
+  html.has-scroll-reveal [data-reveal-fx="cta-sparkle"]::before,
+  html.has-scroll-reveal [data-reveal-fx="cta-sparkle"]::after {
+    display: none;
+  }
+}

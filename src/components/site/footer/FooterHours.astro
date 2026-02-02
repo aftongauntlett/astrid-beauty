@@ -1,0 +1,35 @@
+---
+import type { Messages } from "../../../i18n/types";
+import type { DisplayHour } from "../../../lib/footer/formatting";
+
+import "./FooterHours.module.css";
+
+export type Props = {
+	messages: Messages;
+	displayHours: DisplayHour[];
+};
+
+const { messages, displayHours } = Astro.props;
+---
+
+<section class="site-footer__block site-footer__block--hours" aria-label={messages.footer.hours}>
+	<h2 class="sr-only">{messages.footer.hours}</h2>
+	<table class="site-footer__hoursTable" aria-label={messages.footer.hours}>
+		<tbody>
+			{displayHours.map((item) => (
+				<tr class="site-footer__hoursRow">
+					<th
+						class:list={[
+							"site-footer__hoursDay",
+							item.day.includes(",") ? "site-footer__hoursDay--wrap" : "",
+						]}
+						scope="row"
+					>
+						{item.day}:
+					</th>
+					<td class="site-footer__hoursTime">{item.time}</td>
+				</tr>
+			))}
+		</tbody>
+	</table>
+</section>

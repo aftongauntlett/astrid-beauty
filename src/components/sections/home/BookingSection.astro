@@ -1,0 +1,203 @@
+---
+import SectionIntro from "../../ui/SectionIntro.astro";
+import Accordion from "../../ui/Accordion.astro";
+import Card from "../../ui/Card.astro";
+import HeroBookNowCta from "../../motion/HeroBookNowCta";
+
+import type { Messages } from "../../../i18n/types";
+
+export type Props = {
+	messages: Messages;
+	vagaroServicesUrl: string;
+};
+
+const { messages, vagaroServicesUrl } = Astro.props;
+---
+
+<section class="section section--bg" id="booking" aria-labelledby="booking-title">
+	<div class="container stack stack--lg">
+		<div data-reveal>
+			<SectionIntro
+				id="booking-title"
+				title={messages.about.policies.title}
+				lede={messages.booking.scheduleHelper}
+			/>
+		</div>
+
+		<Accordion
+			rootClass="booking__policies"
+			policies={messages.about.policies}
+			ariaLabelledBy="booking-title"
+			idPrefix="home-policies"
+		/>
+
+		<div class="booking-ctaCard" data-reveal>
+			<Card variant="default" padding="xl" hover={true} class="booking-ctaCard__panel">
+				<div class="booking-ctaCard__actions" aria-label={messages.misc.scheduleAppointment}>
+					<HeroBookNowCta
+						client:idle
+						href={vagaroServicesUrl}
+						label={messages.misc.scheduleAppointment}
+						className="booking-ctaCard__button"
+					/>
+				</div>
+				<p class="booking-ctaCard__helper">{messages.booking.lede}</p>
+			</Card>
+		</div>
+	</div>
+</section>
+
+<style>
+	.booking-ctaCard {
+		display: flex;
+		justify-content: center;
+		align-items: stretch;
+		margin-top: var(--space-xl);
+	}
+
+	:global(.booking-ctaCard__panel) {
+		position: relative;
+		overflow: hidden;
+		isolation: isolate;
+		display: grid;
+		gap: var(--space-sm);
+		justify-items: center;
+		text-align: center;
+		width: 100%;
+		max-width: 44rem;
+		border-color: color-mix(in oklab, var(--color-border) 70%, transparent);
+		background:
+			linear-gradient(
+				180deg,
+				color-mix(in oklab, var(--color-surface-muted) 86%, var(--color-bg)) 0%,
+				color-mix(in oklab, var(--color-surface) 92%, var(--color-primary) 6%) 100%
+			);
+	}
+
+	html:not([data-theme="dark"]) :global(.booking-ctaCard__panel) {
+		border-color: color-mix(in oklab, var(--color-border) 88%, transparent);
+		background:
+			linear-gradient(
+				180deg,
+				color-mix(in oklab, var(--color-surface-elevated) 86%, var(--color-primary) 6%) 0%,
+				color-mix(in oklab, var(--color-surface-muted) 72%, var(--color-primary) 10%) 100%
+			);
+		box-shadow: var(--shadow-md);
+	}
+
+	html[data-theme="dark"] :global(.booking-ctaCard__panel) {
+		background:
+			linear-gradient(
+				180deg,
+				color-mix(in oklab, var(--color-surface) 74%, var(--color-bg)) 0%,
+				color-mix(in oklab, var(--color-surface) 70%, var(--color-bg)) 100%
+			);
+	}
+
+	:global(.booking-ctaCard__panel)::before {
+		content: "";
+		position: absolute;
+		inset: -55%;
+		border-radius: 999px;
+		background: radial-gradient(
+			circle at 30% 18%,
+			color-mix(in oklab, var(--color-primary) 18%, transparent) 0%,
+			transparent 62%
+		);
+		opacity: 0.14;
+		filter: blur(14px);
+		pointer-events: none;
+		z-index: 0;
+	}
+
+	:global(.booking-ctaCard__panel)::after {
+		content: "";
+		position: absolute;
+		inset: -55%;
+		border-radius: 999px;
+		background: radial-gradient(
+			circle at 28% 12%,
+			color-mix(in oklab, var(--color-primary) 18%, transparent) 0%,
+			transparent 62%
+		);
+		opacity: 0;
+		filter: blur(14px);
+		pointer-events: none;
+		z-index: 0;
+	}
+
+	:global(.booking-ctaCard__panel) > * {
+		position: relative;
+		z-index: 1;
+	}
+
+	@media (hover: hover) and (prefers-reduced-motion: no-preference) {
+		:global(.booking-ctaCard__panel)::after {
+			transition: opacity var(--motion-duration-fast) var(--motion-ease-standard);
+		}
+
+		:global(.booking-ctaCard__panel:hover),
+		:global(.booking-ctaCard__panel:focus-within) {
+			border-color: color-mix(in oklab, var(--color-text) 22%, var(--color-border));
+			box-shadow: var(--shadow-md);
+			transform: translateY(-2px);
+		}
+
+		:global(.booking-ctaCard__panel:hover)::after,
+		:global(.booking-ctaCard__panel:focus-within)::after {
+			opacity: 0.28;
+		}
+	}
+
+	.booking-ctaCard__actions {
+		display: grid;
+		justify-items: center;
+		gap: var(--space-xs);
+		width: 100%;
+		max-width: 34rem;
+		margin-top: 0;
+	}
+
+	:global(.booking-ctaCard__button.btn) {
+		width: auto;
+		letter-spacing: 0.01em;
+		min-height: 3.25rem;
+	}
+
+	@media (prefers-reduced-motion: no-preference) {
+		:global(.booking-ctaCard__button.btn:hover) {
+			transform: translateY(-1px);
+		}
+	}
+
+	:global(.booking-ctaCard__button.btn:hover),
+	:global(.booking-ctaCard__button.btn:focus-visible) {
+		background: var(--color-primary-hover);
+		border-color: var(--color-primary-hover);
+		color: var(--color-primary-contrast) !important;
+	}
+
+	:global(.booking-ctaCard__button.btn:hover *) {
+		color: inherit;
+	}
+
+	.booking-ctaCard__helper {
+		margin: 0;
+		color: var(--color-text-muted);
+		font-size: 0.82rem;
+		line-height: 1.4;
+		margin-top: var(--space-sm);
+		max-width: 40rem;
+	}
+
+	.booking-ctaCard__lede {
+		margin: 0;
+		color: var(--color-text-muted);
+		font-size: var(--text-md);
+		line-height: 1.65;
+	}
+
+	.booking-ctaCard__lede--second {
+		margin-top: 0;
+	}
+</style>

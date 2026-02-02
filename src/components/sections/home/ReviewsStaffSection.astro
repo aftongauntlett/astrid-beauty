@@ -1,0 +1,393 @@
+---
+import Card from "../../ui/Card.astro";
+
+import { Star } from "@lucide/astro";
+
+import type { Messages } from "../../../i18n/types";
+import { orderReviewsForGrid, stripOuterQuotes } from "../../../lib/home/reviews";
+
+export type Props = {
+	messages: Messages;
+};
+
+const { messages } = Astro.props;
+
+const orderedReviews = orderReviewsForGrid(messages.reviews);
+
+const staffCards = [
+	{ id: "astrid", ...messages.about.staff.members.astrid },
+	{ id: "cindy", ...messages.about.staff.members.cindy },
+];
+---
+
+<section class="section section--muted" aria-labelledby="reviews-title">
+	<div class="container stack stack--lg">
+		<section class="booking-reviews" aria-labelledby="reviews-title">
+			<header class="booking-reviews__header">
+				<h3 class="about__sectionTitle booking-reviews__title title-plaque" id="reviews-title">{messages.booking.reviewsTitle}</h3>
+			</header>
+			<div class="reviews-grid" role="list" aria-label={messages.booking.reviewsTitle}>
+				{orderedReviews.map((review, index) => (
+					<Card
+						as="figure"
+						variant="default"
+						padding="md"
+						hover={true}
+						class="review"
+						role="listitem"
+						data-reveal
+						data-reveal-delay={String(index * 70)}
+					>
+						<div class="review__rating" role="img" aria-label="5 out of 5 stars">
+							<Star class="review__star" size={16} aria-hidden="true" focusable="false" fill="currentColor" stroke="none" />
+							<Star class="review__star" size={16} aria-hidden="true" focusable="false" fill="currentColor" stroke="none" />
+							<Star class="review__star" size={16} aria-hidden="true" focusable="false" fill="currentColor" stroke="none" />
+							<Star class="review__star" size={16} aria-hidden="true" focusable="false" fill="currentColor" stroke="none" />
+							<Star class="review__star" size={16} aria-hidden="true" focusable="false" fill="currentColor" stroke="none" />
+						</div>
+						<blockquote class="review__quote">{stripOuterQuotes(review.quote)}</blockquote>
+						<figcaption class="review__meta">
+							<span class="review__author">— {review.author}</span>
+							<time class="review__date" datetime={review.date}>{review.date}</time>
+						</figcaption>
+					</Card>
+				))}
+			</div>
+		</section>
+
+		<div class="about__staff">
+			<h3
+				class="about__sectionTitle booking-reviews__title title-plaque"
+				id="staff-title"
+				data-reveal
+				data-reveal-delay="80"
+			>
+				{messages.about.staff.title}
+			</h3>
+			<div class="staff-grid" role="list" aria-labelledby="staff-title">
+				{staffCards.map((member, index) => (
+					<Card
+						as="article"
+						variant="default"
+						padding="lg"
+						hover={true}
+						class="staff-card"
+						role="listitem"
+						data-reveal
+						data-reveal-delay={String(120 + index * 50)}
+						aria-labelledby={`staff-${member.id}-name`}
+					>
+						<header class="staff-card__header">
+							<h4 class="staff-card__name capitalize" id={`staff-${member.id}-name`}>
+								{member.name}
+							</h4>
+							{member.role ? <span class="staff-card__badge">{member.role}</span> : null}
+						</header>
+						<div class="staff-card__bio">
+							{member.paragraphs.map((paragraph) => (
+								<p class="staff-card__text">{paragraph}</p>
+							))}
+						</div>
+					</Card>
+				))}
+			</div>
+		</div>
+	</div>
+</section>
+
+<style>
+	.about__sectionTitle {
+		margin: 0;
+		font-size: var(--heading-3);
+		text-align: center;
+	}
+
+	.booking-reviews {
+		width: 100%;
+	}
+
+	.booking-reviews__header {
+		display: grid;
+		justify-items: center;
+		margin-bottom: var(--space-lg);
+	}
+
+	.booking-reviews__title {
+		margin: 0;
+		text-decoration: underline;
+		text-decoration-thickness: var(--stroke-1);
+		text-underline-offset: 0.22em;
+		text-decoration-color: color-mix(in oklab, var(--color-primary) 55%, transparent);
+	}
+
+	/* Title plaque: used for reviews + staff headings */
+	.title-plaque {
+		display: inline-block;
+		padding: 0;
+		border: 0;
+		border-radius: 0;
+		background: transparent;
+		box-shadow: none;
+	}
+
+	.title-plaque::before {
+		content: none;
+	}
+
+	.title-plaque {
+		text-decoration: none;
+	}
+
+	.reviews-grid {
+		display: grid;
+		grid-template-columns: 1fr;
+		gap: var(--space-lg);
+	}
+
+	@media (min-width: 48rem) {
+		.reviews-grid {
+			grid-template-columns: repeat(2, minmax(0, 1fr));
+			gap: var(--space-xl);
+		}
+	}
+
+	:global(.review) {
+		margin: 0;
+		position: relative;
+		overflow: hidden;
+		isolation: isolate;
+		display: flex;
+		flex-direction: column;
+		gap: var(--space-sm);
+	}
+
+	:global(.review)::after {
+		content: "";
+		position: absolute;
+		inset: -55%;
+		border-radius: 999px;
+		pointer-events: none;
+		background: radial-gradient(
+			circle at 28% 12%,
+			color-mix(in oklab, var(--color-primary) 18%, transparent) 0%,
+			transparent 62%
+		);
+		opacity: 0;
+		filter: blur(12px);
+		z-index: 0;
+	}
+
+	.review__rating {
+		display: inline-flex;
+		align-items: center;
+		gap: 0.2rem;
+		color: color-mix(in oklab, var(--color-secondary) 72%, var(--color-primary));
+		position: relative;
+		z-index: 1;
+	}
+
+	@media (prefers-reduced-motion: no-preference) {
+		.review__rating {
+			transition: transform 180ms ease;
+		}
+
+		:global(.review:hover) .review__rating,
+		:global(.review:focus-within) .review__rating {
+			transform: translateY(-1px) scale(1.02);
+		}
+	}
+
+	@media (hover: hover) and (prefers-reduced-motion: no-preference) {
+		:global(.review)::after {
+			transition: opacity var(--motion-duration-fast) var(--motion-ease-standard);
+		}
+
+		:global(.review:is(:hover, :focus-within))::after {
+			opacity: 0.28;
+		}
+	}
+
+	.review__star {
+		display: block;
+	}
+
+	.review__quote {
+		margin: 0;
+		padding-top: var(--space-sm);
+		color: var(--color-text);
+		line-height: 1.65;
+		font-size: var(--text-sm);
+		position: relative;
+		z-index: 1;
+	}
+
+	.review__meta {
+		margin-top: auto;
+		display: inline-flex;
+		flex-direction: column;
+		align-items: flex-end;
+		justify-content: flex-end;
+		gap: 0.1rem;
+		align-self: flex-end;
+		text-align: right;
+		position: relative;
+		z-index: 1;
+	}
+
+	.review__author {
+		color: color-mix(in oklab, var(--color-text) 72%, var(--color-text-muted));
+		font-size: var(--text-sm);
+		font-weight: 550;
+		font-style: italic;
+		letter-spacing: 0.01em;
+	}
+
+	.review__date {
+		color: color-mix(in oklab, var(--color-text-muted) 82%, var(--color-border));
+		font-size: 0.72rem;
+		letter-spacing: 0.01em;
+	}
+
+	.about__staff {
+		display: grid;
+		gap: var(--space-md);
+		margin-top: var(--space-xl);
+	}
+
+	.about__staff > .about__sectionTitle {
+		margin-bottom: var(--space-sm);
+	}
+
+	.staff-grid {
+		display: grid;
+		grid-template-columns: 1fr;
+		gap: var(--space-xl);
+		align-items: stretch;
+	}
+
+	@media (min-width: 48rem) {
+		.staff-grid {
+			grid-template-columns: repeat(2, minmax(0, 1fr));
+			gap: calc(var(--space-xl) + var(--space-sm));
+		}
+	}
+
+	:global(.staff-card) {
+		position: relative;
+		overflow: hidden;
+		isolation: isolate;
+		display: grid;
+		grid-template-rows: auto 1fr;
+		gap: var(--space-lg);
+		height: 100%;
+	}
+
+	:global(.staff-card)::after {
+		content: "";
+		position: absolute;
+		inset: -55%;
+		border-radius: 999px;
+		pointer-events: none;
+		background: radial-gradient(
+			circle at 28% 12%,
+			color-mix(in oklab, var(--color-primary) 18%, transparent) 0%,
+			transparent 62%
+		);
+		opacity: 0;
+		filter: blur(12px);
+		z-index: 0;
+	}
+
+	@media (hover: hover) and (prefers-reduced-motion: no-preference) {
+		.staff-card__name {
+			transition: color var(--motion-duration-fast) var(--motion-ease-standard);
+		}
+
+		:global(.staff-card)::after {
+			transition: opacity var(--motion-duration-fast) var(--motion-ease-standard);
+		}
+
+		:global(.staff-card:is(:hover, :focus-within))::before {
+			opacity: 1;
+		}
+
+		:global(.staff-card:is(:hover, :focus-within))::after {
+			opacity: 0.35;
+		}
+
+		:global(.staff-card:is(:hover, :focus-within)) .staff-card__name {
+			color: var(--color-primary);
+		}
+	}
+
+	:global(.staff-card)::before {
+		content: "";
+		position: absolute;
+		top: 0;
+		left: 0;
+		right: 0;
+		height: 3px;
+		background: linear-gradient(
+			90deg,
+			color-mix(in oklab, var(--color-primary) 78%, transparent),
+			color-mix(in oklab, var(--color-secondary) 70%, transparent)
+		);
+		opacity: 0.9;
+		pointer-events: none;
+		z-index: 2;
+	}
+
+	.staff-card__header {
+		display: grid;
+		grid-template-columns: 1fr auto;
+		align-items: start;
+		column-gap: var(--space-md);
+		row-gap: var(--space-xs);
+		align-content: start;
+		padding-top: var(--space-xs);
+		position: relative;
+		z-index: 1;
+	}
+
+	.staff-card__name {
+		margin: 0;
+		font-size: var(--heading-3);
+		color: var(--color-text);
+		letter-spacing: -0.015em;
+	}
+
+	.staff-card__badge {
+		justify-self: end;
+		align-self: start;
+		display: inline-flex;
+		align-items: center;
+		gap: 0.4rem;
+		padding: 0.26rem 0.6rem;
+		border-radius: 999px;
+		border: 1px solid color-mix(in oklab, var(--color-primary) 18%, var(--color-border));
+		background: color-mix(in oklab, var(--color-primary) 5%, var(--color-surface));
+		color: color-mix(in oklab, var(--color-text-muted) 80%, var(--color-primary));
+		font-size: 0.78rem;
+		line-height: 1.2;
+		letter-spacing: 0.012em;
+		font-weight: 650;
+		white-space: nowrap;
+	}
+
+	.staff-card__bio {
+		display: grid;
+		gap: var(--space-md);
+		align-content: start;
+		position: relative;
+		z-index: 1;
+		max-width: 60ch;
+	}
+
+	.staff-card__text {
+		margin: 0;
+		color: var(--color-text-muted);
+		font-size: var(--text-sm);
+		line-height: 1.7;
+		text-wrap: pretty;
+	}
+</style>

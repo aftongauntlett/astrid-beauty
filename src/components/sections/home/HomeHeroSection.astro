@@ -1,0 +1,316 @@
+---
+import HeroBookNowCta from "../../motion/HeroBookNowCta";
+import HeroBackdrop from "../../motion/HeroBackdrop";
+
+import type { Messages } from "../../../i18n/types";
+
+export type Props = {
+	messages: Messages;
+	vagaroServicesUrl: string;
+};
+
+const { messages, vagaroServicesUrl } = Astro.props;
+---
+
+<section class="section hero" aria-labelledby="page-title">
+	<HeroBackdrop client:load />
+	<div class="container hero__grid">
+		<div class="hero__content">
+			<p class="sr-only">{messages.home.brandSrOnly}</p>
+			<div class="hero__brandmark" aria-hidden="true" data-reveal>
+				<img
+					class="hero__brandmarkLogo"
+					src="/by-astrid-beauty-logo.png"
+					alt=""
+					width="801"
+					height="692"
+					loading="eager"
+					fetchpriority="high"
+					decoding="async"
+				/>
+			</div>
+		</div>
+
+		<div class="hero__actions" aria-label="Primary actions">
+			<div class="hero__actionsCopy" data-reveal data-reveal-delay="80">
+				<h1 class="hero__actionsTitle" id="page-title">{messages.sections.homeTitle}</h1>
+				<p class="hero__actionsLede">{messages.home.heroLede}</p>
+			</div>
+			<div class="hero__actionsRow">
+				<div class="hero__ctaStack">
+					<HeroBookNowCta
+						client:idle
+						href={vagaroServicesUrl}
+						label={messages.misc.scheduleAppointment}
+						labelMobile={messages.misc.bookNow}
+						className="hero__bookNow"
+					/>
+					<p class="hero__ctaHelper">{messages.home.heroCtaHelper}</p>
+				</div>
+			</div>
+		</div>
+	</div>
+</section>
+
+<style>
+	.hero {
+		padding-block: calc(var(--section-pad-y) * 1.1);
+		position: relative;
+		overflow: hidden;
+		isolation: isolate;
+		background: var(--color-bg);
+	}
+
+	/* Light mode: add a gentle separator into the next section */
+	html:not([data-theme="dark"]) .hero::after {
+		content: "";
+		position: absolute;
+		left: 0;
+		right: 0;
+		bottom: 0;
+		height: 44px;
+		pointer-events: none;
+		background: linear-gradient(
+			180deg,
+			transparent 0%,
+			color-mix(in oklab, var(--color-primary) 4%, var(--color-surface-muted)) 70%,
+			color-mix(in oklab, var(--color-primary) 3%, var(--color-surface-muted)) 100%
+		);
+		opacity: 0.32;
+	}
+
+	html[data-theme="dark"] .hero {
+		background:
+			radial-gradient(
+				1000px 520px at 88% 12%,
+				color-mix(in oklab, var(--color-primary) 14%, transparent),
+				transparent 60%
+			),
+			var(--color-bg);
+	}
+
+	@media (max-width: 48rem) {
+		.hero {
+			background: var(--color-bg);
+		}
+
+		html[data-theme="dark"] .hero {
+			background:
+				radial-gradient(
+					900px 480px at 88% 12%,
+					color-mix(in oklab, var(--color-primary) 14%, transparent),
+					transparent 60%
+				),
+				var(--color-bg);
+		}
+	}
+
+	.hero__grid {
+		justify-items: center;
+		position: relative;
+		z-index: 1;
+	}
+
+	.hero__content {
+		justify-content: center;
+	}
+
+	.hero__brandmark {
+		justify-content: center;
+	}
+
+	.hero__brandmarkLogo {
+		width: min(100%, clamp(18rem, 34vw, 30rem));
+		filter: drop-shadow(0 10px 18px color-mix(in oklab, var(--color-shadow) 12%, transparent));
+	}
+
+	.hero__actions {
+		align-items: center;
+	}
+
+	.hero__actionsCopy {
+		text-align: center;
+	}
+
+	.hero__actionsTitle {
+		font-size: var(--heading-2);
+		letter-spacing: -0.02em;
+	}
+
+	.hero__actionsLede {
+		font-size: var(--heading-2);
+	}
+
+	.hero__grid {
+		display: grid;
+		gap: var(--space-xl);
+		align-items: start;
+	}
+
+	.hero__content {
+		min-width: 0;
+		max-width: min(46rem, var(--measure));
+		display: flex;
+		align-items: center;
+	}
+
+	.hero__brandmark {
+		display: flex;
+		align-items: center;
+		margin: 0;
+		position: relative;
+	}
+
+	/* Subtle glow behind logo for better readability in light mode */
+	.hero__brandmark::before {
+		content: "";
+		position: absolute;
+		top: 50%;
+		left: 50%;
+		transform: translate(-50%, -50%);
+		width: 140%;
+		height: 140%;
+		background: radial-gradient(
+			circle,
+			color-mix(in oklab, var(--color-surface-elevated) 92%, transparent) 0%,
+			transparent 65%
+		);
+		filter: blur(40px);
+		opacity: 0;
+		pointer-events: none;
+		z-index: -1;
+	}
+
+	html:not([data-theme="dark"]) .hero__brandmark::before {
+		opacity: 0;
+	}
+
+	html[data-theme="dark"] .hero__brandmark::before {
+		opacity: 0;
+	}
+
+	.hero__brandmarkLogo {
+		display: block;
+		width: min(100%, clamp(16rem, 28vw, 26rem));
+		height: auto;
+		filter: drop-shadow(0 10px 18px color-mix(in oklab, var(--color-text) 12%, transparent));
+	}
+
+	.hero__actions {
+		width: 100%;
+		max-width: 34rem;
+		display: grid;
+		gap: var(--space-lg);
+	}
+
+	.hero__actions .btn {
+		width: 100%;
+	}
+
+	.hero__actionsCopy {
+		display: grid;
+		gap: calc(var(--space-sm) + 0.25rem);
+	}
+
+	.hero__actionsTitle {
+		margin: 0;
+		font-size: var(--heading-3);
+		letter-spacing: -0.01em;
+	}
+
+	.hero__actionsLede {
+		margin: 0;
+		color: var(--color-text-muted);
+	}
+
+	.hero__actionsRow {
+		margin-top: var(--space-xs);
+	}
+
+	@media (min-width: 34rem) {
+		.hero__actionsRow {
+			grid-template-columns: repeat(auto-fit, minmax(14rem, 1fr));
+			align-items: stretch;
+		}
+	}
+
+	@media (min-width: 60rem) {
+		.hero__grid {
+			grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+			align-items: center;
+			justify-items: stretch;
+		}
+
+		.hero__actions {
+			justify-self: end;
+			align-items: stretch;
+		}
+
+		.hero__actionsCopy {
+			text-align: left;
+		}
+	}
+
+	/* Hero: visible H1 tuned to be slightly larger than section H2s */
+	.hero__actionsTitle {
+		font-size: calc(var(--heading-2) * 1.06);
+		line-height: 1.05;
+	}
+
+	.hero__actionsLede {
+		font-size: var(--text-base);
+	}
+
+	:global(.hero__bookNow.btn) {
+		background: var(--color-primary);
+		border-color: var(--color-primary);
+		color: var(--color-primary-contrast);
+	}
+
+	:global(.hero__bookNow.btn:hover),
+	:global(.hero__bookNow.btn:focus-visible) {
+		background: var(--color-primary-hover);
+		border-color: var(--color-primary-hover);
+		color: var(--color-primary-contrast) !important;
+	}
+
+	:global(.hero__bookNow.btn:hover *) {
+		color: inherit;
+	}
+
+	.hero__actionsRow {
+		display: grid;
+		gap: var(--space-sm);
+		justify-items: center;
+	}
+
+	.hero__ctaStack {
+		display: grid;
+		gap: var(--space-xs);
+		justify-items: center;
+	}
+
+	@media (min-width: 48rem) {
+		.hero__actionsRow {
+			justify-items: end;
+		}
+
+		.hero__ctaStack {
+			justify-items: end;
+		}
+	}
+
+	.hero__ctaHelper {
+		margin: 0;
+		font-size: 0.68rem;
+		color: color-mix(in oklab, var(--color-text-muted) 80%, transparent);
+		letter-spacing: 0.012em;
+		text-align: center;
+	}
+
+	@media (min-width: 48rem) {
+		.hero__ctaHelper {
+			text-align: right;
+		}
+	}
+</style>

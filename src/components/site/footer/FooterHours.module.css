@@ -1,0 +1,59 @@
+:global(.site-footer__hoursTable) {
+  width: auto;
+  margin-inline: auto;
+  border-collapse: collapse;
+  font-size: var(--text-sm);
+}
+
+@media (min-width: 48rem) {
+  :global(.site-footer__hoursTable) {
+    width: 100%;
+  }
+}
+
+:global(.site-footer__hoursRow th),
+:global(.site-footer__hoursRow td) {
+  padding-block: 0.08rem;
+  vertical-align: top;
+}
+
+:global(.site-footer__hoursDay) {
+  text-align: left;
+  color: var(--color-text);
+  font-weight: 600;
+  white-space: nowrap;
+  padding-right: 1.25rem;
+  font-size: var(--text-sm);
+}
+
+:global(.site-footer__hoursTime) {
+  text-align: right;
+  color: var(--color-text-muted);
+  white-space: nowrap;
+  padding-left: 0.75rem;
+  font-size: var(--text-sm);
+}
+
+:global(.site-footer__hoursDay--wrap) {
+  white-space: normal;
+}
+
+@media (max-width: 47.999rem) {
+  :global(.site-footer__block--hours) {
+    padding-top: var(--space-sm);
+  }
+}
+
+@media (min-width: 36rem) and (max-width: 47.999rem) {
+  :global(.site-footer__block--hours) {
+    grid-column: 1 / -1;
+    text-align: center;
+    align-items: center;
+  }
+}
+
+@media (min-width: 48rem) {
+  :global(.site-footer__block--hours) {
+    justify-self: end;
+  }
+}

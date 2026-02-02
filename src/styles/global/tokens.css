@@ -1,0 +1,177 @@
+/* Global tokens + sensible defaults (neutral, accessible) */
+
+:root {
+  color-scheme: light dark;
+
+  /* Typography */
+  --font-heading:
+    "Playfair Display", "Cormorant Garamond", ui-serif, Georgia, Cambria,
+    "Times New Roman", Times, serif;
+  --font-body:
+    "Inter", system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial,
+    sans-serif;
+
+  /* Theme system (keep the same token “shape” across light/dark)
+			- bg: page canvas
+			- surface: primary surfaces (cards, header)
+			- surface-muted: secondary surfaces (tinted sections, subtle hovers)
+			- surface-elevated: overlays (menus) + crisp elevated surfaces
+		*/
+  --color-bg: #f8f5fa; /* warm, low-glare canvas */
+  --color-surface: #fcf9fd; /* primary surfaces (cards/header) */
+  --color-surface-muted: #ebe8f0; /* clearer separation for nav/sections */
+  --color-surface-elevated: #fdf8ff; /* overlay / elevated */
+  --color-accent-soft: #efe0f3; /* soft lavender tint for warmth (less pink) */
+
+  /* Light mode “glass” surfaces (shiny without neon glows) */
+  --surface-glass: linear-gradient(
+    180deg,
+    color-mix(in oklab, white 88%, var(--color-primary) 3%) 0%,
+    var(--color-surface) 56%,
+    color-mix(in oklab, var(--color-surface) 84%, var(--color-primary) 6%) 100%
+  );
+  --surface-glass-muted: linear-gradient(
+    180deg,
+    color-mix(in oklab, white 86%, var(--color-primary) 2%) 0%,
+    color-mix(in oklab, var(--color-surface-muted) 92%, white) 62%,
+    color-mix(in oklab, var(--color-surface-muted) 88%, var(--color-primary) 3%)
+      100%
+  );
+  --surface-glass-elevated: linear-gradient(
+    180deg,
+    color-mix(in oklab, white 90%, var(--color-primary) 4%) 0%,
+    var(--color-surface-elevated) 62%,
+    color-mix(
+        in oklab,
+        var(--color-surface-elevated) 88%,
+        var(--color-secondary) 4%
+      )
+      100%
+  );
+  --glass-highlight: color-mix(in oklab, white 72%, transparent);
+  --glass-rim: color-mix(in oklab, var(--color-primary) 12%, transparent);
+
+  --color-text: #302934; /* deep warm charcoal */
+  --color-text-muted: #5d515f; /* softer warm gray */
+
+  --color-border: #cdb8d380;
+  --color-divider: color-mix(in oklab, var(--color-border) 72%, transparent);
+
+  /* Primary brand color = mauve (headings, nav links, accents) */
+  --color-primary: #6f4b8f;
+  --color-primary-hover: #583a79;
+  --color-primary-contrast: #fff7f1;
+
+  /* Secondary accent = soft gold (CTAs, highlights) */
+  --color-secondary: #ffd240; /* champagne */
+  --color-secondary-hover: #fccb50;
+  --color-secondary-contrast: #1b1512;
+
+  /* Service icon accents (used by Services cards) */
+  --color-icon-signature: #7a5b98; /* purple */
+  --color-icon-gloss: #c75aa7; /* pink */
+  --color-icon-cut: #2aa39a; /* teal */
+  --color-icon-scalp: #3b7fcf; /* blue */
+
+  /* Focus ring stays mauve and accessible */
+  --color-focus: #a14b76;
+
+  /* Shadow base (avoid "glow" in dark mode) */
+  --color-shadow: #241a2c;
+
+  --radius-sm: 0.75rem;
+  --radius-md: 9999px;
+  --radius-lg: 1.25rem;
+
+  /* Stroke widths (use for underlines, dividers, etc.) */
+  --stroke-1: 1px;
+
+  --space-xs: 0.25rem;
+  --space-sm: 0.5rem;
+  --space-md: 1rem;
+  --space-lg: 1.75rem;
+  --space-xl: 2.5rem;
+
+  --container-max: 72rem;
+
+  --container-pad: clamp(1rem, 4vw, 1.5rem);
+  --section-pad-y: clamp(3rem, 7vw, 5rem);
+
+  --header-height: 4rem;
+  --scroll-pad-top: calc(var(--header-height) + var(--space-lg));
+
+  --control-height: 2.75rem;
+
+  --measure: 65ch;
+
+  /* Type scale: readable on mobile, elegant at large sizes */
+  --text-xs: clamp(0.85rem, 0.1vw + 0.83rem, 0.9rem);
+  --text-sm: clamp(0.95rem, 0.15vw + 0.92rem, 1rem);
+  --text-base: clamp(1.03rem, 0.2vw + 0.99rem, 1.125rem);
+  --text-lg: clamp(1.125rem, 0.35vw + 1.05rem, 1.25rem);
+  --text-xl: clamp(1.25rem, 0.55vw + 1.15rem, 1.45rem);
+
+  --heading-1: clamp(2.35rem, 3.1vw + 1.2rem, 3.7rem);
+  --heading-2: clamp(1.75rem, 1.9vw + 1rem, 2.55rem);
+  --heading-3: clamp(1.35rem, 0.9vw + 1.05rem, 1.75rem);
+
+  /* Motion System
+			- Fast (140ms): Quick feedback for buttons, icons, hover states
+			- Normal (240ms): Standard UI transitions, accordions, color changes
+			- Slow (360ms): Deliberate transforms, image effects
+			- Slower (560ms): Scroll reveals, page transitions
+			- Premium (900ms+): One-time reveal effects, sparkles
+
+			All motion respects prefers-reduced-motion via component-level media queries.
+		*/
+  --motion-duration-instant: 0ms;
+  --motion-duration-fast: 140ms;
+  --motion-duration-normal: 240ms;
+  --motion-duration-slow: 360ms;
+  --motion-duration-slower: 560ms;
+  --motion-duration-premium: 900ms;
+
+  --motion-ease-standard: ease;
+  --motion-ease-emphasized: cubic-bezier(0.2, 0.9, 0.2, 1);
+  --motion-ease-smooth: ease-in-out;
+
+  --shadow-color-sm: color-mix(in oklab, var(--color-shadow) 16%, transparent);
+  --shadow-color-md: color-mix(in oklab, var(--color-shadow) 26%, transparent);
+  --shadow-sm:
+    0 1px 2px 0 var(--shadow-color-sm), 0 1px 1px -1px var(--shadow-color-sm);
+  --shadow-md:
+    0 8px 20px -12px var(--shadow-color-md),
+    0 2px 6px -4px var(--shadow-color-sm);
+}
+
+html[data-theme="dark"] {
+  --color-bg: #19121a; /* deep purple (avoid pure-black) */
+  --color-surface: #211a22;
+  --color-surface-muted: #27202a; /* matches elevated for cohesive nav/sections */
+  --color-surface-elevated: #28202a;
+  --color-accent-soft: #2d2327; /* subtle plum tint */
+
+  --color-text: #faeffa; /* warm off-white */
+  --color-text-muted: #d0c2c2;
+
+  --color-border: #6a564f66;
+  --color-divider: color-mix(in oklab, var(--color-border) 74%, transparent);
+
+  --color-primary: #d5a4be; /* brighter mauve for legibility */
+  --color-primary-hover: #cc7ca8;
+  --color-primary-contrast: #1a111a;
+
+  --color-secondary: #d79d6a; /* warm orange on dark */
+  --color-secondary-hover: #e3a67a;
+  --color-secondary-contrast: #1a1310;
+
+  /* Service icon accents (lifted for dark backgrounds) */
+  --color-icon-signature: #d7b3f0; /* purple */
+  --color-icon-gloss: #f2a1cf; /* pink */
+  --color-icon-cut: #5fd0c7; /* teal */
+  --color-icon-scalp: #7bb2ff; /* blue */
+
+  --color-focus: #e79bbb;
+
+  --color-shadow: #060202;
+}

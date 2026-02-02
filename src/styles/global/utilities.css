@@ -1,0 +1,134 @@
+/* Utilities */
+.container {
+  max-width: var(--container-max);
+  margin: 0 auto;
+  padding-inline: var(--container-pad);
+  width: 100%;
+}
+
+.section {
+  padding-block: var(--section-pad-y);
+}
+
+/* Section rhythm: add subtle surface blocks (no layout changes) */
+main > .section {
+  position: relative;
+}
+
+/* Section backgrounds: keep the same rhythm in light + dark.
+	 - Muted surfaces: nav / services / footer / booking details
+	 - Page canvas: hero + content sections
+*/
+main > .section:nth-of-type(even) {
+  background: var(--color-surface-muted);
+}
+
+/* Light mode: make sections feel more “shiny” and dimensional */
+html:not([data-theme="dark"]) main > .section:nth-of-type(even) {
+  background: var(--surface-glass-muted);
+}
+
+main > .section:nth-of-type(odd):not(.hero) {
+  background: var(--color-bg);
+}
+
+html[data-theme="dark"] main > .section:nth-of-type(even) {
+  background: var(--color-surface-muted);
+}
+
+html[data-theme="dark"] main > .section:nth-of-type(odd):not(.hero) {
+  background: var(--color-bg);
+}
+
+/* Explicit overrides for pages/sections that need stable backgrounds
+	 regardless of DOM order.
+*/
+main > .section.section--muted {
+  background: var(--color-surface-muted);
+}
+
+html:not([data-theme="dark"]) main > .section.section--muted {
+  background: var(--surface-glass-muted);
+}
+
+main > .section.section--bg {
+  background: var(--color-bg);
+}
+
+.stack {
+  --stack-gap: var(--space-md);
+  display: grid;
+  gap: var(--stack-gap);
+}
+
+.stack > * {
+  margin: 0;
+}
+
+.stack.stack--lg {
+  --stack-gap: var(--space-lg);
+}
+
+.capitalize {
+  text-transform: capitalize;
+}
+
+.narrow {
+  width: 100%;
+  max-width: min(44rem, var(--measure));
+}
+
+.back-to-top {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.card-actions {
+  display: flex;
+  justify-content: flex-end;
+}
+
+main :is(section)[id] {
+  scroll-margin-top: var(--scroll-pad-top);
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* Skip link: hidden until focused */
+.skip-link {
+  position: absolute;
+  left: var(--space-md);
+  top: var(--space-md);
+  z-index: 1000;
+  padding: var(--space-xs) var(--space-sm);
+  border-radius: var(--radius-md);
+  background: var(--color-surface-elevated);
+  border: 1px solid var(--color-border);
+  color: var(--color-text);
+
+  clip: rect(0 0 0 0);
+  clip-path: inset(50%);
+  height: 1px;
+  width: 1px;
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+.skip-link:focus,
+.skip-link:focus-visible {
+  clip: auto;
+  clip-path: none;
+  height: auto;
+  width: auto;
+  overflow: visible;
+}

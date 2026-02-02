@@ -1,0 +1,160 @@
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: var(--scroll-pad-top);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+}
+
+/* Reset / defaults */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  min-height: 100%;
+}
+
+body {
+  margin: 0;
+  background:
+    radial-gradient(
+      1100px 740px at 50% -20%,
+      color-mix(in oklab, white 48%, transparent),
+      transparent 62%
+    ),
+    radial-gradient(
+      1200px 800px at 10% -10%,
+      color-mix(in oklab, var(--color-secondary) 6%, transparent),
+      transparent 62%
+    ),
+    radial-gradient(
+      900px 600px at 90% 0%,
+      color-mix(in oklab, var(--color-primary) 3%, transparent),
+      transparent 60%
+    ),
+    var(--color-bg);
+  color: var(--color-text);
+  font-family: var(--font-body);
+  line-height: 1.6;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  font-size: var(--text-base);
+}
+
+html[data-theme="dark"] body {
+  background:
+    radial-gradient(
+      1100px 760px at 8% -12%,
+      color-mix(in oklab, var(--color-secondary) 6%, transparent),
+      transparent 64%
+    ),
+    radial-gradient(
+      900px 620px at 92% -4%,
+      color-mix(in oklab, var(--color-primary) 6%, transparent),
+      transparent 62%
+    ),
+    var(--color-bg);
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  margin: 0 0 var(--space-sm);
+  font-family: var(--font-heading);
+  font-optical-sizing: auto;
+  line-height: 1.12;
+  font-weight: 600;
+  letter-spacing: -0.012em;
+  color: var(--color-primary);
+}
+
+/* Headings only: refined tracking (do not affect body copy) */
+h1,
+h2,
+h3 {
+  letter-spacing: 0.006em;
+}
+
+h1 {
+  font-size: var(--heading-1);
+  line-height: 1.05;
+}
+
+h2 {
+  font-size: var(--heading-2);
+  line-height: 1.08;
+}
+
+h3 {
+  font-size: var(--heading-3);
+  line-height: 1.12;
+}
+
+h4 {
+  font-size: var(--text-xl);
+  line-height: 1.18;
+}
+
+p {
+  margin: 0 0 var(--space-md);
+  max-width: var(--measure);
+}
+
+ul,
+ol {
+  margin: 0 0 var(--space-md);
+  padding-left: 1.25em;
+}
+
+img,
+svg,
+video,
+canvas {
+  max-width: 100%;
+  height: auto;
+}
+
+a {
+  color: var(--color-primary);
+  text-decoration-thickness: from-font;
+  text-underline-offset: 0.15em;
+}
+
+a:hover {
+  color: var(--color-primary-hover);
+}
+
+/* Brand elevation: header reads like a luxury surface, not a toolbar */
+.site-header.site-header {
+  box-shadow: var(--shadow-sm);
+}
+
+hr {
+  border: 0;
+  border-top: 1px solid var(--color-divider);
+  margin: var(--space-lg) 0;
+}
+
+:focus-visible {
+  outline: 2px solid var(--color-focus);
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  html.theme-changing *,
+  html.theme-changing *::before,
+  html.theme-changing *::after {
+    transition: none !important;
+  }
+}

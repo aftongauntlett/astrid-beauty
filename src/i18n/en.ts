@@ -155,7 +155,8 @@ export const en: Messages = {
       {
         title: "Consultations",
         startingAt: "$25",
-        description: "A focused starting point for new guests or big changes.",
+        description:
+          "A focused starting point for new guests, changes, or questions.",
         items: [
           "In-person consultation",
           "Test strand (when needed)",
@@ -167,7 +168,7 @@ export const en: Messages = {
         title: "Cut & Style",
         startingAt: "$55",
         description:
-          "A modern shape with a finish that feels polished - never overdone.",
+          "A modern shape with a finish that looks polished, never overdone.",
         items: [
           "Haircut tailored to density and lifestyle",
           "Blowdry finish",
@@ -179,7 +180,7 @@ export const en: Messages = {
         title: "Signature Color",
         startingAt: "$80",
         description:
-          "Single-process color and toning for rich, dimensional results.",
+          "Single-process color with toning for rich, dimensional results.",
         items: [
           "Root touch-ups and all-over color",
           "Gray blending and refresh",
@@ -191,7 +192,7 @@ export const en: Messages = {
         title: "Lightening & Dimension",
         startingAt: "$170",
         description:
-          "Custom highlights and balayage for brightness that grows out well.",
+          "Custom highlights and balayage for brightness that grows out softly.",
         items: [
           "Highlights, balayage, and lived-in color",
           "Face-framing brightness",
@@ -203,7 +204,7 @@ export const en: Messages = {
         title: "Gloss & Shine",
         startingAt: "$50",
         description:
-          "A quick refresh for tone, softness, and mirror-like shine.",
+          "A tone refresh that adds softness and mirror-like shine in minutes.",
         items: [
           "Warm or cool tone adjustments",
           "Brilliance boost between color visits",
@@ -215,7 +216,7 @@ export const en: Messages = {
         title: "Scalp Wellness",
         startingAt: "$250",
         description:
-          "Targeted care - from scalp reset to smoothing services, based on your consultation.",
+          "Targeted scalp care and smoothing options, built from your consultation.",
         items: [
           "Scalp cleanse + massage",
           "Hydration and balance support",
