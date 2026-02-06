@@ -22,16 +22,16 @@ export const en: Messages = {
   misc: {
     bookNow: "Book Now",
     scheduleAppointment: "Book Now",
-    viewPrices: "View Prices",
     viewServices: "Explore Services",
     backToTop: "Back to top",
     scheduleNow: "Book Now",
+    appointmentOnly: "By appointment only",
+    learnMore: "Learn More",
   },
   home: {
     heroLede:
       "Beautiful color, fresh cuts, and luminous gloss treatments - right here in Herndon. Book your appointment anytime.",
     heroSupporting: "Dimensional color and modern cuts in Herndon, VA.",
-    heroCtaHelper: "Secure booking via Vagaro",
     brandSrOnly: "By Astrid Beauty Salon",
   },
   about: {
@@ -144,29 +144,26 @@ export const en: Messages = {
   services: {
     eyebrow: "Services",
     lede: "A curated menu of color, cuts, and treatments - built around your consultation.",
-    startingAtLabel: "Starting at",
     disclaimer: {
       line1:
-        "Starting prices shown. Final pricing can vary by hair length, density, and the service plan created during your consultation.",
+        "Services are customized during your consultation. Timing and exact services are confirmed before we begin.",
       line2:
-        "For the most up-to-date pricing and availability, please book through Vagaro.",
+        "For the most up-to-date availability, please book through Vagaro.",
     },
     cards: [
       {
         title: "Consultations",
-        startingAt: "$25",
         description:
           "A focused starting point for new guests, changes, or questions.",
         items: [
           "In-person consultation",
           "Test strand (when needed)",
           "Service plan + timing",
-          "Starting price guidance",
+          "Service recommendations",
         ],
       },
       {
         title: "Cut & Style",
-        startingAt: "$55",
         description:
           "A modern shape with a finish that looks polished, never overdone.",
         items: [
@@ -178,7 +175,6 @@ export const en: Messages = {
       },
       {
         title: "Signature Color",
-        startingAt: "$80",
         description:
           "Single-process color with toning for rich, dimensional results.",
         items: [
@@ -190,7 +186,6 @@ export const en: Messages = {
       },
       {
         title: "Lightening & Dimension",
-        startingAt: "$170",
         description:
           "Custom highlights and balayage for brightness that grows out softly.",
         items: [
@@ -202,7 +197,6 @@ export const en: Messages = {
       },
       {
         title: "Gloss & Shine",
-        startingAt: "$50",
         description:
           "A tone refresh that adds softness and mirror-like shine in minutes.",
         items: [
@@ -214,7 +208,6 @@ export const en: Messages = {
       },
       {
         title: "Scalp Wellness",
-        startingAt: "$250",
         description:
           "Targeted scalp care and smoothing options, built from your consultation.",
         items: [

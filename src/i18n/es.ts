@@ -22,16 +22,16 @@ export const es: Messages = {
   misc: {
     bookNow: "Reservar",
     scheduleAppointment: "Reservar",
-    viewPrices: "Ver precios",
     viewServices: "Explorar servicios",
     backToTop: "Volver arriba",
     scheduleNow: "Reservar",
+    appointmentOnly: "Solo con cita",
+    learnMore: "Más información",
   },
   home: {
     heroLede:
       "Color vibrante, cortes frescos y tratamientos de brillo luminoso - aquí en Herndon. Reserva tu cita cuando quieras.",
     heroSupporting: "Color dimensional y cortes modernos en Herndon, VA.",
-    heroCtaHelper: "Reserva segura a través de Vagaro.",
     brandSrOnly: "By Astrid Beauty Salon",
   },
   about: {
@@ -144,29 +144,26 @@ export const es: Messages = {
   services: {
     eyebrow: "Servicios",
     lede: "Un menú seleccionado de color, cortes y tratamientos - guiado por tu consulta.",
-    startingAtLabel: "Desde",
     disclaimer: {
       line1:
-        "Se muestran precios desde. El precio final puede variar según el largo, la densidad y el plan definido durante tu consulta.",
+        "Los servicios se personalizan durante tu consulta. Confirmamos el tiempo y el servicio exacto antes de comenzar.",
       line2:
-        "Para ver precios y disponibilidad más actualizados, reserva a través de Vagaro.",
+        "Para ver disponibilidad más actualizada, reserva a través de Vagaro.",
     },
     cards: [
       {
         title: "Consultas",
-        startingAt: "$25",
         description:
           "Un punto de partida claro para clientas nuevas, cambios o dudas.",
         items: [
           "Consulta en persona",
           "Mecha de prueba (si hace falta)",
           "Plan de servicio + tiempos",
-          "Guía de precio desde",
+          "Recomendación de servicios",
         ],
       },
       {
         title: "Corte y estilo",
-        startingAt: "$55",
         description:
           "Una forma moderna con un acabado pulido que se ve natural, sin exceso.",
         items: [
@@ -178,7 +175,6 @@ export const es: Messages = {
       },
       {
         title: "Color Signature",
-        startingAt: "$80",
         description:
           "Color de un solo proceso con tonificación para un resultado rico y dimensional.",
         items: [
@@ -190,7 +186,6 @@ export const es: Messages = {
       },
       {
         title: "Aclarado y dimensión",
-        startingAt: "$170",
         description:
           "Mechas y balayage personalizados para iluminar y crecer bonito con suavidad.",
         items: [
@@ -202,7 +197,6 @@ export const es: Messages = {
       },
       {
         title: "Gloss y brillo",
-        startingAt: "$50",
         description:
           "Un refresh de tono que suaviza y deja brillo tipo espejo entre citas.",
         items: [
@@ -214,7 +208,6 @@ export const es: Messages = {
       },
       {
         title: "Salud capilar",
-        startingAt: "$250",
         description:
           "Cuidado enfocado del cuero cabelludo y opciones de alisado, según tu consulta.",
         items: [

@@ -19,15 +19,15 @@ export type Messages = {
   misc: {
     bookNow: string;
     scheduleAppointment: string;
-    viewPrices: string;
     viewServices: string;
     backToTop: string;
     scheduleNow: string;
+    appointmentOnly: string;
+    learnMore: string;
   };
   home: {
     heroLede: string;
     heroSupporting: string;
-    heroCtaHelper: string;
     brandSrOnly: string;
   };
   about: {
@@ -98,14 +98,12 @@ export type Messages = {
   services: {
     eyebrow: string;
     lede: string;
-    startingAtLabel: string;
     disclaimer: {
       line1: string;
       line2: string;
     };
     cards: Array<{
       title: string;
-      startingAt: string;
       description: string;
       items: string[];
     }>;

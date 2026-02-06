@@ -7,18 +7,19 @@ import type { Messages } from "../../../i18n/types";
 
 export type Props = {
 	messages: Messages;
-	vagaroPricesUrl: string;
+	vagaroServicesUrl: string;
 };
 
-const { messages, vagaroPricesUrl } = Astro.props;
+const { messages, vagaroServicesUrl } = Astro.props;
 
+const serviceIconColor = "var(--color-secondary)";
 const serviceCardMeta = [
-	{ iconName: "consultation", iconColor: "var(--color-icon-scalp)" },
-	{ iconName: "scissors", iconColor: "var(--color-icon-cut)" },
-	{ iconName: "palette", iconColor: "var(--color-icon-signature)" },
-	{ iconName: "sparkles", iconColor: "var(--color-icon-signature)" },
-	{ iconName: "droplet", iconColor: "var(--color-icon-gloss)" },
-	{ iconName: "waves", iconColor: "var(--color-icon-scalp)" },
+	{ iconName: "consultation", iconColor: serviceIconColor },
+	{ iconName: "scissors", iconColor: serviceIconColor },
+	{ iconName: "palette", iconColor: serviceIconColor },
+	{ iconName: "sparkles", iconColor: serviceIconColor },
+	{ iconName: "droplet", iconColor: serviceIconColor },
+	{ iconName: "waves", iconColor: serviceIconColor },
 ] as const;
 ---
 
@@ -37,7 +38,6 @@ const serviceCardMeta = [
 				<div data-reveal data-reveal-delay={String(index * 70)}>
 					<FeatureIconCard
 						title={card.title}
-						meta={`${messages.services.startingAtLabel} ${card.startingAt}`}
 						description={card.description}
 						items={card.items}
 						iconName={serviceCardMeta[index]?.iconName ?? "palette"}
@@ -52,10 +52,10 @@ const serviceCardMeta = [
 		<div class="services-actions" data-reveal data-reveal-delay="70">
 			<HeroBookNowCta
 				client:idle
-				href={vagaroPricesUrl}
-				label={messages.misc.viewPrices}
-				labelMobile={messages.misc.viewPrices}
-				className="services__viewPrices"
+				href={vagaroServicesUrl}
+				label={messages.misc.viewServices}
+				labelMobile={messages.misc.viewServices}
+				className="services__viewServices"
 			/>
 		</div>
 
@@ -95,14 +95,13 @@ const serviceCardMeta = [
 		margin: 0;
 	}
 
-	:global(.services__viewPrices.btn:hover),
-	:global(.services__viewPrices.btn:focus-visible) {
+	:global(.services__viewServices.btn:hover),
+	:global(.services__viewServices.btn:focus-visible) {
 		background: var(--color-primary-hover);
 		border-color: var(--color-primary-hover);
-		color: var(--color-primary-contrast) !important;
 	}
 
-	:global(.services__viewPrices.btn:hover *) {
+	:global(.services__viewServices.btn:hover *) {
 		color: inherit;
 	}
 

@@ -15,11 +15,10 @@ const { lang } = Astro.props;
 const messages = getMessages(lang);
 
 const vagaroServicesUrl = "https://www.vagaro.com/byastridbeautysalon";
-const vagaroPricesUrl = "https://www.vagaro.com/byastridbeautysalon/services";
 ---
 
 <HomeHeroSection messages={messages} vagaroServicesUrl={vagaroServicesUrl} />
-<ServicesSection messages={messages} vagaroPricesUrl={vagaroPricesUrl} />
+<ServicesSection messages={messages} vagaroServicesUrl={vagaroServicesUrl} />
 <AboutGallerySection lang={lang} messages={messages} />
 <ReviewsStaffSection messages={messages} />
 <BookingSection messages={messages} vagaroServicesUrl={vagaroServicesUrl} />

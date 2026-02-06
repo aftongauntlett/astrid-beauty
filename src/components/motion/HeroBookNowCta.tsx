@@ -5,7 +5,7 @@ import {
   useInView,
   useReducedMotion,
 } from "framer-motion";
-import { ExternalLink } from "lucide-react";
+import { ArrowDown, ExternalLink } from "lucide-react";
 
 import styles from "./HeroBookNowCta.module.css";
 
@@ -14,6 +14,8 @@ export type HeroBookNowCtaProps = {
   label: string;
   labelMobile?: string;
   className?: string;
+  variant?: "primary" | "secondary";
+  icon?: "external" | "down";
   target?: string;
   rel?: string;
 };
@@ -23,6 +25,8 @@ export default function HeroBookNowCta({
   label,
   labelMobile,
   className,
+  variant = "primary",
+  icon = "external",
   target = "_blank",
   rel = "noopener noreferrer",
 }: HeroBookNowCtaProps): React.JSX.Element {
@@ -134,10 +138,12 @@ export default function HeroBookNowCta({
     [],
   );
 
-  const baseClasses = "btn btn--primary btn--lg";
+  const baseClasses = `btn btn--${variant} btn--lg`;
   const classes = [baseClasses, styles["btnExternal"], className]
     .filter(Boolean)
     .join(" ");
+
+  const Icon = icon === "down" ? ArrowDown : ExternalLink;
 
   if (reducedMotion) {
     return (
@@ -153,7 +159,7 @@ export default function HeroBookNowCta({
           <span className={styles["labelDesktop"]}>{label}</span>
           <span className={styles["labelMobile"]}>{labelMobile ?? label}</span>
         </span>
-        <ExternalLink
+        <Icon
           className={styles["externalIcon"]}
           size={20}
           aria-hidden="true"
@@ -197,11 +203,11 @@ export default function HeroBookNowCta({
               pointerEvents: "none",
               background: isDarkTheme
                 ? isSmallScreen
-                  ? "radial-gradient(45% 55% at 30% 30%, rgba(231, 199, 122, 0.42), transparent 66%), radial-gradient(40% 50% at 70% 70%, rgba(122, 91, 152, 0.28), transparent 72%)"
-                  : "radial-gradient(45% 55% at 30% 30%, rgba(231, 199, 122, 0.55), transparent 65%), radial-gradient(40% 50% at 70% 70%, rgba(122, 91, 152, 0.35), transparent 70%)"
+                  ? "radial-gradient(45% 55% at 30% 30%, rgba(212, 175, 55, 0.46), transparent 66%), radial-gradient(40% 50% at 70% 70%, rgba(245, 245, 246, 0.14), transparent 72%)"
+                  : "radial-gradient(45% 55% at 30% 30%, rgba(212, 175, 55, 0.58), transparent 65%), radial-gradient(40% 50% at 70% 70%, rgba(245, 245, 246, 0.18), transparent 70%)"
                 : isSmallScreen
-                  ? "radial-gradient(45% 55% at 30% 30%, rgba(231, 199, 122, 0.22), transparent 68%), radial-gradient(40% 50% at 70% 70%, rgba(122, 91, 152, 0.16), transparent 74%)"
-                  : "radial-gradient(45% 55% at 30% 30%, rgba(231, 199, 122, 0.28), transparent 68%), radial-gradient(40% 50% at 70% 70%, rgba(122, 91, 152, 0.18), transparent 74%)",
+                  ? "radial-gradient(45% 55% at 30% 30%, rgba(212, 175, 55, 0.2), transparent 68%), radial-gradient(40% 50% at 70% 70%, rgba(15, 15, 16, 0.08), transparent 74%)"
+                  : "radial-gradient(45% 55% at 30% 30%, rgba(212, 175, 55, 0.28), transparent 68%), radial-gradient(40% 50% at 70% 70%, rgba(15, 15, 16, 0.1), transparent 74%)",
               filter: isSmallScreen ? "blur(9px)" : "blur(12px)",
               mixBlendMode: isDarkTheme ? "soft-light" : "multiply",
               zIndex: 0,
@@ -275,7 +281,7 @@ export default function HeroBookNowCta({
         }}
         animate={iconControls}
       >
-        <ExternalLink
+        <Icon
           className={styles["externalIcon"]}
           size={20}
           aria-hidden="true"
