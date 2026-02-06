@@ -1,0 +1,145 @@
+---
+export interface Props {
+	class?: string;
+	as?: "span" | "div";
+}
+
+const { class: className = "", as = "span" } = Astro.props as Props;
+
+const uid = (globalThis.crypto?.randomUUID?.() ?? Math.random().toString(36).slice(2)).replace(/[^a-z0-9_-]/gi, "");
+const maskId = `bst-mask-${uid}`;
+const revealId = `bst-reveal-${uid}`;
+
+const Tag = as;
+---
+
+<Tag class={`bst ${className}`.trim()} data-bst>
+	<span class="bst__text"><slot /></span>
+	<svg
+		class="bst__svg"
+		viewBox="0 0 440 140"
+		preserveAspectRatio="xMinYMid meet"
+		aria-hidden="true"
+		focusable="false"
+	>
+		<defs>
+			<mask id={maskId} maskUnits="userSpaceOnUse" x="0" y="0" width="440" height="140">
+				<rect width="440" height="140" fill="black" />
+				<!--
+					Frayed-edge reveal shape so the leading edge feels like a brush head,
+					not a straight “loading bar”. This gets scaled left→right in CSS.
+				-->
+				<path
+					id={revealId}
+					class="bst__reveal"
+					fill="white"
+					d="M0 0H396L404 8L410 3L416 12L422 2L428 14L434 6L440 18V122L436 134L430 126L424 140L418 130L412 138L406 128L396 140H0Z"
+				/>
+			</mask>
+		</defs>
+
+		<g mask={`url(#${maskId})`}>
+			<g class="bst__paint">
+			<path
+				class="bst__fill"
+				d="M18 50c38-18 88-20 132-14 44 6 96 10 146-6 56-18 100-14 148 3 22 8 38 18 46 30 9 14 2 30-18 40-18 10-46 16-84 18-78 5-144 4-214 1-68-3-124-2-178 6-26 4-47 3-62-3-16-6-24-16-25-30-2-22 26-41 109-45z"
+			/>
+			<!-- Subtle end fray (kept uniform because opacity is applied on the group) -->
+			<path
+				class="bst__fill"
+				d="M360 28c34 10 60 26 72 46 9 14 8 30-6 42-12 10-30 14-54 16 30-10 42-28 34-52-6-18-20-34-46-52z"
+			/>
+			<path
+				class="bst__fill"
+				d="M380 20c22 12 40 30 48 48 6 14 2 28-14 40-12 8-28 12-48 14 30-12 42-28 36-48-4-14-10-28-22-54z"
+			/>
+			<!--
+				Keep the stroke as a single filled shape.
+				The frayed edge comes from the reveal mask, which keeps color uniform.
+			-->
+			</g>
+		</g>
+	</svg>
+</Tag>
+
+<style>
+	.bst {
+		--bst-reveal: 0;
+		--bst-opacity: 0;
+		--bst-duration: 760ms;
+		--bst-ease: cubic-bezier(0.16, 0.9, 0.2, 1);
+
+		position: relative;
+		display: inline-block;
+		isolation: isolate;
+		vertical-align: middle;
+		overflow: hidden;
+		padding: 0.24em 1em;
+	}
+
+	.bst__text {
+		position: relative;
+		z-index: 1;
+	}
+
+	.bst__svg {
+		position: absolute;
+		/* Keep the paint contained within the title so it can't overlap body text */
+		inset: -0.34em -1.25em;
+		z-index: 0;
+		pointer-events: none;
+		filter: drop-shadow(
+			var(
+				--bst-shadow,
+				0 12px 28px -24px color-mix(in oklab, black 65%, transparent)
+			)
+		);
+		opacity: var(--bst-opacity);
+	}
+
+	/* Expand the painted stroke so longer titles stay covered */
+	.bst__paint {
+		transform-origin: center;
+		transform: translate(-14px, 0) scale(1.18, 1);
+		opacity: var(--bst-ink-opacity);
+	}
+
+	.bst__fill {
+		fill: var(--bst-fill, color-mix(in oklab, #0b0b0c 92%, transparent));
+	}
+
+	.bst__reveal {
+		transform-box: view-box;
+		transform-origin: left center;
+		transform: scaleX(var(--bst-reveal));
+	}
+
+	@media (prefers-reduced-motion: no-preference) {
+		.bst__reveal {
+			transition:
+				transform var(--bst-duration, 760ms)
+				var(--bst-ease, cubic-bezier(0.16, 0.9, 0.2, 1));
+		}
+
+		.bst__svg {
+			transition: opacity 220ms var(--motion-ease-standard);
+		}
+	}
+
+	@media (prefers-reduced-motion: reduce) {
+		.bst__reveal {
+			transition: none;
+		}
+
+		.bst__svg {
+			transition: none;
+		}
+	}
+
+	/* Touch devices: keep things clean (no hover animation) */
+	@media (hover: none) {
+		.bst__svg {
+			display: none;
+		}
+	}
+</style>
