@@ -35,27 +35,26 @@ const getThemePalette = (): {
   // SSR fallback: assume light-ish
   if (typeof document === "undefined") {
     return {
-      // Light mode: soft pinks + purples (outline-only in render).
-      colors: ["#7c3aed", "#9333ea", "#a21caf", "#be185d"],
-      maxOpacity: 0.15,
+      // Light mode: neutral + gold (outline-only in render).
+      colors: ["#0f0f10", "#3f3f43", "#d4af37"],
+      maxOpacity: 0.14,
     };
   }
 
   const isDark = resolveIsDark();
 
   if (isDark) {
-    // Dark mode: lift saturation slightly, keep low opacity.
+    // Dark mode: white + gold outlines, keep low opacity.
     return {
-      colors: ["#e6b0cc", "#d7b3f0", "#d7b06a", "#7bb2ff"],
-      maxOpacity: 0.15,
+      colors: ["#f5f5f6", "#c9c9cd", "#d4af37"],
+      maxOpacity: 0.14,
     };
   }
 
-  // Light mode: soft/pastel accents (less saturated), moderate opacity.
+  // Light mode: neutral + gold outlines.
   return {
-    // Pink/purple only (no yellow/blue).
-    colors: ["#7c3aed", "#9333ea", "#a21caf", "#be185d"],
-    maxOpacity: 0.15,
+    colors: ["#0f0f10", "#3f3f43", "#d4af37"],
+    maxOpacity: 0.14,
   };
 };
 
@@ -174,7 +173,7 @@ export default function HeroBackdrop(): React.JSX.Element {
         // Apply the theme palette's maxOpacity consistently for both themes.
         // Tighter range keeps shapes reading more evenly.
         const opacity = palette.maxOpacity * (0.62 + Math.random() * 0.33);
-        const color = palette.colors[i % palette.colors.length] ?? "#6f4b8f";
+        const color = palette.colors[i % palette.colors.length] ?? "#0f0f10";
 
         return {
           baseX: clampedX,

@@ -92,7 +92,7 @@
 }
 
 :global(.site-footer__link:hover) {
-  color: var(--color-primary);
+  color: var(--color-secondary);
 }
 
 @keyframes site-footer__glowRadial {

@@ -17,11 +17,11 @@
 			- surface-muted: secondary surfaces (tinted sections, subtle hovers)
 			- surface-elevated: overlays (menus) + crisp elevated surfaces
 		*/
-  --color-bg: #f8f5fa; /* warm, low-glare canvas */
-  --color-surface: #fcf9fd; /* primary surfaces (cards/header) */
-  --color-surface-muted: #ebe8f0; /* clearer separation for nav/sections */
-  --color-surface-elevated: #fdf8ff; /* overlay / elevated */
-  --color-accent-soft: #efe0f3; /* soft lavender tint for warmth (less pink) */
+  --color-bg: #ffffff; /* neutral canvas */
+  --color-surface: #ffffff; /* primary surfaces (cards/header) */
+  --color-surface-muted: #e9e9ec; /* clearer neutral separation (light mode) */
+  --color-surface-elevated: #ffffff; /* overlay / elevated */
+  --color-accent-soft: #fbf7eb; /* subtle warm tint (gold-adjacent) */
 
   /* Light mode “glass” surfaces (shiny without neon glows) */
   --surface-glass: linear-gradient(
@@ -32,9 +32,9 @@
   );
   --surface-glass-muted: linear-gradient(
     180deg,
-    color-mix(in oklab, white 86%, var(--color-primary) 2%) 0%,
-    color-mix(in oklab, var(--color-surface-muted) 92%, white) 62%,
-    color-mix(in oklab, var(--color-surface-muted) 88%, var(--color-primary) 3%)
+    color-mix(in oklab, var(--color-surface-muted) 90%, white) 0%,
+    var(--color-surface-muted) 62%,
+    color-mix(in oklab, var(--color-surface-muted) 92%, var(--color-primary) 4%)
       100%
   );
   --surface-glass-elevated: linear-gradient(
@@ -51,33 +51,34 @@
   --glass-highlight: color-mix(in oklab, white 72%, transparent);
   --glass-rim: color-mix(in oklab, var(--color-primary) 12%, transparent);
 
-  --color-text: #302934; /* deep warm charcoal */
-  --color-text-muted: #5d515f; /* softer warm gray */
+  --color-text: #0f0f10; /* near-black */
+  --color-text-muted: #3f3f43; /* neutral gray */
 
-  --color-border: #cdb8d380;
+  --color-border: #0f0f101f;
   --color-divider: color-mix(in oklab, var(--color-border) 72%, transparent);
 
-  /* Primary brand color = mauve (headings, nav links, accents) */
-  --color-primary: #6f4b8f;
-  --color-primary-hover: #583a79;
-  --color-primary-contrast: #fff7f1;
+  /* Primary brand color = neutral black */
+  --color-primary: #0f0f10;
+  --color-primary-hover: #000000;
+  --color-primary-contrast: #ffffff;
 
-  /* Secondary accent = soft gold (CTAs, highlights) */
-  --color-secondary: #ffd240; /* champagne */
-  --color-secondary-hover: #fccb50;
-  --color-secondary-contrast: #1b1512;
+  /* Secondary accent = subtle gold (highlights) */
+  /* Light mode gold: slightly lighter/brighter so it reads luminous on white */
+  --color-secondary: #e2c566;
+  --color-secondary-hover: #d4af37;
+  --color-secondary-contrast: #141414;
 
-  /* Service icon accents (used by Services cards) */
-  --color-icon-signature: #7a5b98; /* purple */
-  --color-icon-gloss: #c75aa7; /* pink */
-  --color-icon-cut: #2aa39a; /* teal */
-  --color-icon-scalp: #3b7fcf; /* blue */
+  /* Service icon accents (lean neutral + gold) */
+  --color-icon-signature: var(--color-secondary);
+  --color-icon-gloss: var(--color-secondary);
+  --color-icon-cut: var(--color-secondary);
+  --color-icon-scalp: var(--color-secondary);
 
-  /* Focus ring stays mauve and accessible */
-  --color-focus: #a14b76;
+  /* Focus ring leans gold for consistency */
+  --color-focus: color-mix(in oklab, var(--color-secondary) 70%, #ffffff);
 
   /* Shadow base (avoid "glow" in dark mode) */
-  --color-shadow: #241a2c;
+  --color-shadow: #000000;
 
   --radius-sm: 0.75rem;
   --radius-md: 9999px;
@@ -145,33 +146,34 @@
 }
 
 html[data-theme="dark"] {
-  --color-bg: #19121a; /* deep purple (avoid pure-black) */
-  --color-surface: #211a22;
-  --color-surface-muted: #27202a; /* matches elevated for cohesive nav/sections */
-  --color-surface-elevated: #28202a;
-  --color-accent-soft: #2d2327; /* subtle plum tint */
+  --color-bg: #0b0b0c; /* near-black */
+  --color-surface: #111112;
+  --color-surface-muted: #161618;
+  --color-surface-elevated: #1b1b1e;
+  --color-accent-soft: #14120d; /* subtle warm tint */
 
-  --color-text: #faeffa; /* warm off-white */
-  --color-text-muted: #d0c2c2;
+  --color-text: #f5f5f6;
+  --color-text-muted: #c9c9cd;
 
-  --color-border: #6a564f66;
+  --color-border: #ffffff24;
   --color-divider: color-mix(in oklab, var(--color-border) 74%, transparent);
 
-  --color-primary: #d5a4be; /* brighter mauve for legibility */
-  --color-primary-hover: #cc7ca8;
-  --color-primary-contrast: #1a111a;
+  /* In dark mode, primary becomes white (keeps B/W look) */
+  --color-primary: #f5f5f6;
+  --color-primary-hover: #ffffff;
+  --color-primary-contrast: #0b0b0c;
 
-  --color-secondary: #d79d6a; /* warm orange on dark */
-  --color-secondary-hover: #e3a67a;
-  --color-secondary-contrast: #1a1310;
+  --color-secondary: #d4af37;
+  --color-secondary-hover: #e0c36a;
+  --color-secondary-contrast: #0b0b0c;
 
-  /* Service icon accents (lifted for dark backgrounds) */
-  --color-icon-signature: #d7b3f0; /* purple */
-  --color-icon-gloss: #f2a1cf; /* pink */
-  --color-icon-cut: #5fd0c7; /* teal */
-  --color-icon-scalp: #7bb2ff; /* blue */
+  /* Service icon accents (gold family) */
+  --color-icon-signature: var(--color-secondary);
+  --color-icon-gloss: var(--color-secondary);
+  --color-icon-cut: var(--color-secondary);
+  --color-icon-scalp: var(--color-secondary);
 
-  --color-focus: #e79bbb;
+  --color-focus: color-mix(in oklab, var(--color-secondary) 75%, #ffffff);
 
-  --color-shadow: #060202;
+  --color-shadow: #000000;
 }

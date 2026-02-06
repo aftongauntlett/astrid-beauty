@@ -376,7 +376,7 @@ const panelId = (suffix: string) => `${idPrefix}-panel-${suffix}`;
 		position: absolute;
 		inset: 0;
 		border-radius: var(--radius-lg);
-		background: color-mix(in oklab, var(--color-primary) 14%, var(--color-surface));
+		background: color-mix(in oklab, var(--color-secondary) 14%, var(--color-surface));
 		opacity: 0;
 		pointer-events: none;
 		z-index: 0;
@@ -410,7 +410,7 @@ const panelId = (suffix: string) => `${idPrefix}-panel-${suffix}`;
 
 	.accordion__trigger:hover,
 	.accordion__trigger:focus-visible {
-		color: var(--color-primary);
+		color: var(--color-secondary);
 		background-color: transparent;
 	}
 
@@ -428,7 +428,7 @@ const panelId = (suffix: string) => `${idPrefix}-panel-${suffix}`;
 	}
 
 	.accordion__trigger[aria-expanded="true"] {
-		color: var(--color-primary);
+		color: var(--color-secondary);
 	}
 
 	.accordion__trigger[aria-expanded="true"]::before {
@@ -543,5 +543,10 @@ const panelId = (suffix: string) => `${idPrefix}-panel-${suffix}`;
 		text-decoration: underline;
 		text-underline-offset: 0.16em;
 		font-weight: 650;
+	}
+
+	.accordion__link:hover,
+	.accordion__link:focus-visible {
+		color: var(--color-secondary);
 	}
 </style>

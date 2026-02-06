@@ -186,6 +186,10 @@ const staffCards = [
 		z-index: 1;
 	}
 
+	html:not([data-theme="dark"]) .review__rating {
+		color: var(--color-secondary);
+	}
+
 	@media (prefers-reduced-motion: no-preference) {
 		.review__rating {
 			transition: transform 180ms ease;
@@ -290,7 +294,7 @@ const staffCards = [
 		pointer-events: none;
 		background: radial-gradient(
 			circle at 28% 12%,
-			color-mix(in oklab, var(--color-primary) 18%, transparent) 0%,
+			color-mix(in oklab, var(--color-secondary) 24%, transparent) 0%,
 			transparent 62%
 		);
 		opacity: 0;
@@ -316,7 +320,13 @@ const staffCards = [
 		}
 
 		:global(.staff-card:is(:hover, :focus-within)) .staff-card__name {
-			color: var(--color-primary);
+			color: var(--color-secondary);
+		}
+
+		:global(.staff-card:is(:hover, :focus-within)) .staff-card__badge {
+			border-color: color-mix(in oklab, var(--color-secondary) 28%, var(--color-border));
+			background: color-mix(in oklab, var(--color-secondary) 6%, var(--color-surface));
+			color: color-mix(in oklab, var(--color-secondary) 82%, var(--color-text-muted));
 		}
 	}
 

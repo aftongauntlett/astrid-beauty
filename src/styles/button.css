@@ -47,15 +47,49 @@
 }
 
 .btn--primary {
-  background: var(--color-primary);
+  background-color: var(--color-primary);
+  background-image: none;
   color: var(--color-primary-contrast);
   border-color: var(--color-primary);
 }
 
 .btn--primary:hover {
-  background: var(--color-primary-hover);
+  background-color: var(--color-primary-hover);
+  background-image: none;
   border-color: var(--color-primary-hover);
   box-shadow: var(--shadow-md);
+  color: var(--color-primary-contrast);
+}
+
+/* Light mode: add a luxe gold text/icon shift on hover */
+html:not([data-theme="dark"]) .btn--primary:hover,
+html:not([data-theme="dark"]) .btn--primary:focus-visible {
+  color: var(--color-secondary);
+}
+
+/* Dark mode: keep text readable, add gold accent via border */
+html[data-theme="dark"] .btn--primary:hover,
+html[data-theme="dark"] .btn--primary:focus-visible {
+  /* Keep a solid bg-color at all times to avoid a brief "transparent → bg" flash on mouseout. */
+  background-color: var(--color-primary-hover);
+
+  /* Fallback (if color-mix isn't supported) */
+  background-image: linear-gradient(
+    180deg,
+    rgba(212, 175, 55, 0.12) 0%,
+    rgba(212, 175, 55, 0) 100%
+  );
+
+  /* Preferred */
+  background-image: linear-gradient(
+    180deg,
+    color-mix(in oklab, var(--color-primary) 92%, var(--color-secondary) 8%) 0%,
+    var(--color-primary-hover) 100%
+  );
+  border-color: color-mix(in oklab, var(--color-secondary) 78%, transparent);
+  box-shadow:
+    var(--shadow-md),
+    0 0 0 2px color-mix(in oklab, var(--color-secondary) 44%, transparent);
 }
 
 .btn--secondary {

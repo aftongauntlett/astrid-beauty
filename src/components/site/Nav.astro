@@ -390,6 +390,7 @@ const sectionHref = (id: string) => (lang === "es" ? `/es#${id}` : `/#${id}`);
 	.nav__link:hover,
 	.nav__link:focus-visible {
 		color: var(--color-primary);
+		font-weight: 700;
 	}
 
 	/* Light mode: give links a faint glass pill on hover/current */
@@ -403,6 +404,7 @@ const sectionHref = (id: string) => (lang === "es" ? `/es#${id}` : `/#${id}`);
 	.nav__link:focus-visible::after {
 		opacity: 1;
 		transform: scaleX(1);
+		height: 2px;
 	}
 
 	/* Subtle current-section treatment (no pill backgrounds). */
@@ -422,6 +424,7 @@ const sectionHref = (id: string) => (lang === "es" ? `/es#${id}` : `/#${id}`);
 	.nav__link[aria-current="page"]::after {
 		opacity: 1;
 		transform: scaleX(1);
+		height: 2px;
 	}
 
 	@media (prefers-reduced-motion: reduce) {
