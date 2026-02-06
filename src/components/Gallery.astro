@@ -110,7 +110,9 @@ const dataId = 'gallery-data';
 			>
 				<span class="gallery__toggleSpacer" aria-hidden="true"></span>
 				<span class="gallery__toggleLabel">{messages.gallery.showMore}</span>
-				<ChevronDown class="gallery__toggleChevron" size={18} aria-hidden="true" focusable="false" />
+				<span class="gallery__toggleChevronWrap" aria-hidden="true">
+					<ChevronDown class="gallery__toggleChevronIcon" size={18} aria-hidden="true" focusable="false" />
+				</span>
 			</Button>
 			<p class="sr-only" id={statusId} aria-live="polite"></p>
 			<script
@@ -373,18 +375,44 @@ const dataId = 'gallery-data';
 		justify-content: center;
 	}
 
-	.gallery .gallery__toggleChevron {
+	.gallery .gallery__toggleChevronWrap {
+		display: flex;
+		align-items: center;
+		justify-content: center;
 		transform: rotate(0deg);
 	}
 
 	@media (prefers-reduced-motion: no-preference) {
-		.gallery .gallery__toggleChevron {
+		.gallery .gallery__toggleChevronWrap {
 			transition: transform var(--motion-duration-fast) var(--motion-ease-standard);
 		}
 	}
 
-	.gallery .gallery__toggle[aria-expanded='true'] .gallery__toggleChevron {
+	.gallery .gallery__toggle[aria-expanded='true'] .gallery__toggleChevronWrap {
 		transform: rotate(180deg);
+	}
+
+	@media (prefers-reduced-motion: no-preference) {
+		@keyframes gallery-chevron-wiggle {
+			0% {
+				transform: translateX(0) rotate(0deg);
+			}
+			35% {
+				transform: translateX(1px) rotate(-12deg);
+			}
+			70% {
+				transform: translateX(-1px) rotate(12deg);
+			}
+			100% {
+				transform: translateX(0) rotate(0deg);
+			}
+		}
+
+		.gallery .gallery__toggle:hover .gallery__toggleChevronIcon,
+		.gallery .gallery__toggle:focus-visible .gallery__toggleChevronIcon {
+			transform-origin: 50% 50%;
+			animation: gallery-chevron-wiggle 0.55s ease-in-out;
+		}
 	}
 
 	.gallery .gallery__media::before {
