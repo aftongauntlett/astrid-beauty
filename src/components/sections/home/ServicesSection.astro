@@ -35,7 +35,7 @@ const serviceCardMeta = [
 
 		<div class="services-grid" aria-label="Service highlights">
 			{messages.services.cards.map((card, index) => (
-				<div data-reveal data-reveal-delay={String(index * 70)}>
+				<div data-reveal data-reveal-delay={String(index * 70)} data-service-title={card.title}>
 					<FeatureIconCard
 						title={card.title}
 						description={card.description}

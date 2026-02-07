@@ -1,6 +1,7 @@
 ---
 import Card from "./ui/Card.astro";
 import BrushStrokeTitle from "./ui/BrushStrokeTitle.astro";
+import IconSparkles from "./motion/IconSparkles";
 
 import {
 	Droplet,
@@ -65,16 +66,11 @@ const cls = (name: string) => (styles as Record<string, string>)[name] ?? "";
 		</div>
 
 		<div class={cls("iconWrap")} style="transform-style: preserve-3d;">
-			<div class={cls("glowRadial")} aria-hidden="true"></div>
-			<div class={cls("glowBlur")} aria-hidden="true"></div>
+			<IconSparkles client:visible />
 
 			<div class={cls("icon")}>
 				<Icon aria-hidden="true" focusable="false" size={30} />
 			</div>
-
-			<span class={`${cls("particle")} ${cls("particle1")}`} aria-hidden="true"></span>
-			<span class={`${cls("particle")} ${cls("particle2")}`} aria-hidden="true"></span>
-			<span class={`${cls("particle")} ${cls("particle3")}`} aria-hidden="true"></span>
 		</div>
 	</div>
 
