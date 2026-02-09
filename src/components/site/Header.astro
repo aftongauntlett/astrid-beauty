@@ -141,7 +141,7 @@ const homeHref = lang === "es" ? "/es" : "/";
 		background: var(--surface-glass-muted);
 		border-bottom-color: color-mix(in oklab, var(--color-border) 90%, transparent);
 		box-shadow:
-			0 18px 46px -38px var(--shadow-color-md),
+			0 22px 60px -48px var(--shadow-color-md),
 			inset 0 1px 0 var(--glass-highlight),
 			inset 0 -1px 0 color-mix(in oklab, var(--color-primary) 10%, transparent);
 	}
@@ -157,7 +157,7 @@ const homeHref = lang === "es" ? "/es" : "/";
 		background: linear-gradient(
 			90deg,
 			transparent,
-			color-mix(in oklab, var(--color-primary) 34%, transparent),
+			color-mix(in oklab, var(--color-secondary) 58%, transparent),
 			transparent
 		);
 		opacity: 0.65;
@@ -167,8 +167,8 @@ const homeHref = lang === "es" ? "/es" : "/";
 
 	@supports (backdrop-filter: blur(1px)) {
 		.site-header {
-			backdrop-filter: blur(12px) saturate(1.06);
-			-webkit-backdrop-filter: blur(12px) saturate(1.06);
+			backdrop-filter: blur(16px) saturate(1.08);
+			-webkit-backdrop-filter: blur(16px) saturate(1.08);
 		}
 	}
 
@@ -205,7 +205,7 @@ const homeHref = lang === "es" ? "/es" : "/";
 		color: var(--color-text);
 		text-decoration: none;
 		padding: var(--space-xs) var(--space-sm);
-		border-radius: var(--radius-md);
+		border-radius: var(--radius-lg);
 		font-weight: 700;
 		display: inline-flex;
 		align-items: center;
@@ -240,17 +240,19 @@ const homeHref = lang === "es" ? "/es" : "/";
 
 
 	.site-header__brand:hover {
-		transform: translateY(-1px);
+		transform: translateY(-1px) scale(1.02);
 		box-shadow:
 			0 18px 36px -28px var(--shadow-color-md),
-			inset 0 1px 0 rgba(255, 255, 255, 0.1);
+			inset 0 1px 0 rgba(255, 255, 255, 0.1),
+			0 0 0 1px color-mix(in oklab, var(--color-secondary) 32%, transparent);
+		border-color: color-mix(in oklab, var(--color-secondary) 26%, transparent);
 	}
 
 	@media (prefers-reduced-motion: no-preference) {
 		.site-header__brand {
 			transition:
-				transform var(--motion-duration-fast) var(--motion-ease-standard),
-				box-shadow var(--motion-duration-fast) var(--motion-ease-standard),
+				transform var(--motion-duration-normal) var(--motion-ease-luxury),
+				box-shadow var(--motion-duration-normal) var(--motion-ease-luxury),
 				background-color var(--motion-duration-fast) var(--motion-ease-standard),
 				border-color var(--motion-duration-fast) var(--motion-ease-standard);
 		}

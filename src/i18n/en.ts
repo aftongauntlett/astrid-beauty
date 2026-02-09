@@ -25,7 +25,7 @@ export const en: Messages = {
     viewServices: "Explore Services",
     backToTop: "Back to top",
     scheduleNow: "Book Now",
-    appointmentOnly: "By appointment only",
+    appointmentOnly: "By Appointment Only",
     learnMore: "Learn More",
   },
   home: {

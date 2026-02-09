@@ -48,7 +48,7 @@
   font-family: var(--font-heading);
   font-size: var(--text-xs);
   letter-spacing: 0.01em;
-  color: color-mix(in oklab, var(--color-text-muted) 86%, transparent);
+  color: var(--color-text-muted);
 }
 
 :global(.site-footer__iconLink) {
@@ -59,6 +59,7 @@
   height: 3.15rem;
   border-radius: 999px;
   position: relative;
+  border: 1px solid color-mix(in oklab, var(--color-border) 72%, transparent);
   background: linear-gradient(
     180deg,
     color-mix(in oklab, var(--color-surface) 82%, rgba(255, 255, 255, 0.06)) 0%,
@@ -73,40 +74,28 @@
   transform-style: preserve-3d;
 }
 
+/* Light mode: make the social icons pop with a dark coin + gold mark */
+html[data-theme="light"] :global(.site-footer__iconLink) {
+  background: linear-gradient(180deg, #1a1a1c 0%, #0b0b0c 100%);
+  border-color: color-mix(in oklab, var(--color-secondary) 34%, transparent);
+  color: var(--color-secondary);
+  box-shadow:
+    0 10px 26px -20px color-mix(in oklab, black 30%, transparent),
+    inset 0 1px 0 rgba(255, 255, 255, 0.08);
+}
+
+/* Remove bubble/glow effects on hover (keep interaction clean) */
 :global(.site-footer__iconLink)::before,
 :global(.site-footer__iconLink)::after {
-  content: "";
-  position: absolute;
-  inset: -55%;
-  border-radius: 999px;
-  pointer-events: none;
-  opacity: 0;
-  background: radial-gradient(
-    circle,
-    color-mix(in oklab, var(--color-primary) 40%, transparent) 0%,
-    transparent 65%
-  );
-  transition: opacity var(--motion-duration-fast) var(--motion-ease-standard);
-}
-
-:global(.site-footer__iconLink)::before {
-  filter: blur(10px);
-}
-
-:global(.site-footer__iconLink)::after {
-  background: radial-gradient(
-    circle,
-    color-mix(in oklab, var(--color-primary) 60%, transparent) 0%,
-    transparent 70%
-  );
-  filter: blur(18px);
+  display: none;
 }
 
 @media (prefers-reduced-motion: no-preference) {
   :global(.site-footer__iconLink) {
     transition:
-      transform var(--motion-duration-fast) var(--motion-ease-standard),
-      box-shadow var(--motion-duration-fast) var(--motion-ease-standard),
+      transform var(--motion-duration-normal) var(--motion-ease-luxury),
+      box-shadow var(--motion-duration-normal) var(--motion-ease-luxury),
+      border-color var(--motion-duration-fast) var(--motion-ease-standard),
       color var(--motion-duration-fast) var(--motion-ease-standard);
   }
 
@@ -122,87 +111,12 @@
   box-shadow:
     inset 0 1px 0 rgba(255, 255, 255, 0.06),
     var(--shadow-md);
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  :global(.site-footer__iconLink:hover)::before {
-    opacity: 0.32;
-    animation: site-footer__glowRadial 1.4s ease-in-out infinite;
-  }
-
-  :global(.site-footer__iconLink:hover)::after {
-    opacity: 0.24;
-    animation: site-footer__glowBlur 1.8s ease-in-out infinite;
-  }
-
-  :global(.site-footer__iconLink:hover .site-footer__iconSvg) {
-    animation: site-footer__iconWobble 0.85s ease-in-out 1;
-  }
+  border-color: color-mix(in oklab, var(--color-secondary) 36%, transparent);
 }
 
 @media (min-width: 36rem) and (max-width: 47.999rem) {
   :global(.site-footer__block--contact > .site-footer__mobileDivider) {
     display: none;
-  }
-}
-
-:global(.site-footer__particle) {
-  position: absolute;
-  z-index: 2;
-  width: 0.35rem;
-  height: 0.35rem;
-  border-radius: 999px;
-  background: color-mix(in oklab, var(--color-primary) 70%, transparent);
-  pointer-events: none;
-  opacity: 0;
-  transform: translate3d(0, 0, 0);
-}
-
-:global(.site-footer__particle1) {
-  left: 62%;
-  top: 18%;
-}
-
-:global(.site-footer__particle2) {
-  left: 22%;
-  top: 58%;
-}
-
-:global(.site-footer__particle3) {
-  left: 78%;
-  top: 64%;
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  :global(.site-footer__iconLink:hover .site-footer__particle) {
-    animation: site-footer__particleFloat 1.6s ease-in-out infinite;
-  }
-
-  :global(.site-footer__iconLink:hover .site-footer__particle1) {
-    animation-delay: 0s;
-  }
-
-  :global(.site-footer__iconLink:hover .site-footer__particle2) {
-    animation-delay: 0.45s;
-  }
-
-  :global(.site-footer__iconLink:hover .site-footer__particle3) {
-    animation-delay: 0.9s;
-  }
-}
-
-@keyframes site-footer__particleFloat {
-  0% {
-    opacity: 0;
-    transform: translate3d(0, 0, 0) scale(0);
-  }
-  25% {
-    opacity: 1;
-    transform: translate3d(0, -18px, 0) scale(1);
-  }
-  100% {
-    opacity: 0;
-    transform: translate3d(4px, -64px, 0) scale(0);
   }
 }
 

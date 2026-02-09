@@ -27,8 +27,8 @@
       background-color var(--motion-duration-fast) var(--motion-ease-standard),
       border-color var(--motion-duration-fast) var(--motion-ease-standard),
       color var(--motion-duration-fast) var(--motion-ease-standard),
-      box-shadow var(--motion-duration-fast) var(--motion-ease-standard),
-      transform var(--motion-duration-fast) var(--motion-ease-standard);
+      box-shadow var(--motion-duration-normal) var(--motion-ease-luxury),
+      transform var(--motion-duration-normal) var(--motion-ease-luxury);
   }
 }
 
@@ -53,12 +53,24 @@
   border-color: var(--color-primary);
 }
 
+/* Light mode: luxe depth gradient */
+html:not([data-theme="dark"]) .btn--primary {
+  background: linear-gradient(180deg, #1a1a1c 0%, #0f0f10 100%);
+  border-color: #0f0f10;
+}
+
 .btn--primary:hover {
-  background-color: var(--color-primary-hover);
-  background-image: none;
   border-color: var(--color-primary-hover);
-  box-shadow: var(--shadow-md);
+  box-shadow:
+    0 1px 2px 0 rgba(0, 0, 0, 0.06),
+    0 12px 28px -14px rgba(0, 0, 0, 0.28),
+    0 22px 52px -24px rgba(0, 0, 0, 0.22);
   color: var(--color-primary-contrast);
+}
+
+/* Light mode: keep gradient background (avoid hover-out flash) */
+html:not([data-theme="dark"]) .btn--primary:hover {
+  background: linear-gradient(180deg, #121214 0%, #000000 100%);
 }
 
 /* Light mode: add a luxe gold text/icon shift on hover */
@@ -93,15 +105,47 @@ html[data-theme="dark"] .btn--primary:focus-visible {
 }
 
 .btn--secondary {
-  background: var(--color-secondary);
+  background: linear-gradient(
+    180deg,
+    color-mix(in oklab, var(--color-secondary) 92%, white) 0%,
+    var(--color-secondary) 100%
+  );
   color: var(--color-secondary-contrast);
   border-color: var(--color-secondary);
+  background-size: 200% 200%;
+  background-position: 50% 0%;
 }
 
 .btn--secondary:hover {
-  background: var(--color-secondary-hover);
+  background: linear-gradient(
+    110deg,
+    var(--color-secondary) 0%,
+    color-mix(in oklab, var(--color-secondary-hover) 70%, white) 38%,
+    var(--color-secondary-hover) 55%,
+    var(--color-secondary) 100%
+  );
   border-color: var(--color-secondary-hover);
-  box-shadow: var(--shadow-md);
+  box-shadow:
+    var(--shadow-md),
+    0 0 0 1px rgba(212, 175, 55, 0.3),
+    0 18px 44px -30px
+      color-mix(in oklab, var(--color-secondary) 32%, transparent);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .btn--secondary:hover {
+    animation: btnShimmer var(--motion-duration-slow) var(--motion-ease-luxury)
+      both;
+  }
+}
+
+@keyframes btnShimmer {
+  0% {
+    background-position: 0% 0%;
+  }
+  100% {
+    background-position: 100% 0%;
+  }
 }
 
 .btn--ghost {
@@ -114,9 +158,10 @@ html[data-theme="dark"] .btn--primary:focus-visible {
 .btn--ghost:hover {
   background: color-mix(
     in oklab,
-    var(--color-primary) 6%,
+    var(--color-secondary) 8%,
     var(--color-surface-muted)
   );
+  color: var(--color-secondary);
 }
 
 .btn:active {
@@ -125,8 +170,12 @@ html[data-theme="dark"] .btn--primary:focus-visible {
 }
 
 .btn:focus-visible {
-  outline: 2px solid var(--color-focus);
-  outline-offset: 2px;
+  outline: 3px solid var(--color-focus);
+  outline-offset: 3px;
+  box-shadow:
+    0 0 0 1px color-mix(in oklab, var(--color-bg) 35%, #000000),
+    0 10px 28px -18px
+      color-mix(in oklab, var(--color-secondary) 55%, transparent);
 }
 
 .btn[aria-disabled="true"],

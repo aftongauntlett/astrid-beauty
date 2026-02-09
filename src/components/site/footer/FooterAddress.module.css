@@ -1,3 +1,8 @@
+:global(.site-footer__block--address .site-footer__blockBottom) {
+  margin-top: var(--space-xs);
+  padding-top: 0.15rem;
+}
+
 :global(.site-footer__mapButton.btn) {
   display: inline-flex;
   align-items: center;

@@ -12,12 +12,12 @@
   );
   --fic-iconwrap-border: color-mix(
     in oklab,
-    var(--fic-icon-color) 22%,
+    var(--fic-icon-color) 28%,
     var(--color-border)
   );
   --fic-iconwrap-shadow:
     inset 0 1px 0 color-mix(in oklab, var(--color-surface) 70%, transparent),
-    inset 0 0 0 1px color-mix(in oklab, var(--color-secondary) 18%, transparent);
+    inset 0 0 0 1px color-mix(in oklab, var(--color-secondary) 24%, transparent);
 
   display: grid;
   gap: var(--space-lg);
@@ -44,13 +44,13 @@ html[data-theme="light"] .card {
     );
   --fic-iconwrap-border: color-mix(
     in oklab,
-    var(--fic-icon-color) 34%,
+    var(--fic-icon-color) 40%,
     #00000066
   );
   --fic-iconwrap-shadow:
     0 10px 26px -20px color-mix(in oklab, black 30%, transparent),
     inset 0 1px 0 color-mix(in oklab, white 46%, transparent),
-    inset 0 0 0 1px color-mix(in oklab, var(--color-secondary) 24%, transparent);
+    inset 0 0 0 1px color-mix(in oklab, var(--color-secondary) 30%, transparent);
 }
 
 @media (prefers-reduced-motion: no-preference) {
@@ -309,7 +309,7 @@ html[data-theme="light"] :global(.icon-fx__glow) {
 /* Tablet + desktop: restore existing icon-in-header layout (unchanged visuals) */
 @media (min-width: 48rem) {
   .card {
-    --fic-icon-size: 4.1rem;
+    --fic-icon-size: 4.5rem;
     --fic-header-gap: var(--space-lg);
     overflow: visible;
     isolation: auto;
@@ -377,13 +377,14 @@ html[data-theme="light"] :global(.icon-fx__glow) {
 @media (min-width: 48rem) and (prefers-reduced-motion: no-preference) and (hover: hover) and (pointer: fine) {
   .card:hover .iconWrap {
     opacity: 1;
-    animation: ficTilt 0.9s ease-in-out;
+    animation: ficTilt 0.95s var(--motion-ease-luxury);
   }
 
   html[data-theme="light"] .card:hover .iconWrap {
     box-shadow:
       0 10px 26px -20px color-mix(in oklab, black 30%, transparent),
-      inset 0 1px 0 color-mix(in oklab, white 46%, transparent);
+      inset 0 1px 0 color-mix(in oklab, white 46%, transparent),
+      0 0 0 1px color-mix(in oklab, var(--color-secondary) 28%, transparent);
   }
 
   .card:hover .icon {
@@ -395,13 +396,14 @@ html[data-theme="light"] :global(.icon-fx__glow) {
 @media (min-width: 48rem) and (prefers-reduced-motion: no-preference) {
   .card:focus-within .iconWrap {
     opacity: 1;
-    animation: ficTilt 0.9s ease-in-out;
+    animation: ficTilt 0.95s var(--motion-ease-luxury);
   }
 
   html[data-theme="light"] .card:focus-within .iconWrap {
     box-shadow:
       0 10px 26px -20px color-mix(in oklab, black 30%, transparent),
-      inset 0 1px 0 color-mix(in oklab, white 46%, transparent);
+      inset 0 1px 0 color-mix(in oklab, white 46%, transparent),
+      0 0 0 1px color-mix(in oklab, var(--color-secondary) 28%, transparent);
   }
 
   .card:focus-within .icon {
@@ -450,7 +452,7 @@ html[data-theme="light"] :global(.icon-fx__glow) {
     transform: rotate(0deg) scale(1);
   }
   50% {
-    transform: rotate(-5deg) scale(1.02);
+    transform: rotate(-5deg) scale(1.04);
   }
   75% {
     transform: rotate(5deg) scale(1.01);

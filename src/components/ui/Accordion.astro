@@ -317,7 +317,7 @@ const panelId = (suffix: string) => `${idPrefix}-panel-${suffix}`;
 
 	.accordion {
 		display: grid;
-		gap: var(--space-sm);
+		gap: var(--space-md);
 	}
 
 	.accordion__item {
@@ -356,7 +356,8 @@ const panelId = (suffix: string) => `${idPrefix}-panel-${suffix}`;
 		justify-content: space-between;
 		gap: var(--space-md);
 		font: inherit;
-		font-weight: 650;
+		font-size: var(--text-lg);
+		font-weight: 700;
 		cursor: pointer;
 		position: relative;
 		isolation: isolate;
@@ -399,12 +400,25 @@ const panelId = (suffix: string) => `${idPrefix}-panel-${suffix}`;
 	@media (prefers-reduced-motion: no-preference) {
 		.accordion__trigger {
 			transition:
-				color var(--motion-duration-normal) var(--motion-ease-standard),
-				background-color var(--motion-duration-normal) var(--motion-ease-standard);
+				color var(--motion-duration-slow) var(--motion-ease-luxury),
+				background-color var(--motion-duration-slow) var(--motion-ease-luxury),
+				transform var(--motion-duration-slow) var(--motion-ease-luxury);
 		}
 
 		.accordion__trigger::before {
-			transition: opacity var(--motion-duration-normal) var(--motion-ease-standard);
+			transition: opacity var(--motion-duration-slow) var(--motion-ease-luxury);
+		}
+	}
+
+	@media (prefers-reduced-motion: no-preference) and (hover: hover) and (pointer: fine) {
+		.accordion__item {
+			transform: scale(1);
+			transform-origin: center;
+			transition: transform var(--motion-duration-slow) var(--motion-ease-luxury);
+		}
+
+		.accordion__item:hover {
+			transform: scale(1.01);
 		}
 	}
 
@@ -432,7 +446,7 @@ const panelId = (suffix: string) => `${idPrefix}-panel-${suffix}`;
 	}
 
 	.accordion__trigger[aria-expanded="true"]::before {
-		opacity: 0.62;
+		opacity: 0.75;
 	}
 
 	/* Light mode: keep the header surface darker when expanded so it
@@ -449,8 +463,12 @@ const panelId = (suffix: string) => `${idPrefix}-panel-${suffix}`;
 	}
 
 	.accordion__trigger:focus-visible {
-		outline: 2px solid var(--color-focus);
-		outline-offset: 2px;
+		outline: 3px solid var(--color-focus);
+		outline-offset: 3px;
+		box-shadow:
+			0 0 0 1px color-mix(in oklab, var(--color-bg) 35%, #000000),
+			0 10px 28px -18px color-mix(in oklab, var(--color-secondary) 55%, transparent),
+			0 0 0 2px color-mix(in oklab, var(--color-secondary) 36%, transparent);
 	}
 
 	.accordion__chevron {
@@ -473,8 +491,14 @@ const panelId = (suffix: string) => `${idPrefix}-panel-${suffix}`;
 	@media (prefers-reduced-motion: no-preference) {
 		.accordion__chevron {
 			transition:
-				transform var(--motion-duration-normal) var(--motion-ease-standard),
-				opacity var(--motion-duration-normal) var(--motion-ease-standard);
+				transform var(--motion-duration-slow) var(--motion-ease-luxury),
+				opacity var(--motion-duration-slow) var(--motion-ease-luxury);
+		}
+	}
+
+	@supports selector(.accordion__item:has(button)) {
+		.accordion__item:has(.accordion__trigger[aria-expanded="true"]) {
+			box-shadow: var(--shadow-md);
 		}
 	}
 

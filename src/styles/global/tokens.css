@@ -19,9 +19,10 @@
 		*/
   --color-bg: #ffffff; /* neutral canvas */
   --color-surface: #ffffff; /* primary surfaces (cards/header) */
-  --color-surface-muted: #e9e9ec; /* clearer neutral separation (light mode) */
+  --color-surface-muted: #ebe9e6; /* subtle cream tint for luxury warmth */
   --color-surface-elevated: #ffffff; /* overlay / elevated */
   --color-accent-soft: #fbf7eb; /* subtle warm tint (gold-adjacent) */
+  --color-accent-gold-light: #f5e6c8; /* soft gold tint for subtle highlights */
 
   /* Light mode “glass” surfaces (shiny without neon glows) */
   --surface-glass: linear-gradient(
@@ -48,8 +49,8 @@
       )
       100%
   );
-  --glass-highlight: color-mix(in oklab, white 72%, transparent);
-  --glass-rim: color-mix(in oklab, var(--color-primary) 12%, transparent);
+  --glass-highlight: color-mix(in oklab, white 85%, transparent);
+  --glass-rim: color-mix(in oklab, var(--color-primary) 18%, transparent);
 
   --color-text: #0f0f10; /* near-black */
   --color-text-muted: #3f3f43; /* neutral gray */
@@ -64,8 +65,8 @@
 
   /* Secondary accent = subtle gold (highlights) */
   /* Light mode gold: slightly lighter/brighter so it reads luminous on white */
-  --color-secondary: #e2c566;
-  --color-secondary-hover: #d4af37;
+  --color-secondary: #d4af37;
+  --color-secondary-hover: #f0d878;
   --color-secondary-contrast: #141414;
 
   /* Service icon accents (lean neutral + gold) */
@@ -74,15 +75,15 @@
   --color-icon-cut: var(--color-secondary);
   --color-icon-scalp: var(--color-secondary);
 
-  /* Focus ring leans gold for consistency */
-  --color-focus: color-mix(in oklab, var(--color-secondary) 70%, #ffffff);
+  /* Focus ring uses brand gold for consistency */
+  --color-focus: var(--color-secondary);
 
   /* Shadow base (avoid "glow" in dark mode) */
   --color-shadow: #000000;
 
   --radius-sm: 0.75rem;
   --radius-md: 9999px;
-  --radius-lg: 1.25rem;
+  --radius-lg: 1.5rem;
 
   /* Stroke widths (use for underlines, dividers, etc.) */
   --stroke-1: 1px;
@@ -91,12 +92,13 @@
   --space-sm: 0.5rem;
   --space-md: 1rem;
   --space-lg: 1.75rem;
-  --space-xl: 2.5rem;
+  --space-xl: 3rem;
+  --space-2xl: 4rem;
 
-  --container-max: 72rem;
+  --container-max: 68rem;
 
   --container-pad: clamp(1rem, 4vw, 1.5rem);
-  --section-pad-y: clamp(3rem, 7vw, 5rem);
+  --section-pad-y: clamp(4rem, 9vw, 7rem);
 
   --header-height: 4rem;
   --scroll-pad-top: calc(var(--header-height) + var(--space-lg));
@@ -112,9 +114,9 @@
   --text-lg: clamp(1.125rem, 0.35vw + 1.05rem, 1.25rem);
   --text-xl: clamp(1.25rem, 0.55vw + 1.15rem, 1.45rem);
 
-  --heading-1: clamp(2.35rem, 3.1vw + 1.2rem, 3.7rem);
-  --heading-2: clamp(1.75rem, 1.9vw + 1rem, 2.55rem);
-  --heading-3: clamp(1.35rem, 0.9vw + 1.05rem, 1.75rem);
+  --heading-1: clamp(2.5rem, 3.5vw + 1.2rem, 4.2rem);
+  --heading-2: clamp(1.85rem, 2.2vw + 0.95rem, 2.85rem);
+  --heading-3: clamp(1.45rem, 1.05vw + 1.02rem, 1.95rem);
 
   /* Motion System
 			- Fast (140ms): Quick feedback for buttons, icons, hover states
@@ -127,12 +129,13 @@
 		*/
   --motion-duration-instant: 0ms;
   --motion-duration-fast: 140ms;
-  --motion-duration-normal: 240ms;
-  --motion-duration-slow: 360ms;
+  --motion-duration-normal: 280ms;
+  --motion-duration-slow: 420ms;
   --motion-duration-slower: 560ms;
   --motion-duration-premium: 900ms;
 
   --motion-ease-standard: ease;
+  --motion-ease-luxury: cubic-bezier(0.25, 0.46, 0.45, 0.94);
   --motion-ease-emphasized: cubic-bezier(0.2, 0.9, 0.2, 1);
   --motion-ease-smooth: ease-in-out;
 
@@ -148,9 +151,9 @@
 html[data-theme="dark"] {
   --color-bg: #0b0b0c; /* near-black */
   --color-surface: #111112;
-  --color-surface-muted: #161618;
-  --color-surface-elevated: #1b1b1e;
-  --color-accent-soft: #14120d; /* subtle warm tint */
+  --color-surface-muted: #18181a;
+  --color-surface-elevated: #1f1f22;
+  --color-accent-soft: #1a1510; /* subtle warm tint */
 
   --color-text: #f5f5f6;
   --color-text-muted: #c9c9cd;
@@ -164,7 +167,7 @@ html[data-theme="dark"] {
   --color-primary-contrast: #0b0b0c;
 
   --color-secondary: #d4af37;
-  --color-secondary-hover: #e0c36a;
+  --color-secondary-hover: #f0d878;
   --color-secondary-contrast: #0b0b0c;
 
   /* Service icon accents (gold family) */
@@ -173,7 +176,7 @@ html[data-theme="dark"] {
   --color-icon-cut: var(--color-secondary);
   --color-icon-scalp: var(--color-secondary);
 
-  --color-focus: color-mix(in oklab, var(--color-secondary) 75%, #ffffff);
+  --color-focus: var(--color-secondary);
 
   --color-shadow: #000000;
 }

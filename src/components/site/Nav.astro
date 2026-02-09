@@ -377,13 +377,13 @@ const sectionHref = (id: string) => (lang === "es" ? `/es#${id}` : `/#${id}`);
 		bottom: 0.45rem;
 		height: var(--stroke-1);
 		border-radius: 9999px;
-		background: color-mix(in oklab, var(--color-primary) 65%, transparent);
+		background: var(--color-secondary);
 		opacity: 0;
 		transform: scaleX(0.6);
 		transform-origin: center;
 		transition:
-			opacity var(--motion-duration-fast) var(--motion-ease-standard),
-			transform var(--motion-duration-fast) var(--motion-ease-standard),
+			opacity var(--motion-duration-normal) var(--motion-ease-luxury),
+			transform var(--motion-duration-normal) var(--motion-ease-luxury),
 			background-color var(--motion-duration-fast) var(--motion-ease-standard);
 	}
 
@@ -404,14 +404,14 @@ const sectionHref = (id: string) => (lang === "es" ? `/es#${id}` : `/#${id}`);
 	.nav__link:focus-visible::after {
 		opacity: 1;
 		transform: scaleX(1);
-		height: 2px;
+		height: 3px;
 	}
 
 	/* Subtle current-section treatment (no pill backgrounds). */
 	.nav__link[aria-current="location"],
 	.nav__link[aria-current="page"] {
 		color: var(--color-primary);
-		font-weight: 700;
+		font-weight: 800;
 	}
 
 	html:not([data-theme="dark"]) .nav__link[aria-current="location"],
@@ -424,7 +424,7 @@ const sectionHref = (id: string) => (lang === "es" ? `/es#${id}` : `/#${id}`);
 	.nav__link[aria-current="page"]::after {
 		opacity: 1;
 		transform: scaleX(1);
-		height: 2px;
+		height: 3px;
 	}
 
 	@media (prefers-reduced-motion: reduce) {

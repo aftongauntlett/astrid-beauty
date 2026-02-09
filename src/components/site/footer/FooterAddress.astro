@@ -16,7 +16,7 @@ export type Props = {
 const { messages, addressDisplayLines, googleMapsHref, appleMapsHref } = Astro.props;
 ---
 
-<section class="site-footer__block" aria-label={messages.footer.address}>
+<section class="site-footer__block site-footer__block--address" aria-label={messages.footer.address}>
 	<h2 class="sr-only">{messages.nav.findUs}</h2>
 	<div class="site-footer__blockBody">
 		<address class="site-footer__text" aria-label={messages.footer.address}>
