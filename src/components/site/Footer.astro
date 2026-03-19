@@ -10,6 +10,7 @@ import {
 import FooterAddress from "./footer/FooterAddress.astro";
 import FooterContact from "./footer/FooterContact.astro";
 import FooterHours from "./footer/FooterHours.astro";
+import FooterPrefs from "./footer/FooterPrefs.astro";
 import FooterMeta from "./footer/FooterMeta.astro";
 
 import "./footer/FooterShared.module.css";
@@ -48,9 +49,11 @@ const year = new Date().getFullYear();
 			<FooterHours messages={messages} displayHours={displayHours} />
 		</div>
 
+		<FooterPrefs messages={messages} lang={lang} />
+
 		<p class="site-footer__infoBanner">{messages.footer.hoursDisclaimer}</p>
 
-		<FooterMeta messages={messages} year={year} lang={lang} />
+		<FooterMeta messages={messages} year={year} />
 	</div>
 </footer>
 

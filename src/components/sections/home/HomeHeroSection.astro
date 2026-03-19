@@ -214,6 +214,20 @@ const heroTitleLead = canSplitHeroTitle
 		align-items: center;
 	}
 
+	@media (max-width: 35.999rem) {
+		.hero__grid {
+			gap: var(--space-lg);
+		}
+
+		.hero__content {
+			display: none;
+		}
+
+		html:not([data-theme="dark"]) .hero__actions::before {
+			display: none;
+		}
+	}
+
 	.hero__brandPanel {
 		position: relative;
 		display: grid;

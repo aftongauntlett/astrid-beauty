@@ -1,0 +1,118 @@
+---
+import { toLangPath } from "../../../i18n/routes";
+
+import "./FooterMeta.module.css";
+
+import type { Messages } from "../../../i18n/types";
+import type { Lang } from "../../../i18n";
+
+export type Props = {
+	messages: Messages;
+	lang: Lang;
+};
+
+const { messages, lang } = Astro.props;
+
+const isEn = lang === "en";
+const pathname = Astro.url.pathname;
+const enHref = toLangPath(pathname, "en");
+const esHref = toLangPath(pathname, "es");
+---
+
+<div class="site-footer__mobileDivider" aria-hidden="true"></div>
+
+<div class="site-footer__prefs" aria-label={messages.settings.label}>
+	<p class="site-footer__prefsLine">
+		<button type="button" class="site-footer__prefsLink" data-theme-choice="light" aria-pressed="false">{messages.settings.lightMode}</button>
+		<span class="site-footer__prefsSep" aria-hidden="true">/</span>
+		<button type="button" class="site-footer__prefsLink" data-theme-choice="dark" aria-pressed="false">{messages.settings.darkMode}</button>
+		<span class="site-footer__prefsDot" aria-hidden="true">·</span>
+		<a href={enHref} class="site-footer__prefsLink" data-lang-choice="en" aria-current={isEn ? "page" : undefined}>English</a>
+		<span class="site-footer__prefsSep" aria-hidden="true">/</span>
+		<a href={esHref} class="site-footer__prefsLink" data-lang-choice="es" aria-current={!isEn ? "page" : undefined}>Español</a>
+	</p>
+</div>
+
+<script>
+	import { setTheme } from "../../../lib/theme";
+
+	globalThis.__astrid_footerPrefsController?.abort?.();
+	const controller = new AbortController();
+	globalThis.__astrid_footerPrefsController = controller;
+	const { signal } = controller;
+
+	document.addEventListener("astro:before-swap", () => controller.abort(), { once: true, signal });
+
+	const initFooterPrefs = () => {
+		const roots = document.querySelectorAll(".site-footer__prefs");
+		if (roots.length === 0) return;
+
+		const syncTheme = () => {
+			const theme = document.documentElement.dataset["theme"] === "dark" ? "dark" : "light";
+			for (const root of roots) {
+				for (const choice of root.querySelectorAll("[data-theme-choice]")) {
+					if (!(choice instanceof HTMLButtonElement)) continue;
+					choice.setAttribute("aria-pressed", choice.dataset["themeChoice"] === theme ? "true" : "false");
+				}
+			}
+		};
+
+		syncTheme();
+
+		for (const root of roots) {
+			root.addEventListener(
+				"click",
+				(event) => {
+					const target = event.target;
+					if (!(target instanceof Element)) return;
+
+					const themeBtn = target.closest("button[data-theme-choice]");
+					if (themeBtn instanceof HTMLButtonElement) {
+						const next = themeBtn.dataset["themeChoice"];
+						if (next === "light" || next === "dark") {
+							setTheme(next);
+							syncTheme();
+						}
+						return;
+					}
+
+					const langLink = target.closest("a[data-lang-choice]");
+					if (langLink instanceof HTMLAnchorElement) {
+						const value = langLink.dataset["langChoice"];
+						if (value === "en" || value === "es") {
+							try {
+								localStorage.setItem("preferredLang", value);
+							} catch {
+								// ignore
+							}
+
+							const currentLang = document.documentElement.lang === "es" ? "es" : "en";
+							if (currentLang === value) {
+								event.preventDefault();
+								return;
+							}
+
+							const href = langLink.getAttribute("href") || "";
+							if (window.location.hash && !href.includes("#")) {
+								event.preventDefault();
+								window.location.assign(`${href}${window.location.search}${window.location.hash}`);
+							}
+						}
+					}
+				},
+				{ signal }
+			);
+		}
+
+		window.addEventListener("themechange", syncTheme, { signal });
+		window.addEventListener(
+			"storage",
+			(event) => {
+				if (event.key === "theme") syncTheme();
+			},
+			{ passive: true, signal }
+		);
+	};
+
+	initFooterPrefs();
+</script>
