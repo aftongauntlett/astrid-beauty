@@ -1,7 +1,7 @@
 :global(.site-footer__contact) {
   display: flex;
   flex-direction: column;
-  gap: var(--space-md);
+  gap: var(--space-sm);
   justify-content: flex-end;
   height: 100%;
 }
@@ -18,7 +18,7 @@
   justify-content: center;
   display: flex;
   flex-direction: column;
-  gap: var(--space-md);
+  gap: var(--space-xs);
   align-items: center;
 }
 
@@ -40,15 +40,6 @@
   gap: var(--space-sm);
   justify-content: center;
   flex-wrap: wrap;
-}
-
-:global(.site-footer__appointmentOnly) {
-  margin: 0;
-  text-align: center;
-  font-family: var(--font-heading);
-  font-size: var(--text-xs);
-  letter-spacing: 0.01em;
-  color: var(--color-text-muted);
 }
 
 :global(.site-footer__iconLink) {
@@ -74,14 +65,23 @@
   transform-style: preserve-3d;
 }
 
-/* Light mode: make the social icons pop with a dark coin + gold mark */
+/* Light mode: warm espresso social icons with gold mark */
 html[data-theme="light"] :global(.site-footer__iconLink) {
-  background: linear-gradient(180deg, #1a1a1c 0%, #0b0b0c 100%);
-  border-color: color-mix(in oklab, var(--color-secondary) 34%, transparent);
-  color: var(--color-secondary);
+  background: color-mix(
+    in oklab,
+    var(--color-surface-elevated) 92%,
+    var(--color-secondary) 8%
+  );
+  border-color: color-mix(in oklab, var(--color-border) 82%, transparent);
+  color: color-mix(in oklab, var(--color-primary) 82%, var(--color-secondary));
   box-shadow:
-    0 10px 26px -20px color-mix(in oklab, black 30%, transparent),
+    0 10px 26px -20px color-mix(in oklab, black 18%, transparent),
     inset 0 1px 0 rgba(255, 255, 255, 0.08);
+}
+
+html[data-theme="light"] :global(.site-footer__iconLink:hover) {
+  border-color: color-mix(in oklab, var(--color-secondary) 30%, transparent);
+  color: var(--color-secondary);
 }
 
 /* Remove bubble/glow effects on hover (keep interaction clean) */

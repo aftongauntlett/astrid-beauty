@@ -47,7 +47,7 @@ body {
     var(--color-bg);
   color: var(--color-text);
   font-family: var(--font-body);
-  line-height: 1.6;
+  line-height: 1.65;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
@@ -58,17 +58,17 @@ html[data-theme="dark"] body {
   background:
     radial-gradient(
       1100px 760px at 8% -12%,
-      color-mix(in oklab, var(--color-secondary) 8%, transparent),
+      color-mix(in oklab, var(--color-secondary) 10%, transparent),
       transparent 64%
     ),
     radial-gradient(
       1200px 820px at 72% -6%,
-      color-mix(in oklab, var(--color-accent-soft) 18%, transparent),
+      color-mix(in oklab, #6b4c8a 12%, transparent),
       transparent 66%
     ),
     radial-gradient(
       900px 620px at 92% -4%,
-      color-mix(in oklab, var(--color-primary) 6%, transparent),
+      color-mix(in oklab, var(--color-primary) 4%, transparent),
       transparent 62%
     ),
     var(--color-bg);
@@ -83,10 +83,10 @@ h6 {
   margin: 0 0 var(--space-sm);
   font-family: var(--font-heading);
   font-optical-sizing: auto;
-  font-variation-settings: "wght" 700;
+  font-variation-settings: "wght" 500;
   line-height: 1.12;
-  font-weight: 700;
-  letter-spacing: -0.012em;
+  font-weight: 500;
+  letter-spacing: -0.005em;
   color: var(--color-primary);
 }
 
@@ -94,25 +94,25 @@ h6 {
 h1,
 h2,
 h3 {
-  letter-spacing: -0.01em;
+  letter-spacing: -0.005em;
 }
 
 h1 {
   font-size: var(--heading-1);
   line-height: 1.05;
-  letter-spacing: -0.02em;
+  letter-spacing: -0.015em;
 }
 
 h2 {
   font-size: var(--heading-2);
   line-height: 1.08;
-  letter-spacing: -0.015em;
+  letter-spacing: -0.01em;
 }
 
 h3 {
   font-size: var(--heading-3);
   line-height: 1.12;
-  letter-spacing: -0.01em;
+  letter-spacing: -0.005em;
 }
 
 h4 {

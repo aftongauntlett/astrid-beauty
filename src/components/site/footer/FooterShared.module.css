@@ -73,6 +73,16 @@
   font-size: var(--text-xs);
 }
 
+:global(.site-footer__infoBanner) {
+  margin: 0;
+  text-align: center;
+  font-size: var(--text-xs);
+  line-height: 1.4;
+  color: var(--color-text-muted);
+  max-width: 64ch;
+  justify-self: center;
+}
+
 :global(.site-footer__list) {
   list-style: none;
   padding: 0;

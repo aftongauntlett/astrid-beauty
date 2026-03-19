@@ -26,6 +26,7 @@ main > .section:nth-of-type(even) {
 /* Light mode: make sections feel more “shiny” and dimensional */
 html:not([data-theme="dark"]) main > .section:nth-of-type(even) {
   background: var(--surface-glass-muted);
+  border-top: 1px solid color-mix(in oklab, var(--color-blush) 15%, transparent);
 }
 
 main > .section:nth-of-type(odd):not(.hero) {
@@ -33,11 +34,32 @@ main > .section:nth-of-type(odd):not(.hero) {
 }
 
 html[data-theme="dark"] main > .section:nth-of-type(even) {
-  background: var(--color-surface-muted);
+  background: color-mix(
+    in oklab,
+    var(--color-secondary) 3%,
+    var(--color-surface-muted)
+  );
 }
 
 html[data-theme="dark"] main > .section:nth-of-type(odd):not(.hero) {
   background: var(--color-bg);
+}
+
+/* Decorative gold gradient divider between sections */
+main > .section + .section::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 10%;
+  right: 10%;
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    color-mix(in oklab, var(--color-secondary) 30%, transparent),
+    transparent
+  );
+  pointer-events: none;
 }
 
 /* Explicit overrides for pages/sections that need stable backgrounds
@@ -111,7 +133,7 @@ main :is(section)[id] {
   top: var(--space-md);
   z-index: 1000;
   padding: var(--space-xs) var(--space-sm);
-  border-radius: var(--radius-md);
+  border-radius: var(--radius-pill);
   background: var(--color-surface-elevated);
   border: 1px solid var(--color-border);
   color: var(--color-text);

@@ -48,7 +48,9 @@ const year = new Date().getFullYear();
 			<FooterHours messages={messages} displayHours={displayHours} />
 		</div>
 
-		<FooterMeta messages={messages} year={year} />
+		<p class="site-footer__infoBanner">{messages.footer.hoursDisclaimer}</p>
+
+		<FooterMeta messages={messages} year={year} lang={lang} />
 	</div>
 </footer>
 

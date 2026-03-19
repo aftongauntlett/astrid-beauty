@@ -21,11 +21,18 @@ module.exports = {
         parser: "@typescript-eslint/parser",
         extraFileExtensions: [".astro"],
       },
-      plugins: ["astro"],
+      plugins: ["astro", "@typescript-eslint"],
       extends: [
         "plugin:astro/recommended",
         "plugin:astro/jsx-a11y-recommended",
       ],
+      rules: {
+        "no-unused-vars": "off",
+        "@typescript-eslint/no-unused-vars": [
+          "error",
+          { argsIgnorePattern: "^_" },
+        ],
+      },
     },
     {
       files: ["**/*.{ts,tsx,js,mjs,cjs}"],

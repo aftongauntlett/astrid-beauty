@@ -32,13 +32,13 @@ const { messages, vagaroServicesUrl } = Astro.props;
 		/>
 
 		<div class="booking-ctaCard" data-reveal>
-			<Card variant="default" padding="xl" hover={true} class="booking-ctaCard__panel">
+			<Card variant="default" padding="xl" hover={false} class="booking-ctaCard__panel">
 				<div class="booking-ctaCard__actions" aria-label={messages.misc.scheduleAppointment}>
 					<HeroBookNowCta
 						client:idle
 						href={vagaroServicesUrl}
 						label={messages.misc.scheduleAppointment}
-						className="booking-ctaCard__button"
+						disableEntranceAnimation={true}
 					/>
 				</div>
 				<p class="booking-ctaCard__helper">{messages.booking.lede}</p>
@@ -140,7 +140,6 @@ const { messages, vagaroServicesUrl } = Astro.props;
 		:global(.booking-ctaCard__panel:focus-within) {
 			border-color: color-mix(in oklab, var(--color-text) 22%, var(--color-border));
 			box-shadow: var(--shadow-md);
-			transform: translateY(-2px);
 		}
 
 		:global(.booking-ctaCard__panel:hover)::after,
@@ -158,27 +157,6 @@ const { messages, vagaroServicesUrl } = Astro.props;
 		margin-top: 0;
 	}
 
-	:global(.booking-ctaCard__button.btn) {
-		width: auto;
-		letter-spacing: 0.01em;
-		min-height: 3.25rem;
-	}
-
-	@media (prefers-reduced-motion: no-preference) {
-		:global(.booking-ctaCard__button.btn:hover) {
-			transform: translateY(-1px);
-		}
-	}
-
-	:global(.booking-ctaCard__button.btn:hover),
-	:global(.booking-ctaCard__button.btn:focus-visible) {
-		border-color: var(--color-primary-hover);
-	}
-
-	:global(.booking-ctaCard__button.btn:hover *) {
-		color: inherit;
-	}
-
 	.booking-ctaCard__helper {
 		margin: 0;
 		color: var(--color-text-muted);
@@ -188,14 +166,4 @@ const { messages, vagaroServicesUrl } = Astro.props;
 		max-width: 40rem;
 	}
 
-	.booking-ctaCard__lede {
-		margin: 0;
-		color: var(--color-text-muted);
-		font-size: var(--text-md);
-		line-height: 1.65;
-	}
-
-	.booking-ctaCard__lede--second {
-		margin-top: 0;
-	}
 </style>

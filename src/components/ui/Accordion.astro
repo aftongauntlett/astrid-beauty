@@ -215,13 +215,10 @@ const panelId = (suffix: string) => `${idPrefix}-panel-${suffix}`;
 	document.addEventListener("astro:before-swap", () => controller.abort(), { once: true, signal });
 
 	const initAccordions = () => {
-		/** @type {HTMLElement[]} */
-		const roots = Array.from(document.querySelectorAll("[data-accordion]"));
+		const roots = Array.from(document.querySelectorAll<HTMLElement>("[data-accordion]"));
 		for (const root of roots) {
-			/** @type {Element[]} */
-			const triggers = Array.from(root.querySelectorAll(".accordion__trigger"));
+			const triggers = Array.from(root.querySelectorAll<HTMLButtonElement>(".accordion__trigger"));
 			for (const triggerEl of triggers) {
-				if (!(triggerEl instanceof HTMLButtonElement)) continue;
 				const trigger = triggerEl;
 
 				const nextPanelId = trigger.getAttribute("aria-controls");
@@ -412,13 +409,7 @@ const panelId = (suffix: string) => `${idPrefix}-panel-${suffix}`;
 
 	@media (prefers-reduced-motion: no-preference) and (hover: hover) and (pointer: fine) {
 		.accordion__item {
-			transform: scale(1);
-			transform-origin: center;
-			transition: transform var(--motion-duration-slow) var(--motion-ease-luxury);
-		}
-
-		.accordion__item:hover {
-			transform: scale(1.01);
+			transition: box-shadow var(--motion-duration-slow) var(--motion-ease-luxury);
 		}
 	}
 
@@ -452,14 +443,36 @@ const panelId = (suffix: string) => `${idPrefix}-panel-${suffix}`;
 	/* Light mode: keep the header surface darker when expanded so it
 	   doesn't blend into the panel/content background. */
 	html:not([data-theme="dark"]) .accordion__trigger[aria-expanded="true"] {
-		background: color-mix(in oklab, var(--color-surface-muted) 94%, var(--color-surface));
+		background: color-mix(in oklab, var(--color-secondary) 82%, var(--color-surface-elevated));
+		color: var(--color-secondary-contrast);
 	}
 
-	/* Light mode: make the opened panel content a slightly different surface
-	   than the header so the two areas read as distinct. */
+	/* Light mode: keep hover/focus subtle; opened/active state carries the accent. */
+	html:not([data-theme="dark"]) .accordion__trigger:hover,
+	html:not([data-theme="dark"]) .accordion__trigger:focus-visible,
+	html:not([data-theme="dark"]) .accordion__trigger:active {
+		color: var(--color-text);
+	}
+
+	/* Light mode: panel content stays clean white, distinct from purple header. */
 	html:not([data-theme="dark"]) .accordion__panel {
-		background: color-mix(in oklab, var(--color-surface) 88%, var(--color-bg));
-		border-top: 1px solid color-mix(in oklab, var(--color-border) 78%, transparent);
+		background: var(--color-surface-elevated);
+		border-top: 1px solid color-mix(in oklab, var(--color-border) 84%, transparent);
+	}
+
+	html:not([data-theme="dark"]) .accordion__trigger:hover,
+	html:not([data-theme="dark"]) .accordion__trigger:focus-visible {
+		background: color-mix(in oklab, var(--color-surface-elevated) 90%, var(--color-secondary) 10%);
+	}
+
+	html:not([data-theme="dark"]) .accordion__trigger:hover::before,
+	html:not([data-theme="dark"]) .accordion__trigger:focus-visible::before,
+	html:not([data-theme="dark"]) .accordion__trigger:active::before {
+		opacity: 0;
+	}
+
+	html:not([data-theme="dark"]) .accordion__trigger[aria-expanded="true"]::before {
+		opacity: 0;
 	}
 
 	.accordion__trigger:focus-visible {

@@ -37,12 +37,13 @@ const canonicalHref = toHref(canonicalPathFinal);
 const enHref = toHref(alternates.en);
 const esHref = toHref(alternates.es);
 const xDefaultHref = toHref(alternates.xDefault);
+const isDevMode = import.meta.env.DEV;
 
 const ogImageHref = toHref("/astrid-logo-light.png");
 ---
 
 <!doctype html>
-<html lang={lang}>
+<html lang={lang} data-dev-mode={isDevMode ? "true" : undefined}>
 	<head>
 		<meta charset="utf-8" />
 		<script is:inline>
@@ -135,13 +136,13 @@ const ogImageHref = toHref("/astrid-logo-light.png");
 		<link
 			rel="preload"
 			as="style"
-			href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@500;600;700&display=swap"
+			href="https://fonts.googleapis.com/css2?family=Alex+Brush&family=Cormorant+Garamond:wght@400;500;600&family=DM+Sans:wght@400;500;600;700&family=Parisienne&display=swap"
 		/>
 		<script is:inline>
 			(() => {
 				try {
 					const href =
-						"https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@500;600;700&display=swap";
+					"https://fonts.googleapis.com/css2?family=Alex+Brush&family=Cormorant+Garamond:wght@400;500;600&family=DM+Sans:wght@400;500;600;700&family=Parisienne&display=swap";
 					const link = document.createElement("link");
 					link.rel = "stylesheet";
 					link.href = href;
@@ -154,7 +155,7 @@ const ogImageHref = toHref("/astrid-logo-light.png");
 		<noscript>
 			<link
 				rel="stylesheet"
-				href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@500;600;700&display=swap"
+				href="https://fonts.googleapis.com/css2?family=Alex+Brush&family=Cormorant+Garamond:wght@400;500;600&family=DM+Sans:wght@400;500;600;700&family=Parisienne&display=swap"
 			/>
 		</noscript>
 		<link rel="icon" href="/favicon.ico" sizes="any" />
@@ -190,6 +191,14 @@ const ogImageHref = toHref("/astrid-logo-light.png");
 
 		<script>
 			import { initScrollReveal } from "../lib/scrollReveal";
+
+			globalThis.__astrid_scrollRevealController?.abort?.();
+			const controller = new AbortController();
+			globalThis.__astrid_scrollRevealController = controller;
+			const { signal } = controller;
+
+			document.addEventListener("astro:before-swap", () => controller.abort(), { once: true, signal });
+
 			const schedule = () => {
 				if (typeof window === "undefined") return;
 				type IdleDeadline = {
@@ -210,8 +219,8 @@ const ogImageHref = toHref("/astrid-logo-light.png");
 				setTimeout(() => initScrollReveal(), 1);
 			};
 			schedule();
-			window.addEventListener("scroll-reveal:refresh", schedule);
-			document.addEventListener("astro:page-load", schedule);
+			window.addEventListener("scroll-reveal:refresh", schedule, { signal });
+			document.addEventListener("astro:page-load", schedule, { signal });
 		</script>
 	</body>
 </html>

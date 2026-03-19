@@ -1,11 +1,9 @@
 ---
 import Card from "./ui/Card.astro";
-import BrushStrokeTitle from "./ui/BrushStrokeTitle.astro";
-import IconSparkles from "./motion/IconSparkles";
 
 import {
 	Droplet,
-	MessageCircleQuestion,
+	MessageCircleQuestionMark,
 	Palette,
 	Scissors,
 	Sparkles,
@@ -34,7 +32,7 @@ const {
 
 const iconByName = {
 	sparkles: Sparkles,
-	consultation: MessageCircleQuestion,
+	consultation: MessageCircleQuestionMark,
 	palette: Palette,
 	scissors: Scissors,
 	droplet: Droplet,
@@ -57,17 +55,13 @@ const cls = (name: string) => (styles as Record<string, string>)[name] ?? "";
 	<div class={cls("header")}>
 		<div class={cls("content")}>
 			<div class={cls("titleRow")}>
-				<h3 class={`${cls("title")} capitalize`}>
-					<BrushStrokeTitle>{title}</BrushStrokeTitle>
-				</h3>
+				<h3 class={`${cls("title")} capitalize`}>{title}</h3>
 				{meta ? <p class={cls("meta")}>{meta}</p> : null}
 			</div>
 			{description ? <p class={cls("description")}>{description}</p> : null}
 		</div>
 
 		<div class={cls("iconWrap")} style="transform-style: preserve-3d;">
-			<IconSparkles client:visible />
-
 			<div class={cls("icon")}>
 				<Icon aria-hidden="true" focusable="false" size={30} />
 			</div>

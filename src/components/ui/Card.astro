@@ -69,10 +69,12 @@ const classes = [
 			inset 0 0 0 1px var(--glass-rim);
 	}
 
-	@supports (backdrop-filter: blur(1px)) {
-		html:not([data-theme="dark"]) .card--default {
-			backdrop-filter: blur(16px) saturate(1.1);
-			-webkit-backdrop-filter: blur(16px) saturate(1.1);
+	@media (min-width: 48rem) {
+		@supports (backdrop-filter: blur(1px)) {
+			html:not([data-theme="dark"]):not([data-dev-mode="true"]) .card--default {
+				backdrop-filter: blur(16px) saturate(1.1);
+				-webkit-backdrop-filter: blur(16px) saturate(1.1);
+			}
 		}
 	}
 
@@ -92,7 +94,7 @@ const classes = [
 	}
 
 	html[data-theme="dark"] .card--default {
-		background: color-mix(in oklab, var(--color-surface) 70%, var(--color-bg));
+		background: color-mix(in oklab, var(--color-surface) 85%, var(--color-accent-soft));
 	}
 
 	.card--default > * {
@@ -167,15 +169,24 @@ const classes = [
 	@media (prefers-reduced-motion: no-preference) {
 		.card--hover {
 			transition:
+				background-color var(--motion-duration-normal) var(--motion-ease-luxury),
 				box-shadow var(--motion-duration-normal) var(--motion-ease-luxury),
 				border-color var(--motion-duration-normal) var(--motion-ease-luxury),
 				transform var(--motion-duration-normal) var(--motion-ease-luxury);
 		}
 
 		.card--hover:focus-within {
-			transform: translateY(-4px);
+			transform: none;
 			box-shadow: var(--shadow-md);
 			border-color: color-mix(in oklab, var(--color-secondary) 30%, var(--color-border));
+		}
+
+		html:not([data-theme="dark"]) .card--hover:focus-within.card--default {
+			background: color-mix(in oklab, var(--color-surface-elevated) 92%, var(--color-secondary) 8%);
+		}
+
+		html[data-theme="dark"] .card--hover:focus-within.card--default {
+			background: color-mix(in oklab, var(--color-surface) 84%, var(--color-bg));
 		}
 
 		html:not([data-theme="dark"]) .card--hover:focus-within.card--default::before {
@@ -185,9 +196,17 @@ const classes = [
 
 	@media (prefers-reduced-motion: no-preference) and (hover: hover) and (pointer: fine) {
 		.card--hover:hover {
-			transform: translateY(-4px);
+			transform: none;
 			box-shadow: var(--shadow-md);
 			border-color: color-mix(in oklab, var(--color-secondary) 30%, var(--color-border));
+		}
+
+		html:not([data-theme="dark"]) .card--hover:hover.card--default {
+			background: color-mix(in oklab, var(--color-surface-elevated) 92%, var(--color-secondary) 8%);
+		}
+
+		html[data-theme="dark"] .card--hover:hover.card--default {
+			background: color-mix(in oklab, var(--color-surface) 84%, var(--color-bg));
 		}
 
 		html:not([data-theme="dark"]) .card--hover:hover.card--default::before {

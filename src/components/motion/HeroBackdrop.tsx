@@ -1,6 +1,6 @@
 import React, { useEffect, useRef } from "react";
 
-type ShapeKind = "circle" | "square" | "diamond" | "triangle";
+type ShapeKind = "circle";
 
 interface Shape {
   x: number;
@@ -35,32 +35,34 @@ const getThemePalette = (): {
   // SSR fallback: assume light-ish
   if (typeof document === "undefined") {
     return {
-      // Light mode: neutral + gold (outline-only in render).
-      colors: ["#0f0f10", "#3f3f43", "#d4af37"],
-      maxOpacity: 0.14,
+      // Light mode: lilac + warm purple + muted plum for higher contrast.
+      colors: ["#7d6796", "#b38fb0", "#6f647c", "#a47ab8"],
+      maxOpacity: 0.34,
     };
   }
 
   const isDark = resolveIsDark();
 
   if (isDark) {
-    // Dark mode: white + gold outlines, keep low opacity.
+    // Dark mode: cream + soft lavender + gold — matches plum palette.
     return {
-      colors: ["#f5f5f6", "#c9c9cd", "#d4af37"],
-      maxOpacity: 0.14,
+      colors: ["#f0e9e0", "#bfb3c4", "#d4b04a"],
+      maxOpacity: 0.1,
     };
   }
 
-  // Light mode: neutral + gold outlines.
+  // Light mode: lilac-forward accents with stronger visibility.
   return {
-    colors: ["#0f0f10", "#3f3f43", "#d4af37"],
-    maxOpacity: 0.14,
+    colors: ["#7d6796", "#b38fb0", "#6f647c", "#a47ab8"],
+    maxOpacity: 0.34,
   };
 };
 
 export default function HeroBackdrop(): React.JSX.Element {
+  const isDev = import.meta.env.DEV;
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const animationFrameRef = useRef<number>(0);
+  const lastRenderedAtRef = useRef(0);
   const shapesRef = useRef<Shape[]>([]);
   const paletteRef = useRef(getThemePalette());
   const isDarkRef = useRef(false);
@@ -82,7 +84,8 @@ export default function HeroBackdrop(): React.JSX.Element {
     const resize = () => {
       if (!canvas) return;
       const rect = canvas.getBoundingClientRect();
-      const nextDpr = Math.min(window.devicePixelRatio || 1, 2);
+      const maxDpr = isDev ? 1.25 : 2;
+      const nextDpr = Math.min(window.devicePixelRatio || 1, maxDpr);
       canvas.width = Math.max(1, Math.floor(rect.width * nextDpr));
       canvas.height = Math.max(1, Math.floor(rect.height * nextDpr));
       // Avoid cumulative scaling on successive resizes.
@@ -110,14 +113,12 @@ export default function HeroBackdrop(): React.JSX.Element {
       // (Desktop should remain visually unchanged.)
       const isVerySmall = w < 30 * 16; // < 480px
       const isMobile = w < 48 * 16; // < 768px
-      const count = isVerySmall ? 6 : isMobile ? 9 : 18;
+      const baseCount = isVerySmall ? 6 : isMobile ? 9 : 16;
+      const count = isDev
+        ? Math.max(4, Math.round(baseCount * 0.66))
+        : baseCount;
 
-      const kinds: readonly ShapeKind[] = [
-        "circle",
-        "square",
-        "diamond",
-        "triangle",
-      ] as const;
+      const kinds: readonly ShapeKind[] = ["circle"] as const;
 
       const clamp = (value: number, min: number, max: number) =>
         Math.max(min, Math.min(max, value));
@@ -127,53 +128,55 @@ export default function HeroBackdrop(): React.JSX.Element {
 
       const isWide = w >= 56 * 16; // ~896px
 
-      // Keep the very center from getting too busy, but avoid leaving the
-      // hero feeling empty (especially in light mode).
-      // Use top / middle / bottom bands, with more weight in the middle.
-      const topMinY = h * 0.06;
-      const topMaxY = h * (isWide ? 0.28 : 0.24);
-      const midMinY = h * (isWide ? 0.32 : 0.3);
-      const midMaxY = h * (isWide ? 0.68 : 0.7);
-      const bottomMinY = h * (isWide ? 0.72 : 0.74);
-      const bottomMaxY = h * 0.94;
+      // Place circles around the perimeter/edges of the hero — avoid the
+      // center content area. This creates a frame-like effect.
+      // Zones: top edge, bottom edge, left edge, right edge, corners.
+      const margin = 0.06; // inset from absolute edge
+      const edgeDepth = isWide ? 0.28 : 0.32; // how deep the edge zone goes
 
-      // On wide layouts, keep left/right density balanced so neither side feels empty.
-      const leftShare = isWide ? 0.5 : 0.52;
-      const leftMinX = w * (isWide ? 0.02 : 0.04);
-      const leftMaxX = w * (isWide ? 0.38 : 0.48);
-      const rightMinX = w * (isWide ? 0.62 : 0.52);
-      const rightMaxX = w * (isWide ? 0.98 : 0.96);
+      // Perimeter placement: pick a random edge, then place within that strip.
+      const placeOnPerimeter = (): { px: number; py: number } => {
+        const edge = Math.random();
+        if (edge < 0.25) {
+          // Top edge
+          return {
+            px: sampleInRange(w * margin, w * (1 - margin)),
+            py: sampleInRange(h * margin, h * edgeDepth),
+          };
+        } else if (edge < 0.5) {
+          // Bottom edge
+          return {
+            px: sampleInRange(w * margin, w * (1 - margin)),
+            py: sampleInRange(h * (1 - edgeDepth), h * (1 - margin)),
+          };
+        } else if (edge < 0.75) {
+          // Left edge
+          return {
+            px: sampleInRange(w * margin, w * edgeDepth),
+            py: sampleInRange(h * margin, h * (1 - margin)),
+          };
+        } else {
+          // Right edge
+          return {
+            px: sampleInRange(w * (1 - edgeDepth), w * (1 - margin)),
+            py: sampleInRange(h * margin, h * (1 - margin)),
+          };
+        }
+      };
 
       shapesRef.current = Array.from({ length: count }, (_, i) => {
-        const leftCount = Math.max(1, Math.round(count * leftShare));
-        const isLeftSide = i < leftCount;
+        const { px, py } = placeOnPerimeter();
 
-        const bandRoll = Math.random();
-        const inTopBand = bandRoll < (isWide ? 0.33 : 0.36);
-        const inMidBand = !inTopBand && bandRoll < (isWide ? 0.72 : 0.7);
-        const y = inTopBand
-          ? sampleInRange(topMinY, Math.max(topMinY + 2, topMaxY))
-          : inMidBand
-            ? sampleInRange(midMinY, Math.max(midMinY + 2, midMaxY))
-            : sampleInRange(
-                Math.min(bottomMinY, bottomMaxY - 2),
-                Math.max(bottomMinY + 2, bottomMaxY),
-              );
-
-        const x = isLeftSide
-          ? sampleInRange(leftMinX, Math.max(leftMinX + 2, leftMaxX))
-          : sampleInRange(rightMinX, Math.max(rightMinX + 2, rightMaxX));
-
-        const clampedX = clamp(x, w * 0.03, w * 0.97);
-        const clampedY = clamp(y, h * 0.05, h * 0.95);
+        const clampedX = clamp(px, w * 0.03, w * 0.97);
+        const clampedY = clamp(py, h * 0.05, h * 0.95);
 
         const kind = kinds[i % kinds.length] ?? "circle";
-        const size = 22 + Math.random() * 64;
-        const strokeWidth = 1.0 + Math.random() * 1.1;
+        const size = 26 + Math.random() * 72;
+        const strokeWidth = 1.1 + Math.random() * 1.35;
         // Apply the theme palette's maxOpacity consistently for both themes.
         // Tighter range keeps shapes reading more evenly.
         const opacity = palette.maxOpacity * (0.62 + Math.random() * 0.33);
-        const color = palette.colors[i % palette.colors.length] ?? "#0f0f10";
+        const color = palette.colors[i % palette.colors.length] ?? "#2c2420";
 
         return {
           baseX: clampedX,
@@ -255,32 +258,7 @@ export default function HeroBackdrop(): React.JSX.Element {
         const half = s / 2;
 
         ctx.beginPath();
-        switch (shape.kind) {
-          case "circle": {
-            ctx.arc(0, 0, half, 0, Math.PI * 2);
-            break;
-          }
-          case "square": {
-            ctx.rect(-half, -half, s, s);
-            break;
-          }
-          case "diamond": {
-            // Square rotated 45°
-            ctx.rotate(Math.PI / 4);
-            ctx.rect(-half, -half, s, s);
-            break;
-          }
-          case "triangle": {
-            ctx.moveTo(0, -half);
-            ctx.lineTo(half, half);
-            ctx.lineTo(-half, half);
-            ctx.closePath();
-            break;
-          }
-          default: {
-            ctx.arc(0, 0, half, 0, Math.PI * 2);
-          }
-        }
+        ctx.arc(0, 0, half, 0, Math.PI * 2);
 
         // Light mode: outlines only (no fill).
 
@@ -297,6 +275,16 @@ export default function HeroBackdrop(): React.JSX.Element {
     const tick = (time: number) => {
       // This frame is now running; allow rescheduling.
       animationFrameRef.current = 0;
+
+      const targetFps = isDev ? 30 : 45;
+      const minFrameMs = 1000 / targetFps;
+      if (time - lastRenderedAtRef.current < minFrameMs) {
+        if (shouldAnimate()) {
+          animationFrameRef.current = requestAnimationFrame(tick);
+        }
+        return;
+      }
+      lastRenderedAtRef.current = time;
 
       renderFrame(time);
 

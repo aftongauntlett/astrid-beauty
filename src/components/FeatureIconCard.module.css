@@ -27,58 +27,93 @@
   isolation: isolate;
 }
 
-/* Light mode: darker icon badge but still glassy/translucent */
+/* Light mode: airy chip badge for a brighter card surface */
 html[data-theme="light"] .card {
-  /* Smoked glass (darker) so gold icons read clearly */
-  /* Match the icon coin to the brush stroke color */
+  --fic-icon-color: color-mix(in oklab, var(--color-secondary) 90%, #ffffff);
   --fic-iconwrap-bg:
     radial-gradient(
       circle at 30% 25%,
-      color-mix(in oklab, white 34%, transparent) 0%,
+      color-mix(in oklab, white 52%, transparent) 0%,
       transparent 58%
     ),
     linear-gradient(
       180deg,
-      color-mix(in oklab, #0b0b0c 84%, transparent) 0%,
-      color-mix(in oklab, #0b0b0c 84%, transparent) 100%
+      color-mix(
+          in oklab,
+          var(--color-surface-elevated) 92%,
+          var(--color-secondary) 8%
+        )
+        0%,
+      color-mix(
+          in oklab,
+          var(--color-surface) 86%,
+          var(--color-accent-soft) 14%
+        )
+        100%
     );
   --fic-iconwrap-border: color-mix(
     in oklab,
-    var(--fic-icon-color) 40%,
-    #00000066
+    var(--color-secondary) 30%,
+    var(--color-border)
   );
   --fic-iconwrap-shadow:
-    0 10px 26px -20px color-mix(in oklab, black 30%, transparent),
-    inset 0 1px 0 color-mix(in oklab, white 46%, transparent),
-    inset 0 0 0 1px color-mix(in oklab, var(--color-secondary) 30%, transparent);
+    0 10px 26px -22px color-mix(in oklab, var(--color-primary) 20%, transparent),
+    inset 0 1px 0 color-mix(in oklab, white 62%, transparent),
+    inset 0 0 0 1px color-mix(in oklab, var(--color-secondary) 18%, transparent);
+}
+
+/* Icon inside badge uses bright gold for contrast against dark badge */
+html[data-theme="light"] .iconWrap {
+  color: color-mix(in oklab, var(--color-secondary) 92%, #ffffff);
 }
 
 @media (prefers-reduced-motion: no-preference) {
   .title {
     transition: color var(--motion-duration-fast) var(--motion-ease-standard);
   }
+
+  .card {
+    transition:
+      background-color var(--motion-duration-normal) var(--motion-ease-standard),
+      border-color var(--motion-duration-normal) var(--motion-ease-standard),
+      box-shadow var(--motion-duration-normal) var(--motion-ease-standard);
+  }
 }
 
 /* Hover-only affordances (avoid running on touch) */
 @media (prefers-reduced-motion: no-preference) and (hover: hover) and (pointer: fine) {
-  .card:hover .title {
-    color: var(--fic-icon-color);
+  .card:hover {
+    background: color-mix(
+      in oklab,
+      var(--color-surface-elevated) 90%,
+      var(--color-secondary) 10%
+    );
+    border-color: color-mix(
+      in oklab,
+      var(--color-secondary) 24%,
+      var(--color-border)
+    );
+    box-shadow: var(--shadow-md);
+  }
+
+  html[data-theme="dark"] .card:hover {
+    background: color-mix(in oklab, var(--color-surface) 84%, var(--color-bg));
   }
 
   .card:hover .list li::before {
-    background: color-mix(in oklab, var(--fic-icon-color) 92%, white);
+    background: color-mix(in oklab, var(--color-secondary) 92%, white);
   }
 }
 
-/* Light mode: use a darker gold for the title so it passes contrast checks */
+/* Light mode: title shifts to accent purple on hover/focus */
 @media (prefers-reduced-motion: no-preference) and (hover: hover) and (pointer: fine) {
   html[data-theme="light"] .card:hover .title {
-    color: #8b6914;
+    color: var(--color-secondary);
   }
 }
 
 html[data-theme="light"] .card:focus-within .title {
-  color: #8b6914;
+  color: var(--color-secondary);
 }
 
 .header {
@@ -167,11 +202,11 @@ html[data-theme="light"] .card:focus-within .title {
   filter: blur(18px);
 }
 
-/* Light theme: tone down icon glow (keep luxe, avoid “neon halo”) */
+/* Light theme: neutral glow to avoid gold-on-gold clash */
 html[data-theme="light"] .glowRadial {
   background: radial-gradient(
     circle,
-    color-mix(in oklab, var(--fic-icon-color) 26%, transparent) 0%,
+    color-mix(in oklab, var(--color-primary) 14%, transparent) 0%,
     transparent 70%
   );
 }
@@ -179,7 +214,7 @@ html[data-theme="light"] .glowRadial {
 html[data-theme="light"] .glowBlur {
   background: radial-gradient(
     circle,
-    color-mix(in oklab, var(--fic-icon-color) 34%, transparent) 0%,
+    color-mix(in oklab, var(--color-primary) 18%, transparent) 0%,
     transparent 74%
   );
   filter: blur(16px);
@@ -252,60 +287,6 @@ html[data-theme="light"] .glowBlur {
   list-style: none;
 }
 
-/* ---------- Icon sparkle/glow effect (React-rendered) ---------- */
-
-:global(.icon-fx) {
-  position: absolute;
-  inset: -30%;
-  z-index: 3;
-  pointer-events: none;
-  display: none; /* shown at md+ via breakpoint below */
-}
-
-:global(.icon-fx__glow) {
-  position: absolute;
-  inset: 12%;
-  border-radius: 50%;
-  opacity: 0;
-  background: radial-gradient(
-    circle,
-    color-mix(in oklab, var(--fic-icon-color) 38%, transparent) 0%,
-    color-mix(in oklab, var(--fic-icon-color) 14%, transparent) 50%,
-    transparent 75%
-  );
-  filter: blur(8px);
-}
-
-html[data-theme="light"] :global(.icon-fx__glow) {
-  background: radial-gradient(
-    circle,
-    color-mix(in oklab, var(--fic-icon-color) 26%, transparent) 0%,
-    color-mix(in oklab, var(--fic-icon-color) 10%, transparent) 50%,
-    transparent 75%
-  );
-}
-
-:global(.icon-fx__sparkle) {
-  position: absolute;
-  border-radius: 50%;
-  background: var(--fic-icon-color);
-  box-shadow: 0 0 5px 1px
-    color-mix(in oklab, var(--fic-icon-color) 50%, transparent);
-  pointer-events: none;
-}
-
-@media (prefers-reduced-motion: reduce) {
-  :global(.icon-fx) {
-    display: none !important;
-  }
-}
-
-@media (hover: none) {
-  :global(.icon-fx) {
-    display: none !important;
-  }
-}
-
 /* Tablet + desktop: restore existing icon-in-header layout (unchanged visuals) */
 @media (min-width: 48rem) {
   .card {
@@ -362,11 +343,6 @@ html[data-theme="light"] :global(.icon-fx__glow) {
   .particle {
     display: none;
   }
-
-  :global(.icon-fx) {
-    display: block;
-  }
-
   .icon svg {
     width: auto;
     height: auto;
@@ -382,13 +358,10 @@ html[data-theme="light"] :global(.icon-fx__glow) {
 
   html[data-theme="light"] .card:hover .iconWrap {
     box-shadow:
-      0 10px 26px -20px color-mix(in oklab, black 30%, transparent),
-      inset 0 1px 0 color-mix(in oklab, white 46%, transparent),
+      0 10px 26px -20px
+        color-mix(in oklab, var(--color-primary) 20%, transparent),
+      inset 0 1px 0 color-mix(in oklab, white 68%, transparent),
       0 0 0 1px color-mix(in oklab, var(--color-secondary) 28%, transparent);
-  }
-
-  .card:hover .icon {
-    animation: ficIconWiggle 0.85s ease-in-out;
   }
 }
 
@@ -401,13 +374,10 @@ html[data-theme="light"] :global(.icon-fx__glow) {
 
   html[data-theme="light"] .card:focus-within .iconWrap {
     box-shadow:
-      0 10px 26px -20px color-mix(in oklab, black 30%, transparent),
-      inset 0 1px 0 color-mix(in oklab, white 46%, transparent),
+      0 10px 26px -20px
+        color-mix(in oklab, var(--color-primary) 20%, transparent),
+      inset 0 1px 0 color-mix(in oklab, white 68%, transparent),
       0 0 0 1px color-mix(in oklab, var(--color-secondary) 28%, transparent);
-  }
-
-  .card:focus-within .icon {
-    animation: ficIconWiggle 0.85s ease-in-out;
   }
 }
 
@@ -444,20 +414,5 @@ html[data-theme="light"] :global(.icon-fx__glow) {
   }
   100% {
     transform: rotateX(0deg) rotateY(0deg) scale(1);
-  }
-}
-
-@keyframes ficIconWiggle {
-  0% {
-    transform: rotate(0deg) scale(1);
-  }
-  50% {
-    transform: rotate(-5deg) scale(1.04);
-  }
-  75% {
-    transform: rotate(5deg) scale(1.01);
-  }
-  100% {
-    transform: rotate(0deg) scale(1);
   }
 }

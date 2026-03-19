@@ -8,12 +8,8 @@ export const en: Messages = {
     booking: "Booking Info",
     menu: "Menu",
   },
-  common: {
-    themeToggleLabel: "Toggle theme",
-    languageToggleLabel: "Language",
-  },
   sections: {
-    homeTitle: "Your beautiful hair starts here",
+    homeTitle: "Welcome To Astrid's Beauty Salon",
     servicesTitle: "Our Services",
     galleryTitle: "About",
     aboutLede:
@@ -32,7 +28,7 @@ export const en: Messages = {
     heroLede:
       "Beautiful color, fresh cuts, and luminous gloss treatments - right here in Herndon. Book your appointment anytime.",
     heroSupporting: "Dimensional color and modern cuts in Herndon, VA.",
-    brandSrOnly: "By Astrid Beauty Salon",
+    brandSrOnly: "Astrid Beauty Salon",
   },
   about: {
     workTitle: "See My Work",
@@ -250,6 +246,8 @@ export const en: Messages = {
     placeholderPhone: "(703) 786-3707",
     placeholderHours:
       "Hours may vary—please call to confirm.\nSunday: Closed\nMonday: 9:00 AM – 5:00 PM\nTuesday: Closed\nWednesday: 9:00 AM – 6:30 PM\nThursday: Closed\nFriday: 9:00 AM – 6:30 PM\nSaturday: 9:30 AM – 4:30 PM",
+    hoursDisclaimer:
+      "Information may change — please check Vagaro for up to date details.",
     copyright: "By Astrid Beauty Salon",
     builtByLabel: "Built by",
   },

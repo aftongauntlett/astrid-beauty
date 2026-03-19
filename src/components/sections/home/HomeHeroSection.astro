@@ -10,6 +10,12 @@ export type Props = {
 };
 
 const { messages, vagaroServicesUrl } = Astro.props;
+const heroTitle = messages.sections.homeTitle;
+const splitTitleSuffix = "Astrid's Beauty Salon";
+const canSplitHeroTitle = /astrid'?s beauty salon$/i.test(heroTitle);
+const heroTitleLead = canSplitHeroTitle
+	? "Welcome To"
+	: heroTitle;
 ---
 
 <section class="section hero" aria-labelledby="page-title">
@@ -17,44 +23,43 @@ const { messages, vagaroServicesUrl } = Astro.props;
 	<div class="container hero__grid">
 		<div class="hero__content">
 			<p class="sr-only">{messages.home.brandSrOnly}</p>
-			<div class="hero__brandmark" aria-hidden="true" data-reveal>
+			<figure class="hero__brandPanel" data-reveal>
 				<img
-					class="hero__brandmarkLogo hero__brandmarkLogo--light"
-					src="/astrid-logo-light.png"
-					alt=""
-					width="801"
-					height="692"
+					class="hero__brandImage"
+					src="/images/purple-hair-color.jpg"
+					alt="Purple toned salon color result"
+					width="900"
+					height="1200"
 					loading="eager"
 					fetchpriority="high"
 					decoding="async"
 				/>
-				<img
-					class="hero__brandmarkLogo hero__brandmarkLogo--dark"
-					src="/astrid-logo-dark.png"
-					alt=""
-					width="801"
-					height="692"
-					loading="eager"
-					fetchpriority="high"
-					decoding="async"
-				/>
-			</div>
+			</figure>
 		</div>
 
-		<div class="hero__actions" aria-label="Primary actions">
+		<div class="hero__actions">
 			<div class="hero__actionsCopy" data-reveal data-reveal-delay="80">
-				<h1 class="hero__actionsTitle" id="page-title">{messages.sections.homeTitle}</h1>
+				<h1 class="hero__actionsTitle" id="page-title">
+					{canSplitHeroTitle ? (
+						<>
+							<span class="hero__actionsTitleLead">{heroTitleLead}</span>
+							<span class="hero__actionsTitleMain">{splitTitleSuffix}</span>
+						</>
+					) : (
+						heroTitle
+					)}
+				</h1>
 				<p class="hero__actionsLede">{messages.home.heroLede}</p>
 			</div>
 			<div class="hero__actionsRow">
 				<div class="hero__ctaStack">
-					<div class="hero__ctaButtons" aria-label="Hero actions">
+					<div class="hero__ctaButtons">
 						<HeroBookNowCta
 							client:idle
 							href="#booking"
 							label={messages.misc.learnMore}
 							labelMobile={messages.misc.learnMore}
-							variant="primary"
+							variant="secondary"
 							icon="down"
 							target="_self"
 							className="hero__learnMore"
@@ -64,8 +69,7 @@ const { messages, vagaroServicesUrl } = Astro.props;
 							href={vagaroServicesUrl}
 							label={messages.misc.scheduleAppointment}
 							labelMobile={messages.misc.bookNow}
-							variant="secondary"
-							className="hero__bookNow"
+							variant="primary"
 						/>
 					</div>
 					<p class="hero__ctaHelper">{messages.misc.appointmentOnly}*</p>
@@ -82,6 +86,27 @@ const { messages, vagaroServicesUrl } = Astro.props;
 		overflow: hidden;
 		isolation: isolate;
 		background: var(--color-bg);
+	}
+
+	/* Light mode: warm ambient glow to make hero feel alive */
+	html:not([data-theme="dark"]) .hero {
+		background:
+			radial-gradient(
+				980px 560px at 22% 44%,
+				color-mix(in oklab, var(--color-sage) 18%, transparent),
+				transparent 64%
+			),
+			radial-gradient(
+				860px 500px at 76% 14%,
+				color-mix(in oklab, var(--color-blush) 14%, transparent),
+				transparent 56%
+			),
+			radial-gradient(
+				740px 420px at 80% 68%,
+				color-mix(in oklab, var(--color-secondary) 12%, transparent),
+				transparent 58%
+			),
+			var(--color-bg);
 	}
 
 	/* Light mode: add a gentle separator into the next section */
@@ -105,23 +130,44 @@ const { messages, vagaroServicesUrl } = Astro.props;
 	html[data-theme="dark"] .hero {
 		background:
 			radial-gradient(
-				1000px 520px at 88% 12%,
-				color-mix(in oklab, var(--color-primary) 14%, transparent),
+				900px 500px at 85% 8%,
+				color-mix(in oklab, var(--color-secondary) 10%, transparent),
+				transparent 55%
+			),
+			radial-gradient(
+				700px 400px at 80% 20%,
+				color-mix(in oklab, #6b4c8a 8%, transparent),
 				transparent 60%
 			),
 			var(--color-bg);
 	}
 
 	@media (max-width: 48rem) {
-		.hero {
-			background: var(--color-bg);
+		html:not([data-theme="dark"]) .hero {
+			background:
+				radial-gradient(
+					640px 360px at 20% 30%,
+					color-mix(in oklab, var(--color-sage) 14%, transparent),
+					transparent 62%
+				),
+				radial-gradient(
+					580px 320px at 82% 16%,
+					color-mix(in oklab, var(--color-blush) 12%, transparent),
+					transparent 60%
+				),
+				var(--color-bg);
 		}
 
 		html[data-theme="dark"] .hero {
 			background:
 				radial-gradient(
-					900px 480px at 88% 12%,
-					color-mix(in oklab, var(--color-primary) 14%, transparent),
+					800px 450px at 80% 10%,
+					color-mix(in oklab, var(--color-secondary) 10%, transparent),
+					transparent 55%
+				),
+				radial-gradient(
+					600px 350px at 75% 25%,
+					color-mix(in oklab, #6b4c8a 8%, transparent),
 					transparent 60%
 				),
 				var(--color-bg);
@@ -136,15 +182,6 @@ const { messages, vagaroServicesUrl } = Astro.props;
 
 	.hero__content {
 		justify-content: center;
-	}
-
-	.hero__brandmark {
-		justify-content: center;
-	}
-
-	.hero__brandmarkLogo {
-		width: min(100%, clamp(18rem, 34vw, 30rem));
-		filter: drop-shadow(0 10px 18px color-mix(in oklab, var(--color-shadow) 12%, transparent));
 	}
 
 	.hero__actions {
@@ -177,67 +214,122 @@ const { messages, vagaroServicesUrl } = Astro.props;
 		align-items: center;
 	}
 
-	.hero__brandmark {
-		display: flex;
-		align-items: center;
-		margin: 0;
+	.hero__brandPanel {
 		position: relative;
+		display: grid;
+		gap: var(--space-md);
+		align-content: start;
+		margin: 0;
+		width: min(100%, 28rem);
+		padding: 0;
+		border-radius: 0;
+		border: 0;
+		background: transparent;
+		box-shadow: none;
+		isolation: isolate;
 	}
 
-
-	/* Subtle glow behind logo for better readability in light mode */
-	.hero__brandmark::before {
+	.hero__brandPanel::before {
 		content: "";
 		position: absolute;
-		top: 50%;
-		left: 50%;
-		transform: translate(-50%, -50%);
-		width: 140%;
-		height: 140%;
+		inset: 8% -8% -10%;
 		background: radial-gradient(
-			circle,
-			color-mix(in oklab, var(--color-surface-elevated) 92%, transparent) 0%,
-			transparent 65%
+			circle at 50% 42%,
+			color-mix(in oklab, var(--color-secondary) 22%, transparent) 0%,
+			transparent 70%
 		);
-		filter: blur(40px);
-		opacity: 0;
+		filter: blur(24px);
+		opacity: 0.34;
 		pointer-events: none;
-		z-index: -1;
+		z-index: 0;
 	}
 
-	html:not([data-theme="dark"]) .hero__brandmark::before {
-		opacity: 0;
+	html[data-theme="dark"] .hero__brandPanel::before {
+		opacity: 0.24;
 	}
 
-	html[data-theme="dark"] .hero__brandmark::before {
-		opacity: 0;
-	}
-
-	.hero__brandmarkLogo {
+	.hero__brandImage {
 		display: block;
-		width: min(100%, clamp(16rem, 28vw, 26rem));
+		width: 100%;
 		height: auto;
-		filter: drop-shadow(0 10px 18px color-mix(in oklab, var(--color-text) 12%, transparent));
+		aspect-ratio: 4 / 5;
+		object-fit: cover;
+		border-radius: 0.95rem;
+		border: 0;
+		box-shadow: 0 18px 36px -26px color-mix(in oklab, var(--color-primary) 36%, transparent);
+		position: relative;
+		z-index: 1;
+		transform: translateZ(0);
+		transform-origin: center center;
+		backface-visibility: hidden;
+		will-change: transform;
 	}
 
-	/* Theme-aware logo swap */
-	html[data-theme="dark"] .hero__brandmarkLogo--light {
-		display: none;
+	@media (prefers-reduced-motion: no-preference) {
+		.hero__brandImage {
+			transition: transform var(--motion-duration-slow) var(--motion-ease-luxury);
+		}
 	}
 
-	html:not([data-theme="dark"]) .hero__brandmarkLogo--dark {
-		display: none;
+	@media (prefers-reduced-motion: no-preference) and (hover: hover) and (pointer: fine) {
+		.hero__brandPanel:hover .hero__brandImage {
+			transform: translateZ(0) scale(1.01);
+		}
 	}
-
 	.hero__actions {
 		width: 100%;
-		max-width: 34rem;
+		max-width: 44rem;
 		display: grid;
 		gap: var(--space-lg);
+		position: relative;
+		isolation: isolate;
+	}
+
+	html:not([data-theme="dark"]) .hero__actions::before {
+		content: "";
+		position: absolute;
+		inset: -1.2rem -1rem -1.1rem;
+		border-radius: 1.25rem;
+		background:
+			radial-gradient(
+				ellipse at 50% 35%,
+				color-mix(in oklab, var(--color-surface-elevated) 96%, transparent) 0%,
+				color-mix(in oklab, var(--color-surface) 92%, transparent) 56%,
+				transparent 82%
+			),
+			linear-gradient(
+				180deg,
+				color-mix(in oklab, var(--color-surface-elevated) 88%, transparent) 0%,
+				transparent 100%
+			);
+		filter: blur(10px);
+		opacity: 0.86;
+		pointer-events: none;
+		z-index: 0;
+	}
+
+	.hero__actions > * {
+		position: relative;
+		z-index: 1;
 	}
 
 	.hero__actions .btn {
 		width: 100%;
+	}
+
+	html:not([data-theme="dark"]) :global(.hero__learnMore.btn--secondary) {
+		background-color: transparent;
+		color: color-mix(in oklab, var(--color-primary) 80%, var(--color-secondary));
+		border-color: color-mix(in oklab, var(--color-secondary) 38%, transparent);
+		box-shadow: none;
+	}
+
+	html:not([data-theme="dark"]) :global(.hero__learnMore.btn--secondary:hover),
+	html:not([data-theme="dark"]) :global(.hero__learnMore.btn--secondary:focus-visible) {
+		background-color: color-mix(in oklab, var(--color-secondary) 12%, transparent);
+		color: color-mix(in oklab, var(--color-primary) 74%, var(--color-secondary));
+		border-color: color-mix(in oklab, var(--color-secondary) 52%, transparent);
+		box-shadow: var(--shadow-sm);
 	}
 
 	.hero__actionsCopy {
@@ -249,6 +341,35 @@ const { messages, vagaroServicesUrl } = Astro.props;
 		margin: 0;
 		font-size: var(--heading-3);
 		letter-spacing: -0.01em;
+		text-wrap: balance;
+	}
+
+	.hero__actionsTitleLead,
+	.hero__actionsTitleMain {
+		display: block;
+	}
+
+	.hero__actionsTitleLead {
+		font-family: var(--font-script);
+		font-style: normal;
+		font-weight: 400;
+		font-size: clamp(2.2rem, 3.2vw + 1rem, 4rem);
+		line-height: 0.98;
+		letter-spacing: 0.004em;
+		color: color-mix(in oklab, var(--color-primary) 72%, var(--color-secondary));
+	}
+
+	.hero__actionsTitleMain {
+		font-family: var(--font-heading);
+		font-style: normal;
+		font-weight: 600;
+		line-height: 1.04;
+		letter-spacing: -0.015em;
+		color: color-mix(in oklab, var(--color-primary) 86%, var(--color-text-muted));
+	}
+
+	html:not([data-theme="dark"]) .hero__actionsTitleMain {
+		color: color-mix(in oklab, var(--color-primary) 84%, var(--color-text-muted));
 	}
 
 	.hero__actionsLede {
@@ -269,25 +390,32 @@ const { messages, vagaroServicesUrl } = Astro.props;
 
 	@media (min-width: 60rem) {
 		.hero__grid {
-			grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+			grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.9fr);
 			align-items: center;
 			justify-items: stretch;
 		}
 
 		.hero__actions {
-			justify-self: end;
+			justify-self: start;
 			align-items: stretch;
 		}
 
 		.hero__actionsCopy {
 			text-align: left;
 		}
+
+		.hero__brandPanel {
+			width: min(100%, 24rem);
+		}
 	}
 
 	/* Hero: visible H1 tuned to be slightly larger than section H2s */
 	.hero__actionsTitle {
+		font-family: var(--font-heading);
+		font-weight: 600;
 		font-size: calc(var(--heading-2) * 1.06);
 		line-height: 1.05;
+		letter-spacing: -0.015em;
 	}
 
 	.hero__actionsLede {

@@ -46,106 +46,74 @@
   min-height: 3rem;
 }
 
+/* ── Primary: solid gold CTA ── */
 .btn--primary {
-  background-color: var(--color-primary);
-  background-image: none;
-  color: var(--color-primary-contrast);
-  border-color: var(--color-primary);
-}
-
-/* Light mode: luxe depth gradient */
-html:not([data-theme="dark"]) .btn--primary {
-  background: linear-gradient(180deg, #1a1a1c 0%, #0f0f10 100%);
-  border-color: #0f0f10;
-}
-
-.btn--primary:hover {
-  border-color: var(--color-primary-hover);
-  box-shadow:
-    0 1px 2px 0 rgba(0, 0, 0, 0.06),
-    0 12px 28px -14px rgba(0, 0, 0, 0.28),
-    0 22px 52px -24px rgba(0, 0, 0, 0.22);
-  color: var(--color-primary-contrast);
-}
-
-/* Light mode: keep gradient background (avoid hover-out flash) */
-html:not([data-theme="dark"]) .btn--primary:hover {
-  background: linear-gradient(180deg, #121214 0%, #000000 100%);
-}
-
-/* Light mode: add a luxe gold text/icon shift on hover */
-html:not([data-theme="dark"]) .btn--primary:hover,
-html:not([data-theme="dark"]) .btn--primary:focus-visible {
-  color: var(--color-secondary);
-}
-
-/* Dark mode: keep text readable, add gold accent via border */
-html[data-theme="dark"] .btn--primary:hover,
-html[data-theme="dark"] .btn--primary:focus-visible {
-  /* Keep a solid bg-color at all times to avoid a brief "transparent → bg" flash on mouseout. */
-  background-color: var(--color-primary-hover);
-
-  /* Fallback (if color-mix isn't supported) */
-  background-image: linear-gradient(
-    180deg,
-    rgba(212, 175, 55, 0.12) 0%,
-    rgba(212, 175, 55, 0) 100%
-  );
-
-  /* Preferred */
-  background-image: linear-gradient(
-    180deg,
-    color-mix(in oklab, var(--color-primary) 92%, var(--color-secondary) 8%) 0%,
-    var(--color-primary-hover) 100%
-  );
-  border-color: color-mix(in oklab, var(--color-secondary) 78%, transparent);
-  box-shadow:
-    var(--shadow-md),
-    0 0 0 2px color-mix(in oklab, var(--color-secondary) 44%, transparent);
-}
-
-.btn--secondary {
-  background: linear-gradient(
-    180deg,
-    color-mix(in oklab, var(--color-secondary) 92%, white) 0%,
-    var(--color-secondary) 100%
-  );
+  background-color: var(--color-secondary);
   color: var(--color-secondary-contrast);
   border-color: var(--color-secondary);
-  background-size: 200% 200%;
-  background-position: 50% 0%;
 }
 
-.btn--secondary:hover {
-  background: linear-gradient(
-    110deg,
-    var(--color-secondary) 0%,
-    color-mix(in oklab, var(--color-secondary-hover) 70%, white) 38%,
-    var(--color-secondary-hover) 55%,
-    var(--color-secondary) 100%
-  );
+.btn--primary:hover,
+.btn--primary:focus-visible {
+  background-color: color-mix(in oklab, var(--color-secondary) 82%, white);
+  border-color: color-mix(in oklab, var(--color-secondary) 82%, white);
+  box-shadow: var(--shadow-md);
+}
+
+html[data-theme="dark"] .btn--primary:hover,
+html[data-theme="dark"] .btn--primary:focus-visible {
+  background-color: var(--color-secondary-hover);
   border-color: var(--color-secondary-hover);
+  color: var(--color-secondary-contrast);
+}
+
+/* ── Secondary: outline → fill on hover ── */
+.btn--secondary {
+  background-color: transparent;
+  color: var(--color-primary);
+  border-color: var(--color-primary);
+  box-shadow: none;
+}
+
+html:not([data-theme="dark"]) .btn--secondary {
+  background-color: color-mix(
+    in oklab,
+    var(--color-secondary) 16%,
+    var(--color-surface-elevated)
+  );
+  color: color-mix(in oklab, var(--color-primary) 76%, var(--color-secondary));
+  border-color: color-mix(in oklab, var(--color-secondary) 36%, transparent);
   box-shadow:
-    var(--shadow-md),
-    0 0 0 1px rgba(212, 175, 55, 0.3),
-    0 18px 44px -30px
-      color-mix(in oklab, var(--color-secondary) 32%, transparent);
+    var(--shadow-sm),
+    inset 0 1px 0 color-mix(in oklab, white 52%, transparent);
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .btn--secondary:hover {
-    animation: btnShimmer var(--motion-duration-slow) var(--motion-ease-luxury)
-      both;
-  }
+.btn--secondary:hover,
+.btn--secondary:focus-visible {
+  background-color: var(--color-primary);
+  color: var(--color-primary-contrast);
+  border-color: var(--color-primary);
+  box-shadow: var(--shadow-sm);
 }
 
-@keyframes btnShimmer {
-  0% {
-    background-position: 0% 0%;
-  }
-  100% {
-    background-position: 100% 0%;
-  }
+html:not([data-theme="dark"]) .btn--secondary:hover,
+html:not([data-theme="dark"]) .btn--secondary:focus-visible {
+  background-color: color-mix(in oklab, var(--color-secondary) 82%, white);
+  color: var(--color-secondary-contrast);
+  border-color: color-mix(in oklab, var(--color-secondary) 88%, white);
+  box-shadow: var(--shadow-md);
+}
+
+html[data-theme="dark"] .btn--secondary {
+  color: var(--color-text);
+  border-color: color-mix(in oklab, var(--color-text) 40%, transparent);
+}
+
+html[data-theme="dark"] .btn--secondary:hover,
+html[data-theme="dark"] .btn--secondary:focus-visible {
+  background-color: color-mix(in oklab, var(--color-text) 12%, transparent);
+  color: var(--color-text);
+  border-color: var(--color-text);
 }
 
 .btn--ghost {

@@ -5,11 +5,13 @@
 
   /* Typography */
   --font-heading:
-    "Playfair Display", "Cormorant Garamond", ui-serif, Georgia, Cambria,
+    "Cormorant Garamond", "Playfair Display", ui-serif, Georgia, Cambria,
     "Times New Roman", Times, serif;
   --font-body:
-    "Inter", system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial,
-    sans-serif;
+    "DM Sans", "Inter", system-ui, -apple-system, Segoe UI, Roboto, Helvetica,
+    Arial, sans-serif;
+  --font-script:
+    "Alex Brush", "Parisienne", "Great Vibes", "Allura", "Segoe Script", cursive;
 
   /* Theme system (keep the same token “shape” across light/dark)
 			- bg: page canvas
@@ -17,57 +19,69 @@
 			- surface-muted: secondary surfaces (tinted sections, subtle hovers)
 			- surface-elevated: overlays (menus) + crisp elevated surfaces
 		*/
-  --color-bg: #ffffff; /* neutral canvas */
-  --color-surface: #ffffff; /* primary surfaces (cards/header) */
-  --color-surface-muted: #ebe9e6; /* subtle cream tint for luxury warmth */
+  --color-bg: #f6f8fc; /* airy cool lilac-blue canvas */
+  --color-surface: #fdfdff; /* cards/headers slightly lifted from bg */
+  --color-surface-muted: #edf1f8; /* cool muted section tint */
   --color-surface-elevated: #ffffff; /* overlay / elevated */
-  --color-accent-soft: #fbf7eb; /* subtle warm tint (gold-adjacent) */
-  --color-accent-gold-light: #f5e6c8; /* soft gold tint for subtle highlights */
+  --color-accent-soft: #e9edf8; /* soft periwinkle whisper for gradients */
+  --color-accent-gold-light: #d3d9ee; /* cool violet accent bridge */
 
-  /* Light mode “glass” surfaces (shiny without neon glows) */
+  /* Warm accent colors */
+  --color-blush: #c8cee6; /* cool lilac-blue accent */
+  --color-sage: #aab8dc; /* repurposed token: soft periwinkle accent */
+
+  /* Light mode "glass" surfaces — frosted cream, not frosted steel */
   --surface-glass: linear-gradient(
     180deg,
-    color-mix(in oklab, white 88%, var(--color-primary) 3%) 0%,
+    color-mix(in oklab, #f8f9ff 88%, var(--color-primary) 4%) 0%,
     var(--color-surface) 56%,
     color-mix(in oklab, var(--color-surface) 84%, var(--color-primary) 6%) 100%
   );
   --surface-glass-muted: linear-gradient(
     180deg,
-    color-mix(in oklab, var(--color-surface-muted) 90%, white) 0%,
+    color-mix(
+        in oklab,
+        var(--color-surface-muted) 90%,
+        var(--color-accent-soft)
+      )
+      0%,
     var(--color-surface-muted) 62%,
-    color-mix(in oklab, var(--color-surface-muted) 92%, var(--color-primary) 4%)
+    color-mix(
+        in oklab,
+        var(--color-surface-muted) 92%,
+        var(--color-secondary) 2%
+      )
       100%
   );
   --surface-glass-elevated: linear-gradient(
     180deg,
-    color-mix(in oklab, white 90%, var(--color-primary) 4%) 0%,
+    color-mix(in oklab, #f7f8ff 90%, var(--color-primary) 4%) 0%,
     var(--color-surface-elevated) 62%,
     color-mix(
         in oklab,
         var(--color-surface-elevated) 88%,
-        var(--color-secondary) 4%
+        var(--color-secondary) 2%
       )
       100%
   );
-  --glass-highlight: color-mix(in oklab, white 85%, transparent);
+  --glass-highlight: color-mix(in oklab, #f7f8ff 85%, transparent);
   --glass-rim: color-mix(in oklab, var(--color-primary) 18%, transparent);
 
-  --color-text: #0f0f10; /* near-black */
-  --color-text-muted: #3f3f43; /* neutral gray */
+  --color-text: #2f2935; /* charcoal-plum */
+  --color-text-muted: #656b7f; /* desaturated cool slate */
 
-  --color-border: #0f0f101f;
+  --color-border: #2a29431f;
   --color-divider: color-mix(in oklab, var(--color-border) 72%, transparent);
 
-  /* Primary brand color = neutral black */
-  --color-primary: #0f0f10;
-  --color-primary-hover: #000000;
-  --color-primary-contrast: #ffffff;
+  /* Primary brand color = warm espresso */
+  --color-primary: #2f2935;
+  --color-primary-hover: #1d1722;
+  --color-primary-contrast: #f4f1f6;
 
-  /* Secondary accent = subtle gold (highlights) */
-  /* Light mode gold: slightly lighter/brighter so it reads luminous on white */
-  --color-secondary: #d4af37;
-  --color-secondary-hover: #f0d878;
-  --color-secondary-contrast: #141414;
+  /* Secondary accent = softer/rounder gold */
+  --color-secondary: #8f79b6;
+  --color-secondary-hover: #8069a9;
+  --color-secondary-contrast: #ffffff;
 
   /* Service icon accents (lean neutral + gold) */
   --color-icon-signature: var(--color-secondary);
@@ -81,9 +95,10 @@
   /* Shadow base (avoid "glow" in dark mode) */
   --color-shadow: #000000;
 
-  --radius-sm: 0.75rem;
-  --radius-md: 9999px;
-  --radius-lg: 1.5rem;
+  --radius-sm: 0.5rem;
+  --radius-md: 0.75rem;
+  --radius-lg: 1rem;
+  --radius-pill: 9999px;
 
   /* Stroke widths (use for underlines, dividers, etc.) */
   --stroke-1: 1px;
@@ -110,7 +125,7 @@
   /* Type scale: readable on mobile, elegant at large sizes */
   --text-xs: clamp(0.85rem, 0.1vw + 0.83rem, 0.9rem);
   --text-sm: clamp(0.95rem, 0.15vw + 0.92rem, 1rem);
-  --text-base: clamp(1.03rem, 0.2vw + 0.99rem, 1.125rem);
+  --text-base: clamp(1rem, 0.2vw + 0.96rem, 1.1rem);
   --text-lg: clamp(1.125rem, 0.35vw + 1.05rem, 1.25rem);
   --text-xl: clamp(1.25rem, 0.55vw + 1.15rem, 1.45rem);
 
@@ -149,26 +164,26 @@
 }
 
 html[data-theme="dark"] {
-  --color-bg: #0b0b0c; /* near-black */
-  --color-surface: #111112;
-  --color-surface-muted: #18181a;
-  --color-surface-elevated: #1f1f22;
-  --color-accent-soft: #1a1510; /* subtle warm tint */
+  --color-bg: #1c1a22; /* deep plum-charcoal */
+  --color-surface: #252330; /* plum surface */
+  --color-surface-muted: #2e2b38; /* mauve-tinted muted */
+  --color-surface-elevated: #383542; /* lighter plum overlay */
+  --color-accent-soft: #2e2636; /* plum-violet whisper */
 
-  --color-text: #f5f5f6;
-  --color-text-muted: #c9c9cd;
+  --color-text: #f0e9e0; /* warm off-white (cream) */
+  --color-text-muted: #bfb3c4; /* soft lavender-sand muted */
 
-  --color-border: #ffffff24;
+  --color-border: rgba(220, 200, 240, 0.14); /* plum-tinted borders */
   --color-divider: color-mix(in oklab, var(--color-border) 74%, transparent);
 
-  /* In dark mode, primary becomes white (keeps B/W look) */
-  --color-primary: #f5f5f6;
-  --color-primary-hover: #ffffff;
-  --color-primary-contrast: #0b0b0c;
+  /* In dark mode, primary = warm cream */
+  --color-primary: #f0e9e0;
+  --color-primary-hover: #faf5ed;
+  --color-primary-contrast: #1c1a22;
 
-  --color-secondary: #d4af37;
-  --color-secondary-hover: #f0d878;
-  --color-secondary-contrast: #0b0b0c;
+  --color-secondary: #d4b04a; /* gold pops against plum */
+  --color-secondary-hover: #dfca72;
+  --color-secondary-contrast: #1c1a22;
 
   /* Service icon accents (gold family) */
   --color-icon-signature: var(--color-secondary);

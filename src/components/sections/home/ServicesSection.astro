@@ -33,7 +33,7 @@ const serviceCardMeta = [
 			/>
 		</div>
 
-		<div class="services-grid" aria-label="Service highlights">
+		<div class="services-grid">
 			{messages.services.cards.map((card, index) => (
 				<div data-reveal data-reveal-delay={String(index * 70)} data-service-title={card.title}>
 					<FeatureIconCard
@@ -55,7 +55,7 @@ const serviceCardMeta = [
 				href={vagaroServicesUrl}
 				label={messages.misc.viewServices}
 				labelMobile={messages.misc.viewServices}
-				className="services__viewServices"
+				variant="secondary"
 			/>
 		</div>
 
@@ -95,15 +95,7 @@ const serviceCardMeta = [
 		margin: 0;
 	}
 
-	:global(.services__viewServices.btn:hover),
-	:global(.services__viewServices.btn:focus-visible) {
-		background: var(--color-primary-hover);
-		border-color: var(--color-primary-hover);
-	}
 
-	:global(.services__viewServices.btn:hover *) {
-		color: inherit;
-	}
 
 	.services-disclaimer {
 		max-width: 52rem;

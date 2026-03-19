@@ -3,7 +3,7 @@
 	 - JS adds `html.has-scroll-reveal` early (unless reduced motion).
 */
 
-html.has-scroll-reveal [data-reveal] {
+html.has-scroll-reveal [data-reveal]:not(.is-revealed) {
   opacity: 0;
   transform: translate3d(0, 12px, 0);
   transition:
@@ -16,6 +16,7 @@ html.has-scroll-reveal [data-reveal] {
 html.has-scroll-reveal [data-reveal].is-revealed {
   opacity: 1;
   transform: translate3d(0, 0, 0);
+  will-change: auto;
 }
 
 /* Mobile tuning: tighter, less floaty motion */

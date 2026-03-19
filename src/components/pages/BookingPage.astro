@@ -19,7 +19,7 @@ const vagaroServicesUrl = "https://www.vagaro.com/byastridbeautysalon";
 <section class="section section--muted" aria-labelledby="booking-title">
 	<div class="container stack stack--lg">
 		<div data-reveal>
-			<SectionIntro id="booking-title" title={messages.booking.title} lede={messages.booking.lede} />
+			<SectionIntro id="booking-title" level={1} title={messages.booking.title} lede={messages.booking.lede} />
 		</div>
 
 		<Accordion
@@ -44,8 +44,9 @@ const vagaroServicesUrl = "https://www.vagaro.com/byastridbeautysalon";
 					<HeroBookNowCta
 						client:idle
 						href={vagaroServicesUrl}
-						label={messages.misc.bookNow}
-						className="booking-ctaCard__button"
+						label={messages.misc.scheduleAppointment}
+						labelMobile={messages.misc.bookNow}
+						disableEntranceAnimation={true}
 					/>
 				</div>
 			</Card>
@@ -106,27 +107,9 @@ const vagaroServicesUrl = "https://www.vagaro.com/byastridbeautysalon";
 			color-mix(in oklab, var(--color-primary) 28%, transparent) 0%,
 			transparent 60%
 		);
-		opacity: 0.45;
-		transform: translate3d(0, 0, 0) scale(1);
+		opacity: 0.4;
+		transform: translate3d(0, 0, 0);
 		pointer-events: none;
-	}
-
-	@media (prefers-reduced-motion: no-preference) {
-		:global(.booking-ctaCard__panel)::before {
-			animation: bookingGlow 5.5s ease-in-out infinite;
-		}
-	}
-
-	@keyframes bookingGlow {
-		0%,
-		100% {
-			opacity: 0.35;
-			transform: scale(1);
-		}
-		50% {
-			opacity: 0.55;
-			transform: scale(1.04);
-		}
 	}
 
 	.booking-ctaCard__actions {
@@ -136,27 +119,6 @@ const vagaroServicesUrl = "https://www.vagaro.com/byastridbeautysalon";
 		width: 100%;
 		max-width: 34rem;
 		margin-top: 0;
-	}
-
-	.booking-ctaCard__button.btn {
-		width: auto;
-		letter-spacing: 0.01em;
-		min-height: 3.25rem;
-	}
-
-	@media (prefers-reduced-motion: no-preference) {
-		.booking-ctaCard__button.btn:hover {
-			transform: translateY(-1px);
-		}
-	}
-
-	.booking-ctaCard__helper {
-		margin: 0;
-		color: var(--color-text-muted);
-		font-size: 0.82rem;
-		line-height: 1.4;
-		margin-top: var(--space-sm);
-		max-width: 40rem;
 	}
 
 	.booking-ctaCard__lede {

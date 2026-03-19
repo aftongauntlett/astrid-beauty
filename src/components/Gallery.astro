@@ -103,7 +103,7 @@ const dataId = 'gallery-data';
 			<Button
 				id={toggleId}
 				type="button"
-				variant="primary"
+				variant="secondary"
 				class="gallery__toggle"
 				aria-controls={gridId}
 				aria-expanded="false"
@@ -281,6 +281,11 @@ const dataId = 'gallery-data';
 		grid-template-columns: 1fr;
 	}
 
+	.gallery .gallery__item {
+		content-visibility: auto;
+		contain-intrinsic-size: 460px 620px;
+	}
+
 	@media (max-width: 35.999rem) {
 		.gallery .gallery__item--preload {
 			display: none;
@@ -316,7 +321,7 @@ const dataId = 'gallery-data';
 		border-radius: var(--radius-lg);
 		padding: var(--space-md);
 		background: color-mix(in oklab, var(--color-primary) 6%, var(--color-surface));
-		border: 1px solid color-mix(in oklab, var(--color-border) 65%, transparent);
+		border: 1px solid color-mix(in oklab, var(--color-blush, var(--color-border)) 20%, var(--color-border));
 		box-shadow: var(--shadow-sm);
 	}
 
@@ -353,7 +358,7 @@ const dataId = 'gallery-data';
 		object-fit: cover;
 		transform: translateZ(0) scale(1);
 		backface-visibility: hidden;
-		filter: saturate(0.94) contrast(0.94) brightness(0.99);
+		filter: saturate(1.05) contrast(1.02) brightness(1.02);
 	}
 
 	.gallery .gallery__toggle.btn {
@@ -431,7 +436,7 @@ const dataId = 'gallery-data';
 				color-mix(in oklab, var(--color-shadow) 12%, transparent),
 				transparent 62%
 			);
-		opacity: 0.22;
+		opacity: 0.08;
 	}
 
 	.gallery .gallery__media::after {
@@ -452,7 +457,6 @@ const dataId = 'gallery-data';
 
 	@media (prefers-reduced-motion: no-preference) {
 		.gallery .gallery__img {
-			will-change: transform;
 			transition:
 				transform var(--motion-duration-slow) var(--motion-ease-standard),
 				filter var(--motion-duration-normal) var(--motion-ease-standard);

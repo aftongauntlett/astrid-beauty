@@ -6,10 +6,6 @@ export type Messages = {
     booking: string;
     menu: string;
   };
-  common: {
-    themeToggleLabel: string;
-    languageToggleLabel: string;
-  };
   sections: {
     homeTitle: string;
     servicesTitle: string;
@@ -138,6 +134,7 @@ export type Messages = {
     placeholderAddress: string;
     placeholderPhone: string;
     placeholderHours: string;
+    hoursDisclaimer: string;
     copyright: string;
     builtByLabel: string;
   };
