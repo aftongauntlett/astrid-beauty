@@ -20,7 +20,10 @@ const homeHref = lang === "es" ? "/es" : "/";
 			href={homeHref}
 			aria-label={messages.home.brandSrOnly}
 		>
-			<span class="site-header__brandText">Astrid Beauty Salon</span>
+			<span class="site-header__brandText">
+				<span class="site-header__brandScript">by Astrid</span>
+				<span class="site-header__brandSalon">Beauty Salon</span>
+			</span>
 		</a>
 		<div class="site-header__right">
 			<Nav lang={lang} />
@@ -254,16 +257,43 @@ const homeHref = lang === "es" ? "/es" : "/";
 	}
 
 	.site-header__brandText {
-		font-family: var(--font-heading);
+		display: inline-grid;
+		grid-auto-flow: row;
+		gap: 0.06rem;
 		font-size: clamp(1.02rem, 1.4vw, 1.28rem);
 		font-weight: 500;
 		letter-spacing: 0.01em;
-		line-height: 1;
-		color: var(--color-primary);
+		line-height: 1.05;
 		white-space: nowrap;
 	}
 
-	html[data-theme="dark"] .site-header__brandText {
+	.site-header__brandScript {
+		font-family: var(--font-script);
+		font-style: normal;
+		font-weight: 400;
+		font-size: 1.15em;
+		line-height: 1;
+		letter-spacing: 0.004em;
+		color: color-mix(in oklab, var(--color-primary) 72%, var(--color-secondary));
+	}
+
+	.site-header__brandSalon {
+		font-family: var(--font-heading);
+		font-style: normal;
+		font-weight: 500;
+		font-size: 0.9em;
+		padding-left: 0.42em;
+		justify-self: start;
+		color: color-mix(in oklab, var(--color-primary) 88%, var(--color-text-muted));
+		transition: color var(--motion-duration-fast) var(--motion-ease-standard);
+	}
+
+	html[data-theme="dark"] .site-header__brandSalon {
+		color: #5a5564;
+	}
+
+	.site-header__brand:hover .site-header__brandSalon,
+	.site-header__brand:focus-visible .site-header__brandSalon {
 		color: var(--color-secondary);
 	}
 

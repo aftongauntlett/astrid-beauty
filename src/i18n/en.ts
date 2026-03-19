@@ -28,7 +28,7 @@ export const en: Messages = {
     heroLede:
       "Beautiful color, fresh cuts, and luminous gloss treatments - right here in Herndon. Book your appointment anytime.",
     heroSupporting: "Dimensional color and modern cuts in Herndon, VA.",
-    brandSrOnly: "Astrid Beauty Salon",
+    brandSrOnly: "by Astrid Beauty Salon",
   },
   about: {
     workTitle: "See My Work",

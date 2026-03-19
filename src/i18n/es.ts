@@ -28,7 +28,7 @@ export const es: Messages = {
     heroLede:
       "Color vibrante, cortes frescos y tratamientos de brillo luminoso - aquí en Herndon. Reserva tu cita cuando quieras.",
     heroSupporting: "Color dimensional y cortes modernos en Herndon, VA.",
-    brandSrOnly: "Astrid Beauty Salon",
+    brandSrOnly: "by Astrid Beauty Salon",
   },
   about: {
     workTitle: "Ver mi trabajo",
