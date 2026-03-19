@@ -373,6 +373,10 @@ const heroTitleLead = canSplitHeroTitle
 		color: color-mix(in oklab, var(--color-primary) 72%, var(--color-secondary));
 	}
 
+	html:not([data-theme="dark"]) .hero__actionsTitleLead {
+		color: color-mix(in oklab, var(--color-secondary) 58%, var(--color-primary));
+	}
+
 	.hero__actionsTitleMain {
 		font-family: var(--font-heading);
 		font-style: normal;
@@ -384,7 +388,7 @@ const heroTitleLead = canSplitHeroTitle
 	}
 
 	html:not([data-theme="dark"]) .hero__actionsTitleMain {
-		color: color-mix(in oklab, var(--color-primary) 66%, var(--color-text-muted));
+		color: color-mix(in oklab, var(--color-text-muted) 62%, var(--color-primary));
 	}
 
 	.hero__actionsLede {
