@@ -3,7 +3,8 @@ import type { Messages } from "./types";
 export const en: Messages = {
   nav: {
     services: "Services",
-    gallery: "About",
+    about: "About",
+    gallery: "Gallery",
     findUs: "Visit Us",
     booking: "Booking Info",
     menu: "Menu",
@@ -11,7 +12,8 @@ export const en: Messages = {
   sections: {
     homeTitle: "Welcome To Astrid's Beauty Salon",
     servicesTitle: "Our Services",
-    galleryTitle: "About",
+    aboutTitle: "About",
+    galleryTitle: "Gallery",
     aboutLede:
       "Meet the team, see recent work, and review booking information before you schedule.",
   },
@@ -19,10 +21,13 @@ export const en: Messages = {
     bookNow: "Book Now",
     scheduleAppointment: "Book Now",
     viewServices: "Explore Services",
+    seeMoreReviews: "See more reviews",
+    checkAvailability: "Check Availability",
     backToTop: "Back to top",
     scheduleNow: "Book Now",
     appointmentOnly: "By Appointment Only",
     learnMore: "Learn More",
+    scrollForMore: "Scroll for more",
   },
   home: {
     heroLede:
@@ -221,6 +226,8 @@ export const en: Messages = {
     showMore: "See more",
     showLess: "See less",
     statusTemplate: "Showing {count} images.",
+    openImageLabel: "View larger image",
+    closeExpandedImageLabel: "Close expanded image",
   },
   skipLink: {
     skipToContent: "Skip to content",
@@ -245,7 +252,7 @@ export const en: Messages = {
     placeholderAddress: "384 Elden Street, Suite 210\nHerndon, VA 20170",
     placeholderPhone: "(703) 786-3707",
     placeholderHours:
-      "Hours may vary—please call to confirm.\nSunday: Closed\nMonday: 9:00 AM – 5:00 PM\nTuesday: Closed\nWednesday: 9:00 AM – 6:30 PM\nThursday: Closed\nFriday: 9:00 AM – 6:30 PM\nSaturday: 9:30 AM – 4:30 PM",
+      "Hours may vary—please call to confirm.\nSunday: Closed\nMonday: 9:00 AM – 6:30 PM\nTuesday: Closed\nWednesday: 9:00 AM – 6:30 PM\nThursday: Closed\nFriday: 9:00 AM – 6:30 PM\nSaturday: 9:30 AM – 4:30 PM",
     hoursDisclaimer:
       "Information may change — please check Vagaro for up to date details.",
     copyright: "By Astrid Beauty Salon",

@@ -1,0 +1,36 @@
+---
+import SectionIntro from "../../ui/SectionIntro.astro";
+import Gallery from "../../Gallery.astro";
+
+import type { Messages } from "../../../i18n/types";
+import type { Lang } from "../../../i18n";
+
+export type Props = {
+	lang: Lang;
+	messages: Messages;
+};
+
+const { lang, messages } = Astro.props;
+---
+
+<section class="section section--bg" id="gallery" aria-labelledby="gallery-title">
+	<div class="container stack stack--lg gallery__stack">
+		<div data-reveal>
+			<SectionIntro
+				id="gallery-title"
+				title={messages.sections.galleryTitle}
+				lede={messages.gallery.lede}
+			/>
+		</div>
+
+		<div data-reveal data-reveal-delay="120">
+			<Gallery lang={lang} />
+		</div>
+	</div>
+</section>
+
+<style>
+	.gallery__stack {
+		--stack-gap: var(--space-lg);
+	}
+</style>

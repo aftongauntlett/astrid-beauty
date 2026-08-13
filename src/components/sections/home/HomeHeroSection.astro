@@ -1,6 +1,7 @@
 ---
 import HeroBookNowCta from "../../motion/HeroBookNowCta";
 import HeroBackdrop from "../../motion/HeroBackdrop";
+import { ChevronDown } from "@lucide/astro";
 
 import type { Messages } from "../../../i18n/types";
 
@@ -19,21 +20,27 @@ const heroTitleLead = canSplitHeroTitle
 ---
 
 <section class="section hero" aria-labelledby="page-title">
-	<HeroBackdrop client:load />
+	<HeroBackdrop client:media="(min-width: 48.001rem)" />
 	<div class="container hero__grid">
 		<div class="hero__content">
 			<p class="sr-only">{messages.home.brandSrOnly}</p>
 			<figure class="hero__brandPanel" data-reveal>
-				<img
-					class="hero__brandImage"
-					src="/images/purple-hair-color.jpg"
-					alt="Purple toned salon color result"
-					width="900"
-					height="1200"
-					loading="eager"
-					fetchpriority="high"
-					decoding="async"
-				/>
+				<picture>
+					<source
+						media="(max-width: 59.999rem)"
+						srcset="data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw=="
+					/>
+					<img
+						class="hero__brandImage"
+						src="/images/purple-hair-color.jpg"
+						alt="Purple toned salon color result"
+						width="900"
+						height="1200"
+						loading="eager"
+						fetchpriority="high"
+						decoding="async"
+					/>
+				</picture>
 			</figure>
 		</div>
 
@@ -63,6 +70,7 @@ const heroTitleLead = canSplitHeroTitle
 							icon="down"
 							target="_self"
 							className="hero__learnMore"
+							disableEntranceAnimation={true}
 						/>
 						<HeroBookNowCta
 							client:idle
@@ -70,6 +78,7 @@ const heroTitleLead = canSplitHeroTitle
 							label={messages.misc.scheduleAppointment}
 							labelMobile={messages.misc.bookNow}
 							variant="primary"
+							disableEntranceAnimation={true}
 						/>
 					</div>
 					<p class="hero__ctaHelper">{messages.misc.appointmentOnly}*</p>
@@ -77,6 +86,10 @@ const heroTitleLead = canSplitHeroTitle
 			</div>
 		</div>
 	</div>
+
+	<a class="hero__scrollCue" href="#services" aria-label={messages.misc.scrollForMore}>
+		<ChevronDown class="hero__scrollCueIcon" size={22} aria-hidden="true" focusable="false" />
+	</a>
 </section>
 
 <style>
@@ -214,7 +227,7 @@ const heroTitleLead = canSplitHeroTitle
 		align-items: center;
 	}
 
-	@media (max-width: 35.999rem) {
+	@media (max-width: 59.999rem) {
 		.hero__grid {
 			gap: var(--space-lg);
 		}
@@ -488,6 +501,59 @@ const heroTitleLead = canSplitHeroTitle
 	@media (min-width: 48rem) {
 		.hero__ctaHelper {
 			text-align: right;
+		}
+	}
+
+	.hero__scrollCue {
+		position: absolute;
+		left: 50%;
+		bottom: var(--space-md);
+		transform: translateX(-50%);
+		z-index: 1;
+		display: grid;
+		place-items: center;
+		width: 2.75rem;
+		height: 2.75rem;
+		border-radius: 999px;
+		color: color-mix(in oklab, var(--color-text-muted) 82%, var(--color-primary));
+		text-decoration: none;
+	}
+
+	.hero__scrollCue:focus-visible {
+		outline: 3px solid var(--color-focus);
+		outline-offset: 2px;
+	}
+
+	.hero__scrollCueIcon {
+		display: block;
+	}
+
+	@media (hover: hover) {
+		.hero__scrollCue:hover {
+			color: var(--color-secondary);
+		}
+	}
+
+	@media (prefers-reduced-motion: no-preference) {
+		.hero__scrollCue {
+			animation: hero-scroll-cue-bounce 2.2s ease-in-out infinite;
+			transition: color var(--motion-duration-fast) var(--motion-ease-standard);
+		}
+
+		@keyframes hero-scroll-cue-bounce {
+			0%,
+			100% {
+				transform: translateX(-50%) translateY(0);
+			}
+			50% {
+				transform: translateX(-50%) translateY(6px);
+			}
+		}
+	}
+
+	@media (max-height: 38rem) {
+		.hero__scrollCue {
+			display: none;
 		}
 	}
 </style>

@@ -4,7 +4,7 @@ import { getMessages, type Lang } from "../../i18n";
 import HomeHeroSection from "../sections/home/HomeHeroSection.astro";
 import ServicesSection from "../sections/home/ServicesSection.astro";
 import AboutGallerySection from "../sections/home/AboutGallerySection.astro";
-import ReviewsStaffSection from "../sections/home/ReviewsStaffSection.astro";
+import GallerySection from "../sections/home/GallerySection.astro";
 import BookingSection from "../sections/home/BookingSection.astro";
 
 type Props = {
@@ -19,6 +19,6 @@ const vagaroServicesUrl = "https://www.vagaro.com/byastridbeautysalon";
 
 <HomeHeroSection messages={messages} vagaroServicesUrl={vagaroServicesUrl} />
 <ServicesSection messages={messages} vagaroServicesUrl={vagaroServicesUrl} />
-<AboutGallerySection lang={lang} messages={messages} />
-<ReviewsStaffSection messages={messages} />
+<AboutGallerySection messages={messages} />
+<GallerySection lang={lang} messages={messages} />
 <BookingSection messages={messages} vagaroServicesUrl={vagaroServicesUrl} />

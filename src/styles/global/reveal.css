@@ -10,7 +10,6 @@ html.has-scroll-reveal [data-reveal]:not(.is-revealed) {
     opacity var(--motion-duration-slower) var(--motion-ease-emphasized),
     transform var(--motion-duration-slower) var(--motion-ease-emphasized);
   transition-delay: var(--reveal-delay, 0ms);
-  will-change: opacity, transform;
 }
 
 html.has-scroll-reveal [data-reveal].is-revealed {
@@ -32,12 +31,12 @@ html.has-scroll-reveal [data-reveal].is-revealed {
   html.has-scroll-reveal [data-reveal-fx="cta-sparkle"].is-revealed::before {
     inset: -8px;
     filter: blur(8px);
-    animation: reveal-cta-glow 760ms ease-out 100ms 1 both; /* premium: ~0.85x --motion-duration-premium */
+    animation: reveal-cta-glow 760ms ease-out 100ms 1 both;
   }
 
   html.has-scroll-reveal [data-reveal-fx="cta-sparkle"].is-revealed::after {
     inset: -10px;
-    animation: reveal-cta-sparkle 900ms ease-out 120ms 1 both; /* premium: 1x --motion-duration-premium */
+    animation: reveal-cta-sparkle 900ms ease-out 120ms 1 both;
   }
 }
 

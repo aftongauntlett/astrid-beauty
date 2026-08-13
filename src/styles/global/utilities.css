@@ -23,10 +23,8 @@ main > .section:nth-of-type(even) {
   background: var(--color-surface-muted);
 }
 
-/* Light mode: make sections feel more “shiny” and dimensional */
 html:not([data-theme="dark"]) main > .section:nth-of-type(even) {
-  background: var(--surface-glass-muted);
-  border-top: 1px solid color-mix(in oklab, var(--color-blush) 15%, transparent);
+  background: var(--color-surface-muted);
 }
 
 main > .section:nth-of-type(odd):not(.hero) {
@@ -36,7 +34,7 @@ main > .section:nth-of-type(odd):not(.hero) {
 html[data-theme="dark"] main > .section:nth-of-type(even) {
   background: color-mix(
     in oklab,
-    var(--color-secondary) 3%,
+    var(--color-secondary) 5%,
     var(--color-surface-muted)
   );
 }
@@ -70,7 +68,7 @@ main > .section.section--muted {
 }
 
 html:not([data-theme="dark"]) main > .section.section--muted {
-  background: var(--surface-glass-muted);
+  background: var(--color-surface-muted);
 }
 
 main > .section.section--bg {

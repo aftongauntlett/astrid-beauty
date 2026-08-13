@@ -32,7 +32,8 @@ const sectionHref = (id: string) => (lang === "es" ? `/es#${id}` : `/#${id}`);
 
 	<div class="nav__menu" id={menuId} data-nav-menu>
 		<a class="nav__link" href={sectionHref("services")} data-section-link="services">{messages.nav.services}</a>
-		<a class="nav__link" href={sectionHref("about")} data-section-link="about">{messages.nav.gallery}</a>
+		<a class="nav__link" href={sectionHref("about")} data-section-link="about">{messages.nav.about}</a>
+		<a class="nav__link" href={sectionHref("gallery")} data-section-link="gallery">{messages.nav.gallery}</a>
 		<a class="nav__link" href={sectionHref("booking")} data-section-link="booking">{messages.nav.booking}</a>
 	</div>
 </nav>

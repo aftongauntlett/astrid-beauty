@@ -38,6 +38,7 @@ const vagaroServicesUrl = "https://www.vagaro.com/byastridbeautysalon";
 	<div class="container stack stack--lg">
 		<div class="booking-ctaCard" data-reveal>
 			<Card variant="glow" padding="xl" hover={false} class="booking-ctaCard__panel">
+				<p class="booking-ctaCard__script">{messages.misc.checkAvailability}!</p>
 				<p class="booking-ctaCard__lede">{messages.booking.lede}</p>
 				<p class="booking-ctaCard__lede booking-ctaCard__lede--second">{messages.booking.scheduleHelper}</p>
 				<div class="booking-ctaCard__actions" aria-label={messages.booking.scheduleHelper}>
@@ -79,14 +80,16 @@ const vagaroServicesUrl = "https://www.vagaro.com/byastridbeautysalon";
 	}
 
 	html:not([data-theme="dark"]) :global(.booking-ctaCard__panel) {
-		border-color: color-mix(in oklab, var(--color-border) 90%, transparent);
+		border-color: color-mix(in oklab, var(--color-border) 84%, transparent);
 		background:
 			linear-gradient(
 				180deg,
-				color-mix(in oklab, var(--color-surface-elevated) 86%, var(--color-primary) 6%) 0%,
-				color-mix(in oklab, var(--color-surface-muted) 72%, var(--color-primary) 10%) 100%
+				color-mix(in oklab, var(--color-surface-muted) 86%, var(--color-secondary) 14%) 0%,
+				color-mix(in oklab, var(--color-surface-muted) 76%, var(--color-primary) 24%) 100%
 			);
-		box-shadow: var(--shadow-md);
+		box-shadow:
+			var(--shadow-md),
+			inset 0 1px 0 color-mix(in oklab, white 48%, transparent);
 	}
 
 	html[data-theme="dark"] :global(.booking-ctaCard__panel) {
@@ -119,6 +122,15 @@ const vagaroServicesUrl = "https://www.vagaro.com/byastridbeautysalon";
 		width: 100%;
 		max-width: 34rem;
 		margin-top: 0;
+	}
+
+	.booking-ctaCard__script {
+		margin: 0;
+		font-family: var(--font-script);
+		font-size: clamp(2rem, 3vw + 0.7rem, 2.8rem);
+		line-height: 1;
+		letter-spacing: 0.01em;
+		color: color-mix(in oklab, var(--color-primary) 80%, var(--color-secondary));
 	}
 
 	.booking-ctaCard__lede {

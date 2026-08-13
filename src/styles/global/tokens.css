@@ -21,7 +21,7 @@
 		*/
   --color-bg: #f6f8fc; /* airy cool lilac-blue canvas */
   --color-surface: #fdfdff; /* cards/headers slightly lifted from bg */
-  --color-surface-muted: #edf1f8; /* cool muted section tint */
+  --color-surface-muted: #f0edf5; /* muted section tint (lighter, softer lilac) */
   --color-surface-elevated: #ffffff; /* overlay / elevated */
   --color-accent-soft: #e9edf8; /* soft periwinkle whisper for gradients */
   --color-accent-gold-light: #d3d9ee; /* cool violet accent bridge */
@@ -166,7 +166,7 @@
 html[data-theme="dark"] {
   --color-bg: #1c1a22; /* deep plum-charcoal */
   --color-surface: #252330; /* plum surface */
-  --color-surface-muted: #2e2b38; /* mauve-tinted muted */
+  --color-surface-muted: #353240; /* slightly lifted mauve-muted for section readability */
   --color-surface-elevated: #383542; /* lighter plum overlay */
   --color-accent-soft: #2e2636; /* plum-violet whisper */
 

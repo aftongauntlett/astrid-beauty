@@ -254,7 +254,7 @@
   }
 
   :global(.site-footer__meta) {
-    grid-template-columns: auto 1fr auto;
+    grid-template-columns: 1fr auto 1fr;
     gap: var(--space-md);
   }
 

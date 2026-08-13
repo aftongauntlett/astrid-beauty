@@ -55,6 +55,7 @@ const serviceCardMeta = [
 				href={vagaroServicesUrl}
 				label={messages.misc.viewServices}
 				labelMobile={messages.misc.viewServices}
+				className="services-actions__cta"
 				variant="secondary"
 			/>
 		</div>
@@ -93,6 +94,23 @@ const serviceCardMeta = [
 		display: grid;
 		justify-items: center;
 		margin: 0;
+	}
+
+	html:not([data-theme="dark"]) :global(.services-actions__cta.btn--secondary) {
+		background: color-mix(in oklab, var(--color-surface-elevated) 94%, var(--color-secondary) 6%);
+		color: color-mix(in oklab, var(--color-primary) 72%, var(--color-secondary));
+		border-color: color-mix(in oklab, var(--color-border) 88%, transparent);
+		box-shadow:
+			var(--shadow-sm),
+			inset 0 1px 0 color-mix(in oklab, white 72%, transparent);
+	}
+
+	html:not([data-theme="dark"]) :global(.services-actions__cta.btn--secondary:hover),
+	html:not([data-theme="dark"]) :global(.services-actions__cta.btn--secondary:focus-visible) {
+		background: color-mix(in oklab, var(--color-surface-elevated) 90%, var(--color-secondary) 10%);
+		color: color-mix(in oklab, var(--color-primary) 70%, var(--color-secondary));
+		border-color: color-mix(in oklab, var(--color-secondary) 26%, var(--color-border));
+		box-shadow: var(--shadow-md);
 	}
 
 

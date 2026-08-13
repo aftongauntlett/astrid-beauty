@@ -5,6 +5,9 @@ import SkipLink from '../components/site/SkipLink.astro';
 import '../styles/global.css';
 
 import { getAlternatePaths, toLangPath, normalizePathname } from "../i18n/routes";
+import { getMessages } from "../i18n";
+import { getPhoneHref } from "../lib/footer/formatting";
+import { buildLocalBusinessJsonLd } from "../lib/seo/localBusiness";
 
 export interface Props {
 	title: string;
@@ -40,6 +43,20 @@ const xDefaultHref = toHref(alternates.xDefault);
 const isDevMode = import.meta.env.DEV;
 
 const ogImageHref = toHref("/astrid-logo-light.png");
+
+const businessMessages = getMessages(lang);
+const localBusinessJsonLd = buildLocalBusinessJsonLd({
+	name: businessMessages.footer.copyright,
+	url: toHref("/"),
+	image: ogImageHref,
+	telephoneHref: getPhoneHref(businessMessages.footer.placeholderPhone),
+	rawAddress: businessMessages.footer.placeholderAddress,
+	rawHours: businessMessages.footer.placeholderHours,
+	sameAs: [
+		"https://www.facebook.com/hair.by.astridm",
+		"https://www.instagram.com/byastrid.beautysalon/",
+	],
+});
 ---
 
 <!doctype html>
@@ -169,11 +186,17 @@ const ogImageHref = toHref("/astrid-logo-light.png");
 		{description ? <meta property="og:description" content={description} /> : null}
 		<meta property="og:url" content={canonicalHref} />
 		<meta property="og:image" content={ogImageHref} />
+		<meta property="og:image:width" content="1040" />
+		<meta property="og:image:height" content="579" />
+		<meta property="og:image:alt" content="By Astrid Beauty Salon" />
 		<meta name="twitter:card" content="summary_large_image" />
+		<meta name="twitter:title" content={title} />
+		{description ? <meta name="twitter:description" content={description} /> : null}
 		<meta name="twitter:image" content={ogImageHref} />
 		<link rel="canonical" href={canonicalHref} />
 		<link rel="alternate" hreflang="en" href={enHref} />
 		<link rel="alternate" hreflang="es" href={esHref} />
+		<script type="application/ld+json" is:inline set:html={JSON.stringify(localBusinessJsonLd)} />
 		<link rel="alternate" hreflang="x-default" href={xDefaultHref} />
 		<slot name="head" />
 		<title>{title}</title>

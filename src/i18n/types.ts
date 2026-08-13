@@ -1,6 +1,7 @@
 export type Messages = {
   nav: {
     services: string;
+    about: string;
     gallery: string;
     findUs: string;
     booking: string;
@@ -9,6 +10,7 @@ export type Messages = {
   sections: {
     homeTitle: string;
     servicesTitle: string;
+    aboutTitle: string;
     galleryTitle: string;
     aboutLede: string;
   };
@@ -16,10 +18,13 @@ export type Messages = {
     bookNow: string;
     scheduleAppointment: string;
     viewServices: string;
+    seeMoreReviews: string;
+    checkAvailability: string;
     backToTop: string;
     scheduleNow: string;
     appointmentOnly: string;
     learnMore: string;
+    scrollForMore: string;
   };
   home: {
     heroLede: string;
@@ -110,6 +115,8 @@ export type Messages = {
     showMore: string;
     showLess: string;
     statusTemplate: string;
+    openImageLabel: string;
+    closeExpandedImageLabel: string;
   };
   skipLink: {
     skipToContent: string;

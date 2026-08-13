@@ -83,11 +83,6 @@ html[data-theme="light"] .iconWrap {
 /* Hover-only affordances (avoid running on touch) */
 @media (prefers-reduced-motion: no-preference) and (hover: hover) and (pointer: fine) {
   .card:hover {
-    background: color-mix(
-      in oklab,
-      var(--color-surface-elevated) 90%,
-      var(--color-secondary) 10%
-    );
     border-color: color-mix(
       in oklab,
       var(--color-secondary) 24%,
@@ -102,6 +97,39 @@ html[data-theme="light"] .iconWrap {
 
   .card:hover .list li::before {
     background: color-mix(in oklab, var(--color-secondary) 92%, white);
+  }
+}
+
+/* Light mode: keep service card surface stable on hover/focus to avoid
+   hover flicker caused by competing background rules from Card + module CSS. */
+html[data-theme="light"] .card:hover,
+html[data-theme="light"] .card:focus-within {
+  background: var(--surface-glass) !important;
+}
+
+html[data-theme="light"] .card:hover::before,
+html[data-theme="light"] .card:focus-within::before {
+  opacity: 0.55 !important;
+}
+
+@media (prefers-reduced-motion: no-preference) and (hover: hover) and (pointer: fine) {
+  html[data-theme="light"] .card:hover .iconWrap,
+  html[data-theme="light"] .card:focus-within .iconWrap {
+    box-shadow:
+      0 12px 30px -22px
+        color-mix(in oklab, var(--color-secondary) 34%, transparent),
+      inset 0 1px 0 color-mix(in oklab, white 72%, transparent),
+      0 0 0 1px color-mix(in oklab, var(--color-secondary) 30%, transparent);
+    transform: translateY(-1px);
+  }
+
+  html[data-theme="light"] .card:hover .title,
+  html[data-theme="light"] .card:focus-within .title {
+    color: color-mix(
+      in oklab,
+      var(--color-secondary) 86%,
+      var(--color-primary)
+    );
   }
 }
 

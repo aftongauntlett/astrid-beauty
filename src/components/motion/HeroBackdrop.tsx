@@ -84,7 +84,9 @@ export default function HeroBackdrop(): React.JSX.Element {
     const resize = () => {
       if (!canvas) return;
       const rect = canvas.getBoundingClientRect();
-      const maxDpr = isDev ? 1.25 : 2;
+      const isSmallScreen =
+        window.matchMedia?.("(max-width: 48rem)").matches ?? false;
+      const maxDpr = isDev ? 1.25 : isSmallScreen ? 1.25 : 2;
       const nextDpr = Math.min(window.devicePixelRatio || 1, maxDpr);
       canvas.width = Math.max(1, Math.floor(rect.width * nextDpr));
       canvas.height = Math.max(1, Math.floor(rect.height * nextDpr));
@@ -276,7 +278,9 @@ export default function HeroBackdrop(): React.JSX.Element {
       // This frame is now running; allow rescheduling.
       animationFrameRef.current = 0;
 
-      const targetFps = isDev ? 30 : 45;
+      const isSmallScreen =
+        window.matchMedia?.("(max-width: 48rem)").matches ?? false;
+      const targetFps = isDev ? 30 : isSmallScreen ? 24 : 45;
       const minFrameMs = 1000 / targetFps;
       if (time - lastRenderedAtRef.current < minFrameMs) {
         if (shouldAnimate()) {

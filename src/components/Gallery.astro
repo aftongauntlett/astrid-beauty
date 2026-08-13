@@ -1,7 +1,6 @@
 ---
 import Button from './ui/Button.astro';
-import Card from './ui/Card.astro';
-import { ChevronDown } from '@lucide/astro';
+import { ChevronDown, ZoomIn, X } from '@lucide/astro';
 import * as fs from 'node:fs';
 
 import { getMessages, type Lang } from '../i18n';
@@ -76,7 +75,14 @@ const dataId = 'gallery-data';
 				data-reveal
 				data-reveal-delay={String(Math.min(260, (idx % 3) * 70 + Math.floor(idx / 3) * 40))}
 			>
-				<Card variant="default" padding="sm" hover={true} class="gallery__frame">
+				<button
+					type="button"
+					class="gallery__thumb"
+					data-gallery-trigger
+					data-image-src={image.src}
+					data-image-alt={image.alt}
+					aria-label={`${messages.gallery.openImageLabel}: ${image.alt}`}
+				>
 					<div class="gallery__media">
 						<img
 							class="gallery__img"
@@ -87,12 +93,39 @@ const dataId = 'gallery-data';
 							width="900"
 							height="1200"
 						/>
+						<span class="gallery__zoomIcon" aria-hidden="true">
+							<ZoomIn class="gallery__zoomIconSvg" size={30} aria-hidden="true" focusable="false" />
+						</span>
 						<span class="gallery__captionHook" aria-hidden="true"></span>
 					</div>
-				</Card>
+				</button>
 			</li>
 		))}
 	</ul>
+
+	<template id="gallery-zoom-icon-template">
+		<span class="gallery__zoomIcon" aria-hidden="true">
+			<ZoomIn class="gallery__zoomIconSvg" size={30} aria-hidden="true" focusable="false" />
+		</span>
+	</template>
+
+	<dialog
+		class="gallery__lightbox"
+		data-gallery-lightbox
+		aria-label={messages.gallery.closeExpandedImageLabel}
+	>
+		<div class="gallery__lightboxContent" data-gallery-lightbox-content>
+			<button
+				type="button"
+				class="gallery__lightboxClose"
+				data-gallery-lightbox-close
+				aria-label={messages.gallery.closeExpandedImageLabel}
+			>
+				<X class="gallery__lightboxCloseIcon" size={26} aria-hidden="true" focusable="false" />
+			</button>
+			<img class="gallery__lightboxImage" data-gallery-lightbox-image alt="" />
+		</div>
+	</dialog>
 
 	{showToggle ? (
 		<div
@@ -123,6 +156,7 @@ const dataId = 'gallery-data';
 					showMore: messages.gallery.showMore,
 					showLess: messages.gallery.showLess,
 					statusTemplate: messages.gallery.statusTemplate,
+					openImageLabel: messages.gallery.openImageLabel,
 				})}
 			></script>
 			<script
@@ -145,6 +179,7 @@ const dataId = 'gallery-data';
 				// Gallery markup not present.
 			} else {
 				const label = toggle.querySelector('.gallery__toggleLabel');
+				const zoomIconTemplate = document.getElementById('gallery-zoom-icon-template');
 				const MOBILE_INITIAL = 3;
 				const safeParse = (node, fallback) => {
 					if (!node) return fallback;
@@ -160,6 +195,7 @@ const dataId = 'gallery-data';
 				const showMoreLabel = labels.showMore || 'Show more';
 				const showLessLabel = labels.showLess || 'Show less';
 				const statusTemplate = labels.statusTemplate || 'Showing {count} images.';
+				const openImageLabel = labels.openImageLabel || 'View larger image';
 				/** @type {HTMLElement[]} */
 				const extraItems = [];
 				let expanded = false;
@@ -202,8 +238,13 @@ const dataId = 'gallery-data';
 					li.setAttribute('data-reveal', '');
 					li.setAttribute('data-reveal-delay', String(computeDelay(itemIndex)));
 
-					const frame = document.createElement('div');
-					frame.className = 'gallery__frame';
+					const button = document.createElement('button');
+					button.type = 'button';
+					button.className = 'gallery__thumb';
+					button.setAttribute('data-gallery-trigger', '');
+					button.setAttribute('data-image-src', img.src);
+					button.setAttribute('data-image-alt', img.alt);
+					button.setAttribute('aria-label', `${openImageLabel}: ${img.alt}`);
 
 					const media = document.createElement('div');
 					media.className = 'gallery__media';
@@ -221,9 +262,22 @@ const dataId = 'gallery-data';
 					captionHook.className = 'gallery__captionHook';
 					captionHook.setAttribute('aria-hidden', 'true');
 
-					media.append(image, captionHook);
-					frame.append(media);
-					li.append(frame);
+					const fallbackZoomIcon = () => {
+						const span = document.createElement('span');
+						span.className = 'gallery__zoomIcon';
+						span.setAttribute('aria-hidden', 'true');
+						return span;
+					};
+
+					const zoomIcon =
+						zoomIconTemplate instanceof HTMLTemplateElement
+							? zoomIconTemplate.content.firstElementChild?.cloneNode(true)
+							: null;
+					const safeZoomIcon = zoomIcon instanceof HTMLElement ? zoomIcon : fallbackZoomIcon();
+
+					media.append(image, safeZoomIcon, captionHook);
+					button.append(media);
+					li.append(button);
 					return li;
 				};
 
@@ -269,6 +323,57 @@ const dataId = 'gallery-data';
 			}
 		</script>
 	) : null}
+
+	<script type="module" is:inline>
+		const galleryRoot = document.querySelector('[data-gallery]');
+		if (galleryRoot instanceof HTMLElement) {
+			const lightbox = galleryRoot.querySelector('[data-gallery-lightbox]');
+			const lightboxImage = galleryRoot.querySelector('[data-gallery-lightbox-image]');
+			const lightboxCloseButton = galleryRoot.querySelector('[data-gallery-lightbox-close]');
+			if (lightbox instanceof HTMLDialogElement && lightboxImage instanceof HTMLImageElement) {
+				const openLightbox = (source, alt) => {
+					if (typeof lightbox.showModal !== 'function') return;
+					lightboxImage.src = source;
+					lightboxImage.alt = alt;
+					if (!lightbox.open) {
+						lightbox.showModal();
+					}
+				};
+
+				const closeLightbox = () => {
+					if (!lightbox.open) return;
+					lightbox.close();
+				};
+
+				lightbox.addEventListener('close', () => {
+					lightboxImage.removeAttribute('src');
+					lightboxImage.alt = '';
+				});
+
+				galleryRoot.addEventListener('click', (event) => {
+					if (!(event.target instanceof Element)) return;
+					const trigger = event.target.closest('[data-gallery-trigger]');
+					if (!(trigger instanceof HTMLButtonElement)) return;
+					const source = trigger.dataset.imageSrc;
+					if (!source) return;
+					const alt = trigger.dataset.imageAlt || '';
+					openLightbox(source, alt);
+				});
+
+				lightbox.addEventListener('click', (event) => {
+					if (event.target !== lightbox) return;
+					closeLightbox();
+				});
+
+				if (lightboxCloseButton instanceof HTMLButtonElement) {
+					lightboxCloseButton.addEventListener('click', (event) => {
+						event.preventDefault();
+						closeLightbox();
+					});
+				}
+			}
+		}
+	</script>
 </div>
 
 <style is:global>
@@ -315,32 +420,6 @@ const dataId = 'gallery-data';
 		}
 	}
 
-	.gallery .gallery__frame {
-		display: block;
-		position: relative;
-		border-radius: var(--radius-lg);
-		padding: var(--space-md);
-		background: color-mix(in oklab, var(--color-primary) 6%, var(--color-surface));
-		border: 1px solid color-mix(in oklab, var(--color-blush, var(--color-border)) 20%, var(--color-border));
-		box-shadow: var(--shadow-sm);
-	}
-
-	@media (prefers-reduced-motion: no-preference) {
-		.gallery .gallery__frame {
-			transition:
-				box-shadow var(--motion-duration-fast) var(--motion-ease-standard),
-				border-color var(--motion-duration-fast) var(--motion-ease-standard),
-				transform var(--motion-duration-fast) var(--motion-ease-standard);
-		}
-
-		.gallery .gallery__frame:hover,
-		.gallery .gallery__frame:focus-within {
-			transform: translateY(-2px);
-			box-shadow: var(--shadow-md);
-			border-color: color-mix(in oklab, var(--color-primary) 22%, var(--color-border));
-		}
-	}
-
 	.gallery .gallery__media {
 		position: relative;
 		display: block;
@@ -348,7 +427,25 @@ const dataId = 'gallery-data';
 		border-radius: var(--radius-lg);
 		overflow: hidden;
 		background: var(--color-surface);
-		border: 1px solid color-mix(in oklab, var(--color-border) 70%, transparent);
+		border: 1px solid color-mix(in oklab, var(--color-border) 60%, transparent);
+	}
+
+	.gallery .gallery__thumb {
+		display: block;
+		width: 100%;
+		margin: 0;
+		padding: 0;
+		border: 0;
+		background: transparent;
+		font: inherit;
+		text-align: inherit;
+		cursor: zoom-in;
+	}
+
+	.gallery .gallery__thumb:focus-visible {
+		outline: 2px solid color-mix(in oklab, var(--color-primary) 52%, white);
+		outline-offset: 3px;
+		border-radius: var(--radius-lg);
 	}
 
 	.gallery .gallery__img {
@@ -439,6 +536,29 @@ const dataId = 'gallery-data';
 		opacity: 0.08;
 	}
 
+	.gallery .gallery__zoomIcon {
+		position: absolute;
+		top: 0.75rem;
+		right: 0.75rem;
+		width: 3.15rem;
+		height: 3.15rem;
+		display: grid;
+		place-items: center;
+		border-radius: 999px;
+		background: color-mix(in oklab, var(--color-surface) 70%, var(--color-shadow));
+		color: var(--color-text);
+		pointer-events: none;
+		opacity: 0;
+		transform: translateY(2px) scale(0.94);
+		line-height: 0;
+	}
+
+	.gallery .gallery__zoomIconSvg {
+		display: block;
+		width: 1.72rem;
+		height: 1.72rem;
+	}
+
 	.gallery .gallery__media::after {
 		content: '';
 		position: absolute;
@@ -456,6 +576,19 @@ const dataId = 'gallery-data';
 	}
 
 	@media (prefers-reduced-motion: no-preference) {
+		.gallery .gallery__media {
+			transition:
+				box-shadow var(--motion-duration-fast) var(--motion-ease-standard),
+				border-color var(--motion-duration-fast) var(--motion-ease-standard),
+				transform var(--motion-duration-fast) var(--motion-ease-standard);
+		}
+
+		.gallery .gallery__zoomIcon {
+			transition:
+				opacity var(--motion-duration-fast) var(--motion-ease-standard),
+				transform var(--motion-duration-fast) var(--motion-ease-standard);
+		}
+
 		.gallery .gallery__img {
 			transition:
 				transform var(--motion-duration-slow) var(--motion-ease-standard),
@@ -468,14 +601,29 @@ const dataId = 'gallery-data';
 				opacity var(--motion-duration-normal) var(--motion-ease-standard);
 		}
 
-		.gallery .gallery__frame:hover .gallery__media::after {
+		.gallery .gallery__item:hover .gallery__media,
+		.gallery .gallery__item:focus-within .gallery__media {
+			transform: translateY(-2px);
+			box-shadow: var(--shadow-md);
+			border-color: color-mix(in oklab, var(--color-primary) 22%, var(--color-border));
+		}
+
+		.gallery .gallery__item:hover .gallery__media::after,
+		.gallery .gallery__item:focus-within .gallery__media::after {
 			opacity: 1;
 			transform: translateX(130%) skewX(-15deg);
 		}
 
-		.gallery .gallery__frame:hover .gallery__img {
+		.gallery .gallery__item:hover .gallery__img,
+		.gallery .gallery__item:focus-within .gallery__img {
 			transform: translateZ(0) scale(1.015);
 			filter: saturate(1) contrast(0.98) brightness(1);
+		}
+
+		.gallery .gallery__item:hover .gallery__zoomIcon,
+		.gallery .gallery__item:focus-within .gallery__zoomIcon {
+			opacity: 0.74;
+			transform: translateY(0) scale(1);
 		}
 	}
 
@@ -490,6 +638,17 @@ const dataId = 'gallery-data';
 		}
 	}
 
+	@media (hover: none), (pointer: coarse), (max-width: 48rem) {
+		.gallery .gallery__thumb {
+			cursor: default;
+		}
+
+		.gallery .gallery__zoomIcon {
+			opacity: 0.74;
+			transform: translateY(0) scale(1);
+		}
+	}
+
 	.gallery .gallery__actions {
 		display: flex;
 		justify-content: center;
@@ -497,7 +656,8 @@ const dataId = 'gallery-data';
 	}
 
 	.gallery .gallery__actions .btn {
-		width: min(100%, 20rem);
+		width: fit-content;
+		max-width: 100%;
 	}
 
 	.gallery .gallery__captionHook {
@@ -505,5 +665,124 @@ const dataId = 'gallery-data';
 		inset: auto 0 0 0;
 		min-height: 2.25rem;
 		pointer-events: none;
+	}
+
+	.gallery .gallery__lightbox {
+		position: fixed;
+		inset: 0;
+		margin: 0;
+		width: 100dvw;
+		height: 100dvh;
+		display: grid;
+		place-items: center;
+		padding: var(--space-md);
+		border: 0;
+		max-width: none;
+		max-height: none;
+		background: transparent;
+		overflow: hidden;
+		cursor: default;
+		z-index: 60;
+	}
+
+	.gallery .gallery__lightbox:not([open]) {
+		display: none;
+	}
+
+	.gallery .gallery__lightbox::backdrop {
+		background: color-mix(in oklab, var(--color-shadow) 76%, transparent);
+		backdrop-filter: blur(1px);
+		cursor: zoom-out;
+	}
+
+	.gallery .gallery__lightboxImage {
+		display: block;
+		max-width: min(96vw, 78rem);
+		max-height: 92vh;
+		border-radius: var(--radius-lg);
+		box-shadow: var(--shadow-lg);
+		background: var(--color-surface);
+		object-fit: contain;
+	}
+
+	.gallery .gallery__lightboxContent {
+		position: relative;
+		display: grid;
+		place-items: center;
+	}
+
+	.gallery .gallery__lightboxClose {
+		position: absolute;
+		top: var(--space-sm);
+		right: var(--space-sm);
+		width: 3rem;
+		height: 3rem;
+		display: inline-grid;
+		place-items: center;
+		border: 1px solid color-mix(in oklab, var(--color-border) 70%, transparent);
+		border-radius: 999px;
+		background: color-mix(in oklab, var(--color-surface) 74%, var(--color-shadow));
+		color: var(--color-text);
+		cursor: pointer;
+		z-index: 1;
+	}
+
+	.gallery .gallery__lightboxCloseIcon {
+		display: block;
+		width: 1.62rem;
+		height: 1.62rem;
+	}
+
+	html:not([data-theme="dark"]) .gallery .gallery__lightboxClose {
+		background: color-mix(in oklab, var(--color-surface-elevated) 95%, var(--color-secondary) 5%);
+		color: color-mix(in oklab, var(--color-text) 82%, var(--color-primary));
+		border-color: color-mix(in oklab, var(--color-border) 84%, transparent);
+		box-shadow:
+			var(--shadow-sm),
+			inset 0 1px 0 color-mix(in oklab, white 72%, transparent);
+	}
+
+	.gallery .gallery__lightboxClose:focus-visible {
+		outline: 2px solid color-mix(in oklab, var(--color-primary) 52%, white);
+		outline-offset: 2px;
+	}
+
+	@media (prefers-reduced-motion: no-preference) {
+		.gallery .gallery__lightboxClose {
+			transition:
+				background-color var(--motion-duration-fast) var(--motion-ease-standard),
+				border-color var(--motion-duration-fast) var(--motion-ease-standard),
+				transform var(--motion-duration-fast) var(--motion-ease-standard);
+		}
+
+		.gallery .gallery__lightboxClose:hover,
+		.gallery .gallery__lightboxClose:focus-visible {
+			transform: translateY(-1px);
+			border-color: color-mix(in oklab, var(--color-primary) 22%, var(--color-border));
+			background: color-mix(in oklab, var(--color-surface) 82%, var(--color-shadow));
+		}
+
+		html:not([data-theme="dark"]) .gallery .gallery__lightboxClose:hover,
+		html:not([data-theme="dark"]) .gallery .gallery__lightboxClose:focus-visible {
+			border-color: color-mix(in oklab, var(--color-secondary) 34%, var(--color-border));
+			background: color-mix(in oklab, var(--color-surface-elevated) 90%, var(--color-secondary) 10%);
+		}
+	}
+
+	@media (prefers-reduced-motion: no-preference) {
+		.gallery .gallery__lightboxImage {
+			animation: gallery-lightbox-in var(--motion-duration-normal) var(--motion-ease-standard);
+		}
+
+		@keyframes gallery-lightbox-in {
+			from {
+				opacity: 0;
+				transform: scale(0.985);
+			}
+			to {
+				opacity: 1;
+				transform: scale(1);
+			}
+		}
 	}
 </style>

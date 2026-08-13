@@ -475,6 +475,14 @@ const panelId = (suffix: string) => `${idPrefix}-panel-${suffix}`;
 		opacity: 0;
 	}
 
+	html:not([data-theme="dark"]) .accordion__trigger[aria-expanded="true"],
+	html:not([data-theme="dark"]) .accordion__trigger[aria-expanded="true"]:hover,
+	html:not([data-theme="dark"]) .accordion__trigger[aria-expanded="true"]:focus-visible,
+	html:not([data-theme="dark"]) .accordion__trigger[aria-expanded="true"]:active {
+		background: color-mix(in oklab, var(--color-secondary) 82%, var(--color-surface-elevated));
+		color: var(--color-secondary-contrast);
+	}
+
 	.accordion__trigger:focus-visible {
 		outline: 3px solid var(--color-focus);
 		outline-offset: 3px;

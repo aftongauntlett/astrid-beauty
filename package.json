@@ -16,6 +16,7 @@
   },
   "dependencies": {
     "@astrojs/react": "^4.4.2",
+    "@astrojs/sitemap": "^3.7.3",
     "@lucide/astro": "^0.563.0",
     "astro": "^5.16.15",
     "framer-motion": "^12.29.0",

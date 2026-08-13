@@ -36,6 +36,13 @@ const homeHref = lang === "es" ? "/es" : "/";
 		const header = document.querySelector(".site-header");
 		if (!(header instanceof HTMLElement)) return;
 
+		const isSmallScreen =
+			window.matchMedia?.("(max-width: 48rem)").matches ?? false;
+		if (isSmallScreen) {
+			header.dataset["hidden"] = "false";
+			return;
+		}
+
 		globalThis.__astrid_headerAutoHideController?.abort?.();
 		const controller = new AbortController();
 		globalThis.__astrid_headerAutoHideController = controller;
@@ -50,6 +57,8 @@ const homeHref = lang === "es" ? "/es" : "/";
 		let hidden = false;
 		let headerHeight = 0;
 		let triggerScrollY = Number.POSITIVE_INFINITY;
+		const hideTriggerOffset = 24;
+		const showTriggerOffset = 8;
 		let prefersReducedMotion =
 			window.matchMedia?.("(prefers-reduced-motion: reduce)").matches ?? false;
 		const reducedMotionMql = window.matchMedia?.("(prefers-reduced-motion: reduce)");
@@ -86,17 +95,23 @@ const homeHref = lang === "es" ? "/es" : "/";
 			const delta = currentY - lastScrollY;
 			lastScrollY = currentY;
 
-			const pastTrigger = currentY >= triggerScrollY;
+			const hideTriggerY = triggerScrollY + hideTriggerOffset;
+			const showTriggerY = triggerScrollY + showTriggerOffset;
 
-			// Always show before hitting the trigger zone.
-			if (!pastTrigger) {
+			if (!hidden && currentY < hideTriggerY) {
 				hidden = false;
 				header.dataset["hidden"] = "false";
 				return;
 			}
 
-			const isScrollingDown = delta > 2;
-			const isScrollingUp = delta < -2;
+			if (hidden && currentY <= showTriggerY) {
+				hidden = false;
+				header.dataset["hidden"] = "false";
+				return;
+			}
+
+			const isScrollingDown = delta > 3;
+			const isScrollingUp = delta < -3;
 
 			if (isScrollingUp) {
 				hidden = false;
@@ -289,7 +304,7 @@ const homeHref = lang === "es" ? "/es" : "/";
 	}
 
 	html[data-theme="dark"] .site-header__brandSalon {
-		color: #5a5564;
+		color: color-mix(in oklab, var(--color-text) 78%, var(--color-text-muted));
 	}
 
 	.site-header__brand:hover .site-header__brandSalon,

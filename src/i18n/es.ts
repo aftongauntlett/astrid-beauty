@@ -3,7 +3,8 @@ import type { Messages } from "./types";
 export const es: Messages = {
   nav: {
     services: "Servicios",
-    gallery: "Sobre",
+    about: "Sobre",
+    gallery: "Galería",
     findUs: "Visítanos",
     booking: "Info de reserva",
     menu: "Menú",
@@ -11,7 +12,8 @@ export const es: Messages = {
   sections: {
     homeTitle: "Bienvenida al Salón de Belleza de Astrid",
     servicesTitle: "Nuestros Servicios",
-    galleryTitle: "Sobre",
+    aboutTitle: "Sobre",
+    galleryTitle: "Galería",
     aboutLede:
       "Conoce al equipo, mira trabajos recientes y revisa la información de reserva antes de agendar.",
   },
@@ -19,10 +21,13 @@ export const es: Messages = {
     bookNow: "Reservar",
     scheduleAppointment: "Reservar",
     viewServices: "Explorar servicios",
+    seeMoreReviews: "Ver más reseñas",
+    checkAvailability: "Ver disponibilidad",
     backToTop: "Volver arriba",
     scheduleNow: "Reservar",
     appointmentOnly: "Solo con cita",
     learnMore: "Más información",
+    scrollForMore: "Desplázate para ver más",
   },
   home: {
     heroLede:
@@ -221,6 +226,8 @@ export const es: Messages = {
     showMore: "Ver más",
     showLess: "Ver menos",
     statusTemplate: "Mostrando {count} imágenes.",
+    openImageLabel: "Ver imagen ampliada",
+    closeExpandedImageLabel: "Cerrar imagen ampliada",
   },
   skipLink: {
     skipToContent: "Saltar al contenido",
@@ -245,7 +252,7 @@ export const es: Messages = {
     placeholderAddress: "384 Elden Street, Suite 210\nHerndon, VA 20170",
     placeholderPhone: "(703) 786-3707",
     placeholderHours:
-      "El horario puede variar—por favor llámanos para confirmar.\nDomingo: Cerrado\nLunes: 9:00 AM – 5:00 PM\nMartes: Cerrado\nMiércoles: 9:00 AM – 6:30 PM\nJueves: Cerrado\nViernes: 9:00 AM – 6:30 PM\nSábado: 9:30 AM – 4:30 PM",
+      "El horario puede variar—por favor llámanos para confirmar.\nDomingo: Cerrado\nLunes: 9:00 AM – 6:30 PM\nMartes: Cerrado\nMiércoles: 9:00 AM – 6:30 PM\nJueves: Cerrado\nViernes: 9:00 AM – 6:30 PM\nSábado: 9:30 AM – 4:30 PM",
     hoursDisclaimer:
       "La información puede cambiar — revisa Vagaro para ver los detalles más actualizados.",
     copyright: "By Astrid Beauty Salon",

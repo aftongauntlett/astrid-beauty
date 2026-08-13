@@ -95,6 +95,7 @@ const classes = [
 
 	html[data-theme="dark"] .card--default {
 		background: color-mix(in oklab, var(--color-surface) 85%, var(--color-accent-soft));
+		border-color: color-mix(in oklab, var(--color-text-muted) 22%, var(--color-border));
 	}
 
 	.card--default > * {
@@ -125,6 +126,10 @@ const classes = [
 		box-shadow: none;
 	}
 
+	html[data-theme="dark"] .card--glow {
+		border-color: color-mix(in oklab, var(--color-text-muted) 22%, var(--color-border));
+	}
+
 	.card--glow::after {
 		content: "";
 		position: absolute;
@@ -139,6 +144,15 @@ const classes = [
 		);
 		filter: blur(18px);
 		z-index: 0;
+	}
+
+	html[data-theme="dark"] .card--glow::after {
+		opacity: 0.18;
+		background: radial-gradient(
+			circle,
+			color-mix(in oklab, var(--color-text-muted) 24%, transparent) 0%,
+			transparent 68%
+		);
 	}
 
 	.card--glow > * {
@@ -181,6 +195,14 @@ const classes = [
 			border-color: color-mix(in oklab, var(--color-secondary) 30%, var(--color-border));
 		}
 
+		html[data-theme="dark"] .card--hover:focus-within {
+			border-color: color-mix(in oklab, var(--color-text-muted) 24%, var(--color-border));
+			box-shadow:
+				var(--shadow-md),
+				0 0 0 1px color-mix(in oklab, var(--color-text-muted) 16%, transparent),
+				0 12px 28px -22px color-mix(in oklab, var(--color-text-muted) 34%, transparent);
+		}
+
 		html:not([data-theme="dark"]) .card--hover:focus-within.card--default {
 			background: color-mix(in oklab, var(--color-surface-elevated) 92%, var(--color-secondary) 8%);
 		}
@@ -199,6 +221,14 @@ const classes = [
 			transform: none;
 			box-shadow: var(--shadow-md);
 			border-color: color-mix(in oklab, var(--color-secondary) 30%, var(--color-border));
+		}
+
+		html[data-theme="dark"] .card--hover:hover {
+			border-color: color-mix(in oklab, var(--color-text-muted) 24%, var(--color-border));
+			box-shadow:
+				var(--shadow-md),
+				0 0 0 1px color-mix(in oklab, var(--color-text-muted) 16%, transparent),
+				0 12px 28px -22px color-mix(in oklab, var(--color-text-muted) 34%, transparent);
 		}
 
 		html:not([data-theme="dark"]) .card--hover:hover.card--default {
